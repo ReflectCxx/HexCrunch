@@ -7,7 +7,7 @@
 
 namespace hex
 {
-    class SwipeTracker
+    class TouchTracker
     {
         bool m_isSwiping = false;
 
@@ -22,7 +22,7 @@ namespace hex
 
     public:
 
-        ~SwipeTracker();
-        SwipeTracker(cocos2d::Node* pTarget, const std::function<void(Swipe)>& pCallback);
+        ~TouchTracker();
+        TouchTracker(cocos2d::Node* pTarget, const std::function<void(Swipe)>& pCallback);
     };
 }

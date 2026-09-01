@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SwipeTracker.h"
-#include "SwipeConsumer.h"
+#include "TouchTracker.h"
+#include "TouchConsumer.h"
 #include "HexGridController.h"
 
 namespace hex
@@ -12,9 +12,9 @@ namespace hex
 
 		HexGridController m_controller;
 
-		std::unique_ptr<SwipeTracker> m_swipeTracker = nullptr;
+		std::unique_ptr<TouchTracker> m_swipeTracker = nullptr;
 
-		std::unique_ptr<SwipeConsumer> m_swipeConsumer = nullptr;
+		std::unique_ptr<TouchConsumer> m_swipeConsumer = nullptr;
 
 		HexGrid();
 
@@ -42,8 +42,6 @@ namespace hex
 		constexpr HexGridController& controller();
 	};
 }
-
-
 
 
 namespace hex

@@ -40,8 +40,8 @@ namespace hex
 {
 	HexGrid::HexGrid()
 		: m_controller(*this)
-		, m_swipeConsumer(std::make_unique<SwipeConsumer>(*this))
-		, m_swipeTracker(std::make_unique<SwipeTracker>(this,
+		, m_swipeConsumer(std::make_unique<TouchConsumer>(*this))
+		, m_swipeTracker(std::make_unique<TouchTracker>(this,
 			[this](Swipe pDir) {
 				m_swipeConsumer->onInputRecieved(pDir);
 			}))

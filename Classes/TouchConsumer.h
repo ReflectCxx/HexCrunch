@@ -5,7 +5,7 @@
 namespace hex
 {
 	class HexGrid;
-	class SwipeConsumer
+	class TouchConsumer
 	{
 		bool m_isLastSwipeUp;
 		bool m_lastSwipeLeft;
@@ -29,7 +29,7 @@ namespace hex
 
 	public:
 
-		SwipeConsumer(HexGrid& pHexGrid);
+		TouchConsumer(HexGrid& pHexGrid);
 
 		void init();
 		void onInputRecieved(Swipe pDir);

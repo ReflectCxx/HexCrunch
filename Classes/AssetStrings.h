@@ -11,5 +11,7 @@ namespace hex
 	constexpr auto TILE_YELLOW = "hex_yellow.png";
 	constexpr auto TILE_PURPLE = "hex_purple.png";
 
+	constexpr auto BTN_EXIT_NORMAL = "exit_normal.png";
+	constexpr auto BTN_EXIT_SELECTED = "exit_selected";
 	constexpr auto FONT = "fonts/Marker Felt.ttf";
 }

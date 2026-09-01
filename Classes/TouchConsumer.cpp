@@ -1,18 +1,18 @@
 
 #include "HexGrid.h"
 #include "HexTileUtils.h"
-#include "SwipeConsumer.h"
+#include "TouchConsumer.h"
 
 USING_NS_CC;
 
 namespace hex
 {
-	inline HexTile& SwipeConsumer::otherTile()
+	inline HexTile& TouchConsumer::otherTile()
 	{
 		return (*m_outerNeighbours[m_otherTileIndex]);
 	}
 
-	inline HexTile& SwipeConsumer::actorTile()
+	inline HexTile& TouchConsumer::actorTile()
 	{
 		return *m_actorTile;
 	}
@@ -21,7 +21,7 @@ namespace hex
 
 namespace hex
 {
-	SwipeConsumer::SwipeConsumer(HexGrid& pHexGrid)
+	TouchConsumer::TouchConsumer(HexGrid& pHexGrid)
 		: m_otherTileIndex(-1)
 		, m_lastSwipeLeft(false)
 		, m_isLastSwipeUp(true)
@@ -31,7 +31,7 @@ namespace hex
 	{ }
 
 
-	void SwipeConsumer::init()
+	void TouchConsumer::init()
 	{
 		m_otherTileIndex = 1;
 		m_actorTile = m_grid.getHexagonRings()[RING_COUNT - 2][0];
@@ -46,7 +46,7 @@ namespace hex
 	}
 
 
-	void SwipeConsumer::onInputRecieved(Swipe pDir)
+	void TouchConsumer::onInputRecieved(Swipe pDir)
 	{
 		if (!m_grid.controller().isGridIdle()) {
 			return;
@@ -90,7 +90,7 @@ namespace hex
 
 namespace hex
 {
-	void SwipeConsumer::initOuterRingsTiles()
+	void TouchConsumer::initOuterRingsTiles()
 	{
 		if (m_otherTileIndex >= 0 && m_otherTileIndex < m_outerNeighbours.size()) {
 			otherTile().setState(TileState::kIdle);
@@ -104,7 +104,7 @@ namespace hex
 	}
 
 
-	void SwipeConsumer::swapSelectionAndMove()
+	void TouchConsumer::swapSelectionAndMove()
 	{
 		const auto onEndCb = [this]()
 		{
@@ -129,7 +129,7 @@ namespace hex
 	}
 
 
-	void SwipeConsumer::moveSelectionUp()
+	void TouchConsumer::moveSelectionUp()
 	{	
 		m_grid.controller().setRingTilesState(actorTile(), TileState::kIdle);
 		m_grid.controller().setRingTilesState(otherTile(), TileState::kIdle);
@@ -164,7 +164,7 @@ namespace hex
 	}
 
 
-	void SwipeConsumer::moveSelectionDown()
+	void TouchConsumer::moveSelectionDown()
 	{
 		m_grid.controller().setRingTilesState(actorTile(), TileState::kIdle);
 		m_grid.controller().setRingTilesState(otherTile(), TileState::kIdle);
@@ -200,72 +200,72 @@ namespace hex
 	}
 
 
-	void SwipeConsumer::moveSelectionLeft()
+	void TouchConsumer::moveSelectionLeft()
 	{
-		if (m_otherTileIndex > 0) {
-			otherTile().setState(TileState::kClipped);
-			m_otherTileIndex--;
-			otherTile().setState(TileState::kSelected);
-		}
-		else {
+		//if (m_otherTileIndex > 0) {
+		//	otherTile().setState(TileState::kClipped);
+		//	m_otherTileIndex--;
+		//	otherTile().setState(TileState::kSelected);
+		//}
+		//else {
 			actorTile().setState(TileState::kClipped);
-			auto& outerTile = otherTile();
-			m_outerNeighbours.pop_back();
-			{
-				const auto ri = actorTile().getRingIndex();
-				const auto ti = actorTile().getTileIndex();
-				if (ti % (ri + 1) == 0) {
-					m_outerNeighbours.pop_back();
-				}
-			}
+		//	auto& outerTile = otherTile();
+		//	m_outerNeighbours.pop_back();
+		//	{
+		//		const auto ri = actorTile().getRingIndex();
+		//		const auto ti = actorTile().getTileIndex();
+		//		if (ti % (ri + 1) == 0) {
+		//			m_outerNeighbours.pop_back();
+		//		}
+		//	}
 			m_actorTile = static_cast<HexTile*>(actorTile().getPrevoiusRingTile());
 			actorTile().setState(TileState::kSelected);
-			const auto pt = outerTile.getPrevoiusRingTile();
-			m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
-			{
-				const auto ri = actorTile().getRingIndex();
-				const auto ti = actorTile().getTileIndex();
-				if (ti % (ri + 1) == 0) {
-					auto pt = m_outerNeighbours.front()->getPrevoiusRingTile();
-					m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
-				}
-			}
-			m_otherTileIndex = (m_outerNeighbours.size() - 1);
-		}
+		//	const auto pt = outerTile.getPrevoiusRingTile();
+			//m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
+			//{
+			//	const auto ri = actorTile().getRingIndex();
+			//	const auto ti = actorTile().getTileIndex();
+			//	if (ti % (ri + 1) == 0) {
+			//		auto pt = m_outerNeighbours.front()->getPrevoiusRingTile();
+			//		m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
+			//	}
+			//}
+			//m_otherTileIndex = (m_outerNeighbours.size() - 1);
+		//}
 	}
 
 
-	void SwipeConsumer::moveSelectionRight()
+	void TouchConsumer::moveSelectionRight()
 	{
-		if (m_otherTileIndex < (m_outerNeighbours.size() - 1)) {
-			otherTile().setState(TileState::kClipped);
-			m_otherTileIndex++;
-			otherTile().setState(TileState::kSelected);
-		}
-		else {
+		//if (m_otherTileIndex < (m_outerNeighbours.size() - 1)) {
+		//	otherTile().setState(TileState::kClipped);
+		//	m_otherTileIndex++;
+		//	otherTile().setState(TileState::kSelected);
+		//}
+		//else {
 			actorTile().setState(TileState::kClipped);
-			auto& outerTile = otherTile();
-			m_outerNeighbours.pop_front();
-			{
-				const auto ri = actorTile().getRingIndex();
-				const auto ti = actorTile().getTileIndex();
-				if (ti % (ri + 1) == 0) {
-					m_outerNeighbours.pop_front();
-				}
-			}
+			//auto& outerTile = otherTile();
+			//m_outerNeighbours.pop_front();
+			//{
+			//	const auto ri = actorTile().getRingIndex();
+			//	const auto ti = actorTile().getTileIndex();
+			//	if (ti % (ri + 1) == 0) {
+			//		m_outerNeighbours.pop_front();
+			//	}
+			//}
 			m_actorTile = static_cast<HexTile*>(actorTile().getNextRingTile());
 			actorTile().setState(TileState::kSelected);
-			const auto nt = outerTile.getNextRingTile();
-			m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
-			{
-				const auto ri = actorTile().getRingIndex();
-				const auto ti = actorTile().getTileIndex();
-				if (ti % (ri + 1) == 0) {
-					auto nt = m_outerNeighbours.back()->getNextRingTile();
-					m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
-				}
-			}
-			m_otherTileIndex = 0;
-		}
+		//	const auto nt = outerTile.getNextRingTile();
+		//	m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
+		//	{
+		//		const auto ri = actorTile().getRingIndex();
+		//		const auto ti = actorTile().getTileIndex();
+		//		if (ti % (ri + 1) == 0) {
+		//			auto nt = m_outerNeighbours.back()->getNextRingTile();
+		//			m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
+		//		}
+		//	}
+		//	m_otherTileIndex = 0;
+		//}
 	}
 }

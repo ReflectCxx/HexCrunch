@@ -1,5 +1,5 @@
 
-#include "SwipeTracker.h"
+#include "TouchTracker.h"
 
 USING_NS_CC;
 
@@ -9,7 +9,7 @@ namespace {
 
 namespace hex
 {
-    SwipeTracker::SwipeTracker(Node* pTarget, const std::function<void(Swipe)>& pCallback)
+    TouchTracker::TouchTracker(Node* pTarget, const std::function<void(Swipe)>& pCallback)
         : m_isSwiping(false)
         , m_callback(pCallback)
         , m_target(pTarget) {
@@ -17,7 +17,7 @@ namespace hex
     }
 
 
-    SwipeTracker::~SwipeTracker()
+    TouchTracker::~TouchTracker()
     {
         if (m_listener && m_target) {
             m_target->getEventDispatcher()->removeEventListener(m_listener);
@@ -25,7 +25,7 @@ namespace hex
     }
 
 
-    void SwipeTracker::init()
+    void TouchTracker::init()
     {
         m_listener = cocos2d::EventListenerTouchOneByOne::create();
         m_listener->onTouchEnded = [this](cocos2d::Touch*, cocos2d::Event*) {
