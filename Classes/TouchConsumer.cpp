@@ -108,22 +108,22 @@ namespace hex
 	{
 		const auto onEndCb = [this]()
 		{
-			if (m_currentSwipe == Swipe::kUp || m_currentSwipe == Swipe::kDown) {
-				if (m_isLastSwipeUp) {
-					moveSelectionUp();
-				}
-				else {
-					moveSelectionDown();
-				}
-			}
-			else if (m_currentSwipe == Swipe::kLeft || m_currentSwipe == Swipe::kRight) {
-				if (m_lastSwipeLeft) {
-					moveSelectionLeft();
-				}
-				else {
-					moveSelectionRight();
-				}
-			}
+			//if (m_currentSwipe == Swipe::kUp || m_currentSwipe == Swipe::kDown) {
+			//	if (m_isLastSwipeUp) {
+			//		moveSelectionUp();
+			//	}
+			//	else {
+			//		moveSelectionDown();
+			//	}
+			//}
+			//else if (m_currentSwipe == Swipe::kLeft || m_currentSwipe == Swipe::kRight) {
+			//	if (m_lastSwipeLeft) {
+			//		moveSelectionLeft();
+			//	}
+			//	else {
+			//		moveSelectionRight();
+			//	}
+			//}
 		};
 		m_grid.controller().swapSelection(actorTile(), otherTile(), onEndCb);
 	}
@@ -202,70 +202,70 @@ namespace hex
 
 	void TouchConsumer::moveSelectionLeft()
 	{
-		//if (m_otherTileIndex > 0) {
-		//	otherTile().setState(TileState::kClipped);
-		//	m_otherTileIndex--;
-		//	otherTile().setState(TileState::kSelected);
-		//}
-		//else {
+		if (m_otherTileIndex > 0) {
+			otherTile().setState(TileState::kClipped);
+			m_otherTileIndex--;
+			otherTile().setState(TileState::kSelected);
+		}
+		else {
 			actorTile().setState(TileState::kClipped);
-		//	auto& outerTile = otherTile();
-		//	m_outerNeighbours.pop_back();
-		//	{
-		//		const auto ri = actorTile().getRingIndex();
-		//		const auto ti = actorTile().getTileIndex();
-		//		if (ti % (ri + 1) == 0) {
-		//			m_outerNeighbours.pop_back();
-		//		}
-		//	}
+			auto& outerTile = otherTile();
+			m_outerNeighbours.pop_back();
+			{
+				const auto ri = actorTile().getRingIndex();
+				const auto ti = actorTile().getTileIndex();
+				if (ti % (ri + 1) == 0) {
+					m_outerNeighbours.pop_back();
+				}
+			}
 			m_actorTile = static_cast<HexTile*>(actorTile().getPrevoiusRingTile());
 			actorTile().setState(TileState::kSelected);
-		//	const auto pt = outerTile.getPrevoiusRingTile();
-			//m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
-			//{
-			//	const auto ri = actorTile().getRingIndex();
-			//	const auto ti = actorTile().getTileIndex();
-			//	if (ti % (ri + 1) == 0) {
-			//		auto pt = m_outerNeighbours.front()->getPrevoiusRingTile();
-			//		m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
-			//	}
-			//}
-			//m_otherTileIndex = (m_outerNeighbours.size() - 1);
-		//}
+			const auto pt = outerTile.getPrevoiusRingTile();
+			m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
+			{
+				const auto ri = actorTile().getRingIndex();
+				const auto ti = actorTile().getTileIndex();
+				if (ti % (ri + 1) == 0) {
+					auto pt = m_outerNeighbours.front()->getPrevoiusRingTile();
+					m_outerNeighbours.push_front(static_cast<HexTile*>(pt));
+				}
+			}
+			m_otherTileIndex = (m_outerNeighbours.size() - 1);
+		}
 	}
 
 
 	void TouchConsumer::moveSelectionRight()
 	{
-		//if (m_otherTileIndex < (m_outerNeighbours.size() - 1)) {
-		//	otherTile().setState(TileState::kClipped);
-		//	m_otherTileIndex++;
-		//	otherTile().setState(TileState::kSelected);
-		//}
-		//else {
+		if (m_otherTileIndex < (m_outerNeighbours.size() - 1)) {
+			otherTile().setState(TileState::kClipped);
+			m_otherTileIndex++;
+			otherTile().setState(TileState::kSelected);
+		}
+		else {
 			actorTile().setState(TileState::kClipped);
-			//auto& outerTile = otherTile();
-			//m_outerNeighbours.pop_front();
-			//{
-			//	const auto ri = actorTile().getRingIndex();
-			//	const auto ti = actorTile().getTileIndex();
-			//	if (ti % (ri + 1) == 0) {
-			//		m_outerNeighbours.pop_front();
-			//	}
-			//}
+			auto& outerTile = otherTile();
+			m_outerNeighbours.pop_front();
+			{
+				const auto ri = actorTile().getRingIndex();
+				const auto ti = actorTile().getTileIndex();
+				if (ti % (ri + 1) == 0) {
+					m_outerNeighbours.pop_front();
+				}
+			}
 			m_actorTile = static_cast<HexTile*>(actorTile().getNextRingTile());
 			actorTile().setState(TileState::kSelected);
-		//	const auto nt = outerTile.getNextRingTile();
-		//	m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
-		//	{
-		//		const auto ri = actorTile().getRingIndex();
-		//		const auto ti = actorTile().getTileIndex();
-		//		if (ti % (ri + 1) == 0) {
-		//			auto nt = m_outerNeighbours.back()->getNextRingTile();
-		//			m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
-		//		}
-		//	}
-		//	m_otherTileIndex = 0;
-		//}
+			const auto nt = outerTile.getNextRingTile();
+			m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
+			{
+				const auto ri = actorTile().getRingIndex();
+				const auto ti = actorTile().getTileIndex();
+				if (ti % (ri + 1) == 0) {
+					auto nt = m_outerNeighbours.back()->getNextRingTile();
+					m_outerNeighbours.push_back(static_cast<HexTile*>(nt));
+				}
+			}
+			m_otherTileIndex = 0;
+		}
 	}
 }
