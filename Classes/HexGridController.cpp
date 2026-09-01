@@ -44,11 +44,11 @@ namespace hex
 	}
 
 
-	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, std::function<void()> pOnEndCb)
+	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, const std::function<void()>& pOnEndCb)
 	{
 		constexpr auto DT = 0.25f;
-		const auto actorPos = pActorT.getPosition();
-		const auto otherPos = pOtherT.getPosition();
+		const auto& actorPos = pActorT.getPosition();
+		const auto& otherPos = pOtherT.getPosition();
 
 		pActorT.runAction(MoveTo::create(DT, otherPos));
 		pOtherT.runAction(MoveTo::create(DT, actorPos));

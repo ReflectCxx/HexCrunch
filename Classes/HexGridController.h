@@ -10,6 +10,7 @@ namespace hex
 	class HexGridController
 	{
 		bool m_isGridIdle;
+
 		HexGrid& m_grid;
 
 	public:
@@ -18,7 +19,7 @@ namespace hex
 		
 		GETB(GridIdle, m_isGridIdle)
 
-		void swapSelection(HexTile& pActor, HexTile& pOther, std::function<void()> pCb);
+		void swapSelection(HexTile& pActor, HexTile& pOther, const std::function<void()>& pOnEndCb);
 
 		void correctOrientation(HexTile& pActorT, HexTile& pOtherT);
 
