@@ -6,9 +6,9 @@ namespace hex
 
 	struct HexTileState
 	{
-		static void onIdle(HexTile&);
-		static void onClipped(HexTile&);
-		static void onSelected(HexTile&);
-		static void onHighlighted(HexTile&);
+		static void setToIdle(HexTile&);
+		static void setToActing(HexTile&);
+		static void setToClipped(HexTile&);
+		static void setToHighlighted(HexTile&);
 	};
 }

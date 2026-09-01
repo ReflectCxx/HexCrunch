@@ -16,14 +16,15 @@ namespace hex
 	class HexTile : public Hex, public cocos2d::Node
 	{
 		friend struct HexTileUtils;
+
 	protected:
 
 		PathLink m_pathLink;
 
 		cocos2d::Node* m_clipped;
-		cocos2d::Node* m_highlight;
-		cocos2d::Node* m_background;
 		cocos2d::Node* m_foreground;
+		cocos2d::Node* m_background;
+		cocos2d::DrawNode* m_bgHighlight;
 
 		void addIndexLabel();
 		void refreshTileColor();
@@ -34,13 +35,13 @@ namespace hex
 
 	public:
 
-		SETP(cocos2d::Node, Background, m_background)
+		SETP(cocos2d::DrawNode, Background, m_background)
 
 		GETPREF(cocos2d::Node, Clipped, m_clipped)
 		GETPREF(cocos2d::Node, Link, m_pathLink.node)
-		GETPREF(cocos2d::Node, Highlight, m_highlight)
-		GETPREF(cocos2d::Node, Background, m_background)
 		GETPREF(cocos2d::Node, Foreground, m_foreground)
+		GETPREF(cocos2d::Node, Background, m_background)
+		GETPREF(cocos2d::DrawNode, Highlight, m_bgHighlight)
 
 		void setState(TileState pState);
 

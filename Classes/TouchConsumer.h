@@ -19,19 +19,26 @@ namespace hex
 
 		HexTile& actorTile();
 		HexTile& otherTile();
-		
-		void moveSelectionUp();
-		void moveSelectionLeft();
-		void moveSelectionDown();
-		void moveSelectionRight();
+
 		void swapSelectionAndMove();
-		void initOuterRingsTiles();
+		void updateOuterRingPathQ();
+		void highlightCurrentRing(bool pStateOn);
+
+		void moveActorUp();
+		void moveActorDown();
+
+		bool moveSelectionUp();
+		bool moveSelectionLeft();
+		bool moveSelectionDown();
+		bool moveSelectionRight();
+
+		bool moveSliderTiles(const Swipe pDir);
 
 	public:
 
 		TouchConsumer(HexGrid& pHexGrid);
 
 		void init();
-		void onInputRecieved(Swipe pDir);
+		void onInputRecieved(const Swipe pDir);
 	};
 }

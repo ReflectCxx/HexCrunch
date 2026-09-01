@@ -8,10 +8,9 @@ USING_NS_CC;
 
 namespace
 {
-	static constexpr auto Z_TILE_COLOR = 0;
-	static constexpr auto Z_TILE_CLIPPED = 1;
-	static constexpr auto Z_TILE_HIGHLIGHT = 2;
-	static constexpr auto COLOR_SPRITE_TAG = 99;
+	static constexpr auto Z_BG_HIGHLIGHT = 0;
+	static constexpr auto Z_FOREGROUND = 1;
+	static constexpr auto Z_CLIPPED = 2;
 }
 
 
@@ -20,9 +19,9 @@ namespace hex
 	HexTile::HexTile(const int pRingIndex, const int pTileIndex)
 		: Hex(pRingIndex, pTileIndex)
 		, m_clipped(nullptr)
-		, m_highlight(nullptr)
 		, m_background(nullptr)
 		, m_foreground(nullptr)
+		, m_bgHighlight(nullptr)
 	{ }
 
 
@@ -50,22 +49,16 @@ namespace hex
 		constexpr auto radius = (HEX_RAD - HEX_BORDER);
 		const auto sz = Size{ SQRT_3 * radius, 2.f * radius };
 
+		m_bgHighlight = DrawNode::create();
+		m_bgHighlight->setContentSize(sz);
+		m_bgHighlight->setVisible(false);
+		m_bgHighlight->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
+		addChild(m_bgHighlight, Z_BG_HIGHLIGHT);
+
 		m_foreground = Node::create();
 		m_foreground->setContentSize(sz);
-		addChild(m_foreground, Z_TILE_COLOR);
+		addChild(m_foreground, Z_FOREGROUND);
 
-		m_highlight = Node::create();
-		addChild(m_highlight, Z_TILE_HIGHLIGHT);
-
-		const auto create = [&sz](const std::string pStr, float scale = 1.f) {
-			auto tile = Sprite::create(pStr);
-			const auto& ssz = tile->getContentSize();
-			const auto scaleX = (sz.width * scale)/ ssz.width;
-			const auto scaleY = (sz.height * scale)/ ssz.height;
-			tile->setScale(scaleX, scaleY);
-			return tile;
-		};
-		//m_hexHighlight->addChild(create(TILE_HIGH));
 		refreshTileColor();
 		addIndexLabel();
 		return true;
@@ -80,15 +73,16 @@ namespace hex
 	{
 		const auto& sz = getForeground().getContentSize();
 		const auto color = getColorId();
+		const auto tileStr = HexTileUtils::toStr(color);
 		{
-			auto tile = HexTileUtils::tileSprite(sz, color);
-			getForeground().removeChildByTag(COLOR_SPRITE_TAG);
-			getForeground().addChild(tile, 0, COLOR_SPRITE_TAG);
+			auto tile = HexTileUtils::tileSprite(sz, tileStr);
+			getForeground().removeAllChildren();
+			getForeground().addChild(tile);
 		}
 
 		if (m_clipped != nullptr)
 		{
-			auto tile = HexTileUtils::tileSprite(sz, color);
+			auto tile = HexTileUtils::tileSprite(sz, tileStr);
 			getClipped().removeAllChildren();
 			getClipped().addChild(tile);
 		}
@@ -101,17 +95,19 @@ namespace hex
 
 	void HexTile::setRingPathLink(const PathLink& pLink)
 	{
-		const auto tileSz = getForeground().getContentSize();
+		const auto& tileSz = getForeground().getContentSize();
 		const auto clipSz = Size{ CLIP_WIDTH, CLIP_HEIGHT };
+		const auto color = getColorId();
+		const auto tileStr = HexTileUtils::toStr(color);
 
 		m_clipped = Node::create();
-		auto tile = HexTileUtils::tileSprite(tileSz, getColorId());
+		auto tile = HexTileUtils::tileSprite(tileSz, tileStr);
 		getClipped().addChild(tile);
 
 		auto capsule = DrawNode::create();
 		auto clipped = HexTileUtils::createClipped(m_clipped, capsule);
-		HexTileUtils::drawLinkCapsule({ pLink.angle, pLink.origin, capsule }, getColorId(), clipSz);
-		addChild(clipped, Z_TILE_CLIPPED);
+		HexTileUtils::drawLinkCapsule({ pLink.angle, pLink.origin, capsule }, color, clipSz);
+		addChild(clipped, Z_CLIPPED);
 
 		m_pathLink = pLink;
 		getLink().setVisible(false);
@@ -137,22 +133,22 @@ namespace hex
 		switch (getCurrentState())
 		{
 		case TileState::kIdle: {
-			HexTileState::onIdle(*this);
+			HexTileState::setToIdle(*this);
 			return;
 		}
 		case TileState::kClipped:
 		{
-			HexTileState::onClipped(*this);
+			HexTileState::setToClipped(*this);
 			return;
 		}
-		case TileState::kSelected:
+		case TileState::kActing:
 		{
-			HexTileState::onSelected(*this);
+			HexTileState::setToActing(*this);
 			return;
 		}
 		case TileState::kHighlighted:
 		{
-			HexTileState::onHighlighted(*this);
+			HexTileState::setToHighlighted(*this);
 			return;
 		}
 		default: return;

@@ -36,8 +36,8 @@ namespace hex
 	{
 		kNone,
 		kIdle,
+		kActing,
 		kClipped,
-		kSelected,
 		kHighlighted
 	};
 

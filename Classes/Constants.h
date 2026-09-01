@@ -26,6 +26,8 @@ namespace hex
 	constexpr auto HEX_HEIGHT = 2.f * HEX_RAD;
 	constexpr auto HEX_BORDER = 6.0;
 	constexpr auto BOUNCE_SCALE = 0.93f;
+	constexpr auto CORNER_RAD = 15.f;
+	constexpr auto TILE_HIGHLIGHT_ALPHA = 0.90;
 
 	//Not scalable across resolutions.
 	constexpr auto LINK_WIDTH = 100.f;

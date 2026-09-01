@@ -82,7 +82,7 @@ namespace hex::ut
         drawNode->drawSolidPoly(vertices.data(), static_cast<int>(vertices.size()), color);
     }
 
-
+    //Runs on schedular, not on any action.
     static void run_hex_bounce(cocos2d::Node* pNode, float pRadius, std::function<void(float)> pOnBounce)
     {
         constexpr float SPEED = 110.f;

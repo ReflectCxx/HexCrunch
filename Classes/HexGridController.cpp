@@ -76,8 +76,8 @@ namespace hex
 		{
 			pActorT.setPosition(actorPos);
 			pOtherT.setPosition(otherPos);
-			pActorT.setState(TileState::kSelected);
-			pOtherT.setState(TileState::kSelected);
+			pActorT.setState(TileState::kActing);
+			pOtherT.setState(TileState::kActing);
 			HexTileUtils::swapTileColor(&pActorT, &pOtherT);
 			pOnEndCb();
 			m_isGridIdle = true;

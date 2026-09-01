@@ -21,17 +21,31 @@ namespace hex
 	}
 
 
+	const std::string HexTileUtils::bgStr(const ColorId pId)
+	{
+		switch (pId) {
+		case ColorId::kRed: return TILE_RED_BG;
+		case ColorId::kBlue: return TILE_BLUE_BG;
+		case ColorId::kGreen: return TILE_GREEN_BG;
+		case ColorId::kYellow: return TILE_YELLOW_BG;
+		case ColorId::kPurple: return TILE_PURPLE_BG;
+		default:break;
+		}
+		return TILE_BIEGE;
+	}
+
+
 	const cocos2d::Color4F HexTileUtils::toColor(const ColorId pId)
 	{
 		switch (pId) {
 		case ColorId::kRed: return HEXCOL_RED;
 		case ColorId::kBlue: return HEXCOL_BLUE;
-		case ColorId::kGreen: return HEXCOL_GREEN;
+		case ColorId::kGreen: return HEXCOL_TEAL_GREEN;
 		case ColorId::kYellow: return HEXCOL_YELLOW;
 		case ColorId::kPurple: return HEXCOL_PURPLE;
 		default:break;
 		}
-		return cocos2d::Color4F::BLACK;
+		return cocos2d::Color4F::ORANGE;
 	}
 }
 
@@ -55,9 +69,9 @@ namespace hex
 	}
 
 	 
-	Node* HexTileUtils::tileSprite(const Size& pSz, const ColorId pId, const float pScale)
+	Node* HexTileUtils::tileSprite(const Size& pSz, const std::string& pName, const float pScale)
 	{
-		auto tile = Sprite::create(toStr(pId));
+		auto tile = Sprite::create(pName);
 		const auto& sz = tile->getContentSize();
 		const auto scaleX = (pSz.width * pScale) / sz.width;
 		const auto scaleY = (pSz.height * pScale) / sz.height;

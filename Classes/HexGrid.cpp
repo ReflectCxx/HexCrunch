@@ -5,9 +5,6 @@
 
 USING_NS_CC;
 
-namespace {
-	static constexpr auto CORNER_RAD = 15.f;
-}
 
 namespace
 {
@@ -139,7 +136,7 @@ namespace hex
 	{
 		const auto node = DrawNode::create();
 		ut::draw_hexagon(node, HEX_RAD, Color4F::WHITE, CORNER_RAD);
-		node->setOpacity(255 * 0.9f);
+		node->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
 
 		auto capsule = DrawNode::create();
 		auto clipped = HexTileUtils::createClipped(node, capsule);
