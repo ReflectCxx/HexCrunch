@@ -82,7 +82,7 @@ namespace hex
 				updateOuterRingPathQ();
 				highlightCurrentRing(true);
 			}
-		} while (0 && movedSuccessfully && actorTile().getColorId() == otherTile().getColorId());
+		} while (movedSuccessfully && actorTile().getColorId() == otherTile().getColorId());
 		m_grid.controller().correctOrientation(actorTile(), otherTile());
 	}
 }
