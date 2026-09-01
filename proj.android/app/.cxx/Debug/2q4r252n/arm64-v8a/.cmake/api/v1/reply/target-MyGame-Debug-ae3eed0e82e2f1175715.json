@@ -1,0 +1,747 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "D:/infer-core/hex-crunch/proj.android/app/build/intermediates/cxx/Debug/2q4r252n/obj/arm64-v8a/libMyGame.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 155,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 157,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 160,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 161,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -frtti -fexceptions -fsigned-char -O0 -fno-limit-debug-info -fno-experimental-isel  -fPIC"
+				},
+				{
+					"fragment" : "-std=c++2a"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "ANDROID"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "COCOS2D_DEBUG=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "LWS_WITH_LIBUV"
+				},
+				{
+					"define" : "MyGame_EXPORTS"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "USE_FILE32API"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "D:/infer-core/hex-crunch/Classes"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/cocos/audio/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/cocos"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/extensions"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/cocos/platform"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/cocos/editor-support"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/cocos/base"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/cocos/platform/android"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/recast/.."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/tinyxml2/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/xxhash/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/xxtea/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/clipper/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/edtaa3func/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/ConvertUTF/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/poly2tri/.."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/md5/.."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/neera/AppData/Local/Android/Sdk/ndk/20.1.5948944/sources/android/cpufeatures"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/android-specific/pvmp3dec/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/android-specific/pvmp3dec/src"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/android-specific/tremolo/."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/unzip/."
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/Box2D/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/chipmunk/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/freetype2/include/android/freetype2"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/bullet/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/bullet/include/bullet"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/jpeg/include/android"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/openssl/include/android"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/uv/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/webp/include/android"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/websockets/include/android"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/curl/include/android"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/png/include/android"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "D:/infer-core/hex-crunch/cocos2d/external/zlib/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "20"
+			},
+			"sourceIndexes" : 
+			[
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28
+			],
+			"sysroot" : 
+			{
+				"path" : "C:/Users/neera/AppData/Local/Android/Sdk/ndk/20.1.5948944/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "cocos2d::@b17589fc6237857a1771"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "external::@62470bbe2074d04a1904"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_recast::@49aedbc985f97720d891"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_xxhash::@11e20b8b9139209a045a"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_tinyxml2::@fd6ab661f4ee25a21ef0"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_xxtea::@95546a4b2abc077b0042"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_clipper::@33abc919e86db66c28b8"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_edtaa3func::@f3d42e550923b89477b0"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_convertUTF::@205c2f0e44a3b06b9b59"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_poly2tri::@ce0bfd23a4070be0c5de"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_md5::@82bef7d6fa8c2aa61808"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_cpufeatures::@faefd91259078ecab22c"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_unzip::@05a8bf1aba81c1a16e64"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_tremolo::@afb4f15f0e6ee4fb58dc"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "ext_pvmp3dec::@942eff57d9b63e8baa4e"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cpp_android_spec::@1eba3e23debeef414eca"
+		}
+	],
+	"id" : "MyGame::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libatomic.a -static-libstdc++ -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments -Wl,-z,noexecstack",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-Wl,--whole-archive",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "engine\\cocos\\platform\\libcpp_android_spec.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-Wl,--no-whole-archive",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "lib\\libcocos2d.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libexternal.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\Box2D\\prebuilt\\android\\arm64-v8a\\libbox2d.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\chipmunk\\prebuilt\\android\\arm64-v8a\\libchipmunk.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\freetype2\\prebuilt\\android\\arm64-v8a\\libfreetype.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_recast.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\bullet\\prebuilt\\android\\arm64-v8a\\libLinearMath.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\bullet\\prebuilt\\android\\arm64-v8a\\libBulletDynamics.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\bullet\\prebuilt\\android\\arm64-v8a\\libBulletCollision.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\bullet\\prebuilt\\android\\arm64-v8a\\libLinearMath.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\bullet\\prebuilt\\android\\arm64-v8a\\libBulletMultiThreaded.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\bullet\\prebuilt\\android\\arm64-v8a\\libMiniCL.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\jpeg\\prebuilt\\android\\arm64-v8a\\libjpeg.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\webp\\prebuilt\\android\\arm64-v8a\\libwebp.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\websockets\\prebuilt\\android\\arm64-v8a\\libwebsockets.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\openssl\\prebuilt\\android\\arm64-v8a\\libssl.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\openssl\\prebuilt\\android\\arm64-v8a\\libcrypto.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\uv\\prebuilt\\android\\arm64-v8a\\libuv_a.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_tinyxml2.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_xxhash.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_xxtea.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_clipper.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_edtaa3func.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_convertUTF.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_poly2tri.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_md5.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\curl\\prebuilt\\android\\arm64-v8a\\libcurl.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\png\\prebuilt\\android\\arm64-v8a\\libpng.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "engine\\external\\android-specific\\cpufeatures\\libext_cpufeatures.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_pvmp3dec.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_tremolo.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\cocos2d\\external\\zlib\\prebuilt\\android\\arm64-v8a\\libz.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "lib\\libext_unzip.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lGLESv2",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lEGL",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-llog",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-landroid",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lOpenSLES",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX",
+		"sysroot" : 
+		{
+			"path" : "C:/Users/neera/AppData/Local/Android/Sdk/ndk/20.1.5948944/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+		}
+	},
+	"name" : "MyGame",
+	"nameOnDisk" : "libMyGame.so",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "Classes/AppDelegate.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/SwipeTracker.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/GameScene.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/HexGrid.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/SwipeConsumer.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/DrawingUtils.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/Constants.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/TypeConstants.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/AssetStrings.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/Defines.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/Hex.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/HexTileUtils.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/HexTile.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/HexTileState.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/HexGridController.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/CommandManager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Classes/Command.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/AppDelegate.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/SwipeTracker.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/GameScene.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/HexGrid.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/SwipeConsumer.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/Hex.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/HexTileUtils.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/HexTile.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/HexTileState.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/HexGridController.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Classes/CommandManager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "proj.android/app/jni/hellocpp/main.cpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

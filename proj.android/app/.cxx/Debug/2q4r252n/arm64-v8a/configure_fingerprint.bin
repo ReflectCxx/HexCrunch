@@ -1,0 +1,125 @@
+C/C++ Structured Log+
+)
+'D:\infer-core\hex-crunch\CMakeLists.txtC
+A
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	õ¥§Ü…4ğ1 ¿ÉÚ…4J
+H
+FD:\infer-core\hex-crunch\cocos2d\cmake\Modules\CocosBuildHelpers.cmake	õ¥§Ü…4ªv ¿ÎıĞÑ3F
+D
+BD:\infer-core\hex-crunch\cocos2d\cmake\Modules\CocosBuildSet.cmake	õ¥§Ü…4ó ¿ÎıĞÑ3J
+H
+FD:\infer-core\hex-crunch\cocos2d\cmake\Modules\CocosConfigDefine.cmake	õ¥§Ü…4¬! éáúƒ4J
+H
+FD:\infer-core\hex-crunch\cocos2d\cmake\Modules\CocosConfigDepend.cmake	õ¥§Ü…4¦" ¿ÎıĞÑ3<
+:
+8D:\infer-core\hex-crunch\cocos2d\cocos\2d\CMakeLists.txt	õ¥§Ü…4õ ƒÏıĞÑ3<
+:
+8D:\infer-core\hex-crunch\cocos2d\cocos\3d\CMakeLists.txt	õ¥§Ü…4Ì	 ¢ÏıĞÑ39
+7
+5D:\infer-core\hex-crunch\cocos2d\cocos\CMakeLists.txt	õ¥§Ü…4	¹- ¢ÏıĞÑ3?
+=
+;D:\infer-core\hex-crunch\cocos2d\cocos\audio\CMakeLists.txt	õ¥§Ü…4
+À$ ¢ÏıĞÑ3>
+<
+:D:\infer-core\hex-crunch\cocos2d\cocos\base\CMakeLists.txt	ö¥§Ü…4Ö öÏıĞÑ3S
+Q
+OD:\infer-core\hex-crunch\cocos2d\cocos\editor-support\cocostudio\CMakeLists.txt	ö¥§Ü…4ÙU ­ĞıĞÑ3N
+L
+JD:\infer-core\hex-crunch\cocos2d\cocos\editor-support\spine\CMakeLists.txt	ö¥§Ü…4é ×ĞıĞÑ3>
+<
+:D:\infer-core\hex-crunch\cocos2d\cocos\math\CMakeLists.txt	ö¥§Ü…4£ ˆÑıĞÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\cocos\navmesh\CMakeLists.txt	ö¥§Ü…4û ™ÑıĞÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\cocos\network\CMakeLists.txt	ö¥§Ü…4§
+ ÑıĞÑ3C
+A
+?D:\infer-core\hex-crunch\cocos2d\cocos\physics3d\CMakeLists.txt	ö¥§Ü…4 ²ÑıĞÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\cocos\physics\CMakeLists.txt	ö¥§Ü…4² ­ÑıĞÑ3B
+@
+>D:\infer-core\hex-crunch\cocos2d\cocos\platform\CMakeLists.txt	ö¥§Ü…4‹. ºÑıĞÑ3J
+H
+FD:\infer-core\hex-crunch\cocos2d\cocos\platform\android\CMakeLists.txt	ö¥§Ü…4à ÀÑıĞÑ3B
+@
+>D:\infer-core\hex-crunch\cocos2d\cocos\renderer\CMakeLists.txt	ö¥§Ü…4Ï" ›ÒıĞÑ3<
+:
+8D:\infer-core\hex-crunch\cocos2d\cocos\ui\CMakeLists.txt	ö¥§Ü…4£" ·ÓıĞÑ3>
+<
+:D:\infer-core\hex-crunch\cocos2d\extensions\CMakeLists.txt	ö¥§Ü…4Ô£ ïÓıĞÑ3B
+@
+>D:\infer-core\hex-crunch\cocos2d\external\Box2D\CMakeLists.txt	ö¥§Ü…4Ş ğ£ñÑÑ3<
+:
+8D:\infer-core\hex-crunch\cocos2d\external\CMakeLists.txt	ö¥§Ü…4 . ğ£ñÑÑ3G
+E
+CD:\infer-core\hex-crunch\cocos2d\external\ConvertUTF\CMakeLists.txt	ö¥§Ü…4² ğ£ñÑÑ3Y
+W
+UD:\infer-core\hex-crunch\cocos2d\external\android-specific\cpufeatures\CMakeLists.txt	ö¥§Ü…4… ğ£ñÑÑ3V
+T
+RD:\infer-core\hex-crunch\cocos2d\external\android-specific\pvmp3dec\CMakeLists.txt	ö¥§Ü…4¼ ğ£ñÑÑ3U
+S
+QD:\infer-core\hex-crunch\cocos2d\external\android-specific\tremolo\CMakeLists.txt	ö¥§Ü…4Â ğ£ñÑÑ3C
+A
+?D:\infer-core\hex-crunch\cocos2d\external\bullet\CMakeLists.txt	ö¥§Ü…4° ğ£ñÑÑ3E
+C
+AD:\infer-core\hex-crunch\cocos2d\external\chipmunk\CMakeLists.txt	ö¥§Ü…4É ğ£ñÑÑ3D
+B
+@D:\infer-core\hex-crunch\cocos2d\external\clipper\CMakeLists.txt	ö¥§Ü…4 – ğ£ñÑÑ3M
+K
+ID:\infer-core\hex-crunch\cocos2d\external\cmake\CocosExternalConfig.cmake	ö¥§Ü…4!¼	 ğ£ñÑÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\external\curl\CMakeLists.txt	ö¥§Ü…4"ó ğ£ñÑÑ3G
+E
+CD:\infer-core\hex-crunch\cocos2d\external\edtaa3func\CMakeLists.txt	ö¥§Ü…4#œ ğ£ñÑÑ3F
+D
+BD:\infer-core\hex-crunch\cocos2d\external\freetype2\CMakeLists.txt	ö¥§Ü…4$ì Ø«ñÑÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\external\jpeg\CMakeLists.txt	ö¥§Ü…4%á Ø«ñÑÑ3@
+>
+<D:\infer-core\hex-crunch\cocos2d\external\md5\CMakeLists.txt	ö¥§Ü…4&¿ Ø«ñÑÑ3D
+B
+@D:\infer-core\hex-crunch\cocos2d\external\openssl\CMakeLists.txt	ö¥§Ü…4'ç Ø«ñÑÑ3@
+>
+<D:\infer-core\hex-crunch\cocos2d\external\png\CMakeLists.txt	ö¥§Ü…4(à Ø«ñÑÑ3E
+C
+AD:\infer-core\hex-crunch\cocos2d\external\poly2tri\CMakeLists.txt	ö¥§Ü…4)£ Ø«ñÑÑ3C
+A
+?D:\infer-core\hex-crunch\cocos2d\external\recast\CMakeLists.txt	ö¥§Ü…4*İ Ø«ñÑÑ3E
+C
+AD:\infer-core\hex-crunch\cocos2d\external\tinyxml2\CMakeLists.txt	ö¥§Ü…4+µ Ø«ñÑÑ3B
+@
+>D:\infer-core\hex-crunch\cocos2d\external\unzip\CMakeLists.txt	ö¥§Ü…4,™ Ø«ñÑÑ3?
+=
+;D:\infer-core\hex-crunch\cocos2d\external\uv\CMakeLists.txt	ö¥§Ü…4-İ Ø«ñÑÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\external\webp\CMakeLists.txt	ö¥§Ü…4.á Ø«ñÑÑ3G
+E
+CD:\infer-core\hex-crunch\cocos2d\external\websockets\CMakeLists.txt	ö¥§Ü…4/Ş Ø«ñÑÑ3C
+A
+?D:\infer-core\hex-crunch\cocos2d\external\xxhash\CMakeLists.txt	ö¥§Ü…40’ À³ñÑÑ3B
+@
+>D:\infer-core\hex-crunch\cocos2d\external\xxtea\CMakeLists.txt	ö¥§Ü…41’ À³ñÑÑ3A
+?
+=D:\infer-core\hex-crunch\cocos2d\external\zlib\CMakeLists.txt	ö¥§Ü…42Â À³ñÑÑ3h
+f
+dD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\additional_project_files.txt	ö¥§Ü…43©˜ İ¤§Ü…4e
+c
+aD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\android_gradle_build.json	ö¥§Ü…44üI à¤§Ü…4j
+h
+fD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\android_gradle_build_mini.json	ö¥§Ü…45¬E á¥§Ü…4W
+U
+SD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\build.ninja	ö¥§Ü…46¡ë‹ „¤§Ü…4[
+Y
+WD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\build.ninja.txt	ö¥§Ü…47`
+^
+\D:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\build_file_index.txt	ö¥§Ü…48— ï•Ü•ƒ4a
+_
+]D:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\compile_commands.json	÷¥§Ü…49˜Ô‰ ƒ¤§Ü…4e
+c
+aD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\compile_commands.json.bin	÷¥§Ü…4:î€ ƒ¤§Ü…4k
+i
+gD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\metadata_generation_command.txt	÷¥§Ü…4;„	 ê•Ü•ƒ4^
+\
+ZD:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\prefab_config.json	÷¥§Ü…4<( ê•Ü•ƒ4c
+a
+_D:\infer-core\hex-crunch\proj.android\app\.cxx\Debug\2q4r252n\arm64-v8a\symbol_folder_index.txt	÷¥§Ü…4=^ ï•Ü•ƒ4

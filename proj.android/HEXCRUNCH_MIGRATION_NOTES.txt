@@ -1,0 +1,63 @@
+HexCrunch Android migration notes
+=================================
+
+Expected project root:
+  D:\infer-core\hex-crunch
+
+Updated inside this proj.android ZIP:
+  proj.android\build.gradle
+  proj.android\settings.gradle
+  proj.android\gradle.properties
+  proj.android\gradle\wrapper\gradle-wrapper.properties
+  proj.android\app\build.gradle
+  proj.android\app\AndroidManifest.xml
+  proj.android\app\res\values\strings.xml
+
+Configured toolchain:
+  Android Gradle Plugin: 8.7.3
+  Gradle:                8.9
+  JDK:                   C:\Program Files\Java\jdk-17
+  compileSdk:            35
+  targetSdk:             35
+  minSdk:                21
+  NDK:                   20.1.5948944
+  ABI:                   arm64-v8a
+  App ID / namespace:    com.infercore.hexcrunch
+  Display name:          HexCrunch
+  Orientation:           portrait
+
+IMPORTANT: These files are outside proj.android and were NOT present in the uploaded ZIP.
+If this HexCrunch source tree is the old/original Cocos2d-x tree, apply the same fixes there too:
+
+1) D:\infer-core\hex-crunch\CMakeLists.txt
+   Add/keep:
+     set(CMAKE_CXX_STANDARD 14)
+     set(CMAKE_CXX_STANDARD_REQUIRED ON)
+     set(CMAKE_CXX_EXTENSIONS OFF)
+
+2) D:\infer-core\hex-crunch\cocos2d\cmake\Modules\CocosConfigDefine.cmake
+   Change:
+     set(CMAKE_CXX_STANDARD 11)
+   to:
+     set(CMAKE_CXX_STANDARD 14)
+
+3) D:\infer-core\hex-crunch\cocos2d\cocos\platform\android\java\src\org\cocos2dx\lib\Cocos2dxHelper.java
+   Remove the obsolete com.enhance.gameservice / IGameTuningService integration if present.
+
+4) Any game-source occurrences such as:
+     auto& at = [=](...)
+   must be:
+     auto at = [=](...)
+   if the same invalid lambda binding exists in this project.
+
+5) AGP 8 also requires the Cocos Android library module to be modernized:
+   D:\infer-core\hex-crunch\cocos2d\cocos\platform\android\libcocos2dx\build.gradle
+   It needs namespace 'org.cocos2dx.lib' and modern compileSdk/minSdk/targetSdk syntax.
+
+Before rebuilding, remove stale native caches:
+  proj.android\app\.cxx
+  proj.android\app\build
+
+Then from D:\infer-core\hex-crunch\proj.android:
+  .\gradlew.bat clean
+  .\gradlew.bat assembleDebug

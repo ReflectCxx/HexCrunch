@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "engine/external/android-specific/tremolo",
+		"source" : "cocos2d/external/android-specific/tremolo"
+	}
+}
