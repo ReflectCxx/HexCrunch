@@ -61,10 +61,10 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/SwipeTracker.cpp
+     Classes/TouchTracker.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
-     Classes/SwipeConsumer.cpp
+     Classes/TouchConsumer.cpp
      Classes/Hex.cpp
      Classes/HexTileUtils.cpp
      Classes/HexTile.cpp
@@ -74,10 +74,10 @@ list(APPEND GAME_SOURCE
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/SwipeTracker.h
+     Classes/TouchTracker.h
      Classes/GameScene.h
      Classes/HexGrid.h
-     Classes/SwipeConsumer.h
+     Classes/TouchConsumer.h
      Classes/DrawingUtils.h
      Classes/Constants.h
      Classes/TypeConstants.h
