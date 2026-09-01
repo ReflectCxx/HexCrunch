@@ -42,7 +42,7 @@ namespace hex
 		: m_controller(*this)
 		, m_swipeConsumer(std::make_unique<SwipeConsumer>(*this))
 		, m_swipeTracker(std::make_unique<SwipeTracker>(this,
-			[this](Slide pDir) {
+			[this](Swipe pDir) {
 				m_swipeConsumer->onInputRecieved(pDir);
 			}))
 	{ }

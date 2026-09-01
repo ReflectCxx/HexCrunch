@@ -48,7 +48,7 @@ namespace hex
                     return;
                 }
 
-                m_callback(delta.x > 0 ? Slide::kRight : Slide::kLeft);
+                m_callback(delta.x > 0 ? Swipe::kRight : Swipe::kLeft);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace hex
                     return;
                 }
 
-                m_callback(delta.y > 0 ? Slide::kUp : Slide::kDown);
+                m_callback(delta.y > 0 ? Swipe::kUp : Swipe::kDown);
             }
             m_isSwiping = true;
             m_startPos = currentPos;
@@ -65,7 +65,7 @@ namespace hex
         m_listener->onTouchEnded = [this](cocos2d::Touch*, cocos2d::Event*)
         {
             if (!m_isSwiping) {
-                m_callback(Slide::kSingleTap);
+                m_callback(Swipe::kSingleTap);
             }
         };
 

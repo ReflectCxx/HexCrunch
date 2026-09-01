@@ -7,9 +7,10 @@ namespace hex
 	class HexGrid;
 	class SwipeConsumer
 	{
+		bool m_isLastSwipeUp;
+		bool m_lastSwipeLeft;
 		int m_otherTileIndex;
-		bool m_isGridRotating;
-		bool m_isTileMoving;
+		Swipe m_currentSwipe;
 
 		HexGrid& m_grid;
 
@@ -19,18 +20,18 @@ namespace hex
 		HexTile& actorTile();
 		HexTile& otherTile();
 		
-		void initOuterRingsTiles();		
-		void onDoubleTap();
 		void moveSelectionUp();
 		void moveSelectionLeft();
 		void moveSelectionDown();
 		void moveSelectionRight();
+		void swapSelectionAndMove();
+		void initOuterRingsTiles();
 
 	public:
 
 		SwipeConsumer(HexGrid& pHexGrid);
 
 		void init();
-		void onInputRecieved(Slide pDir);
+		void onInputRecieved(Swipe pDir);
 	};
 }

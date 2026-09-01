@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 namespace hex
 {
 	class HexTile;
@@ -16,7 +18,7 @@ namespace hex
 		
 		GETB(GridIdle, m_isGridIdle)
 
-		void swapSelection(HexTile& pActor, HexTile& pOther);
+		void swapSelection(HexTile& pActor, HexTile& pOther, std::function<void()> pCb);
 
 		void correctOrientation(HexTile& pActorT, HexTile& pOtherT);
 

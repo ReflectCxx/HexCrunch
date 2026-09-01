@@ -23,7 +23,7 @@ namespace hex
         bg->setOpacity(255 * 0.95f);
 
         auto grid = HexGrid::create();
-        grid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f });
+        grid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
         addChild(grid);
         return true;
     }

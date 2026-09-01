@@ -9,7 +9,7 @@ namespace hex
 {
     struct SwipeTracker
     {
-        using Callback = std::function<void(Slide)>;
+        using Callback = std::function<void(Swipe)>;
 
         bool m_isSwiping = false;
 

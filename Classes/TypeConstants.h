@@ -23,7 +23,7 @@ namespace hex
 	};
 
 
-	enum class Slide {
+	enum class Swipe {
 		kNone,
 		kUp,
 		kLeft,

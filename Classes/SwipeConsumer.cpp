@@ -16,12 +16,6 @@ namespace hex
 	{
 		return *m_actorTile;
 	}
-
-
-	void SwipeConsumer::onDoubleTap()
-	{
-		m_grid.controller().swapSelection(actorTile(), otherTile());
-	}
 }
 
 
@@ -29,8 +23,9 @@ namespace hex
 {
 	SwipeConsumer::SwipeConsumer(HexGrid& pHexGrid)
 		: m_otherTileIndex(-1)
-		, m_isGridRotating(false)
-		, m_isTileMoving(false)
+		, m_lastSwipeLeft(false)
+		, m_isLastSwipeUp(true)
+		, m_currentSwipe(Swipe::kNone)
 		, m_grid(pHexGrid)
 		, m_actorTile(nullptr)
 	{ }
@@ -51,31 +46,39 @@ namespace hex
 	}
 
 
-	void SwipeConsumer::onInputRecieved(Slide pDir)
+	void SwipeConsumer::onInputRecieved(Swipe pDir)
 	{
 		if (!m_grid.controller().isGridIdle()) {
 			return;
 		}
 		switch (pDir)
 		{
-			case Slide::kUp: {
+			case Swipe::kSingleTap: {
+				swapSelectionAndMove();
+				break;
+			}
+			case Swipe::kUp: {
 				moveSelectionUp();
+				m_currentSwipe = pDir;
+				m_isLastSwipeUp = true;
 				break;
 			}
-			case Slide::kLeft: {
+			case Swipe::kLeft: {
 				moveSelectionLeft();
+				m_currentSwipe = pDir;
+				m_lastSwipeLeft = true;
 				break;
 			}
-			case Slide::kDown: {
+			case Swipe::kDown: {
 				moveSelectionDown();
+				m_currentSwipe = pDir;
+				m_isLastSwipeUp = false;
 				break;
 			}
-			case Slide::kRight: {
+			case Swipe::kRight: {
+				m_currentSwipe = pDir;
 				moveSelectionRight();
-				break;
-			}
-			case Slide::kSingleTap: {
-				onDoubleTap();
+				m_lastSwipeLeft = false;
 				break;
 			}
 			default:break;
@@ -98,6 +101,31 @@ namespace hex
 			m_outerNeighbours.push_back(static_cast<HexTile*>(t));
 		}
 		m_otherTileIndex = std::clamp(m_otherTileIndex, 0, (int)m_outerNeighbours.size() - 1);
+	}
+
+
+	void SwipeConsumer::swapSelectionAndMove()
+	{
+		const auto onEndCb = [this]()
+		{
+			if (m_currentSwipe == Swipe::kUp || m_currentSwipe == Swipe::kDown) {
+				if (m_isLastSwipeUp) {
+					moveSelectionUp();
+				}
+				else {
+					moveSelectionDown();
+				}
+			}
+			else if (m_currentSwipe == Swipe::kLeft || m_currentSwipe == Swipe::kRight) {
+				if (m_lastSwipeLeft) {
+					moveSelectionLeft();
+				}
+				else {
+					moveSelectionRight();
+				}
+			}
+		};
+		m_grid.controller().swapSelection(actorTile(), otherTile(), onEndCb);
 	}
 
 

@@ -44,7 +44,7 @@ namespace hex
 	}
 
 
-	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT)
+	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, std::function<void()> pOnEndCb)
 	{
 		constexpr auto DT = 0.25f;
 		const auto actorPos = pActorT.getPosition();
@@ -79,8 +79,8 @@ namespace hex
 			pActorT.setState(TileState::kSelected);
 			pOtherT.setState(TileState::kSelected);
 			HexTileUtils::swapTileColor(&pActorT, &pOtherT);
+			pOnEndCb();
 			m_isGridIdle = true;
-
 		}, DT + 0.01, "cb");
 	}
 }
