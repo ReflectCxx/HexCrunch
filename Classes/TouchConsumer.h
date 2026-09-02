@@ -7,10 +7,14 @@ namespace hex
 	class HexGrid;
 	class TouchConsumer
 	{
-		bool m_isLastSwipeUp;
-		bool m_lastSwipeLeft;
 		int m_otherTileIndex;
-		Swipe m_currentSwipe;
+
+		int m_sameDirSwapCount;
+		int m_sameDirSlideCount;
+
+		Swipe m_currentSlideDir;
+		Swipe m_lastSwappedInDir;
+		std::pair<int, int> m_lastSwappedIndices;
 
 		HexGrid& m_grid;
 
@@ -20,20 +24,22 @@ namespace hex
 		HexTile& actorTile();
 		HexTile& otherTile();
 
-		void swapSelectionAndMove();
-		void updateOuterRingPathQ();
-		void highlightCurrentRing(bool pStateOn);
-
 		void moveActorUp();
 		void moveActorDown();
-
 		bool moveSelectionUp();
 		bool moveSelectionLeft();
 		bool moveSelectionDown();
 		bool moveSelectionRight();
 
+		void updateOuterRingPathQ();
+		void highlightCurrentRing(bool pStateOn);
+
+		void swapSelection();
 		bool moveSliderTiles(const Swipe pDir);
 
+		void trackTapToPredictNextSwap();
+		void trackSwipeToPredictNextSwap(const Swipe pDir);
+		
 	public:
 
 		TouchConsumer(HexGrid& pHexGrid);
