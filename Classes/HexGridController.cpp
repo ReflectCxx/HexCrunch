@@ -46,7 +46,7 @@ namespace hex
 
 	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, const std::function<void()>& pOnEndCb)
 	{
-		constexpr auto DT = 0.25f;
+		constexpr auto DT = 0.2f;
 		const auto& actorPos = pActorT.getPosition();
 		const auto& otherPos = pOtherT.getPosition();
 
@@ -80,9 +80,8 @@ namespace hex
 			pActorT.getForeground().setVisible(false);
 			pOtherT.getClipped().setVisible(true);
 			pOtherT.getForeground().setVisible(false);
-
-			pOnEndCb();
 			m_isGridIdle = true;
+			pOnEndCb();
 		}, DT + 0.01, "cb");
 	}
 }

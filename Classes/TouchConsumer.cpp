@@ -5,6 +5,11 @@
 
 USING_NS_CC;
 
+namespace
+{
+	constexpr auto ENABLE_SAME_COLOR_SWAP = false;
+}
+
 namespace hex
 {
 	inline HexTile& TouchConsumer::otherTile()
@@ -23,9 +28,11 @@ namespace hex
 {
 	TouchConsumer::TouchConsumer(HexGrid& pHexGrid)
 		: m_otherTileIndex(-1)
-		, m_lastSwipeLeft(false)
-		, m_isLastSwipeUp(true)
-		, m_currentSwipe(Swipe::kNone)
+		, m_sameDirSwapCount(0)
+		, m_sameDirSlideCount(0)
+		, m_currentSlideDir(Swipe::kNone)
+		, m_lastSwappedInDir(Swipe::kNone)
+		, m_lastSwappedIndices{ -1, -1 }
 		, m_grid(pHexGrid)
 		, m_actorTile(nullptr)
 	{ }
@@ -36,8 +43,8 @@ namespace hex
 		m_otherTileIndex = 1;
 		m_actorTile = m_grid.getHexagonRings()[RING_COUNT - 2][0];
 		updateOuterRingPathQ();
-		m_grid.controller().correctOrientation(actorTile(), otherTile());
 		highlightCurrentRing(true);
+		m_grid.controller().correctOrientation(actorTile(), otherTile());
 	}
 }
 
@@ -57,44 +64,99 @@ namespace hex
 	}
 
 
+	void TouchConsumer::trackTapToPredictNextSwap()
+	{
+		if (m_lastSwappedInDir != Swipe::kNone && m_lastSwappedInDir == m_currentSlideDir) {
+			m_sameDirSwapCount++;
+		}
+		else {
+			m_sameDirSwapCount = 0;
+			m_sameDirSlideCount = 0;
+			m_lastSwappedInDir = Swipe::kNone;
+		}
+		m_lastSwappedInDir = m_currentSlideDir;
+	}
+
+
+	void TouchConsumer::trackSwipeToPredictNextSwap(const Swipe pDir)
+	{
+		if (pDir != m_currentSlideDir || pDir == Swipe::kUp || pDir == Swipe::kDown) {
+			m_sameDirSlideCount = 0;
+			m_lastSwappedInDir = Swipe::kNone;
+		}
+		else {
+			if (m_sameDirSlideCount != m_sameDirSwapCount) {
+				m_sameDirSwapCount = 0;
+				m_lastSwappedInDir = Swipe::kNone;
+			}
+			m_sameDirSlideCount++;
+		}
+		m_currentSlideDir = pDir;
+	}
+
+
 	void TouchConsumer::onInputRecieved(const Swipe pDir)
 	{
 		if (!m_grid.controller().isGridIdle()) {
 			return;
 		}
-
 		if (pDir == Swipe::kSingleTap) {
-			swapSelectionAndMove();
-			return;
+			trackTapToPredictNextSwap();
+			swapSelection();
 		}
-
-		m_currentSwipe = pDir;
-		auto prevoiusActor = m_actorTile;
-		auto previousTileI = m_otherTileIndex;
-		bool movedSuccessfully = false;
-
-		do {
-			movedSuccessfully = moveSliderTiles(pDir);
-		} while (movedSuccessfully && actorTile().getColorId() == otherTile().getColorId());
-
-		if (!movedSuccessfully)
+		else
 		{
-			highlightCurrentRing(false);
-			m_actorTile = prevoiusActor;
-			m_otherTileIndex = previousTileI;
-			updateOuterRingPathQ();
-			highlightCurrentRing(true);
+			trackSwipeToPredictNextSwap(pDir);
+			if constexpr (ENABLE_SAME_COLOR_SWAP) {
+				moveSliderTiles(pDir);
+			}
+			else {
+				auto prevoiusActor = m_actorTile;
+				auto previousTileI = m_otherTileIndex;
+				bool movedSuccessfully = false;
+
+				do {
+					movedSuccessfully = moveSliderTiles(pDir);
+				} while (movedSuccessfully &&
+						 actorTile().getColorId() == otherTile().getColorId());
+
+				if (!movedSuccessfully) {
+					highlightCurrentRing(false);
+					m_actorTile = prevoiusActor;
+					m_otherTileIndex = previousTileI;
+					updateOuterRingPathQ();
+					highlightCurrentRing(true);
+				}
+			}
+			m_grid.controller().correctOrientation(actorTile(), otherTile());
 		}
-		m_grid.controller().correctOrientation(actorTile(), otherTile());
 	}
 }
 
 
 namespace hex
 {
-	void TouchConsumer::swapSelectionAndMove()
+	void TouchConsumer::swapSelection()
 	{
-		const auto onEndCb = [this]() {};
+		const auto actorTi = actorTile().getTileIndex();
+		const auto otherTi = otherTile().getTileIndex();
+		if (std::make_pair(actorTi, otherTi) == m_lastSwappedIndices ||
+			std::make_pair(otherTi, actorTi) == m_lastSwappedIndices) {
+			m_lastSwappedInDir = Swipe::kNone;
+			m_sameDirSwapCount = 0;
+		}
+		m_lastSwappedIndices = { actorTi, otherTi };
+
+		const auto onEndCb = [=]()-> bool
+		{
+			if (m_sameDirSwapCount > 1) {
+				onInputRecieved(m_currentSlideDir);
+				m_grid.controller().correctOrientation(actorTile(), otherTile());
+				return true;
+			}
+			CCLOG("Same dir swap count : %d", m_sameDirSwapCount);
+			return false;
+		};
 		m_grid.controller().swapSelection(actorTile(), otherTile(), onEndCb);
 	}
 
@@ -132,7 +194,6 @@ namespace hex
 		{
 			moveActorUp();
 			updateOuterRingPathQ();
-			m_grid.controller().correctOrientation(actorTile(), otherTile());
 			movedSuccessfully = true;
 		}
 		highlightCurrentRing(true);
@@ -148,7 +209,6 @@ namespace hex
 		{
 			moveActorDown();
 			updateOuterRingPathQ();
-			m_grid.controller().correctOrientation(actorTile(), otherTile());
 			movedSuccessfully = true;
 		}
 		highlightCurrentRing(true);
