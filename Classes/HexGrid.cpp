@@ -6,33 +6,6 @@
 USING_NS_CC;
 
 
-namespace
-{
-	std::vector<hex::ColorId> getRandomColors()
-	{
-		std::vector<int> count = { 6, 12, 18, 24, 30 };
-		std::vector<hex::ColorId> arr = {
-			hex::ColorId::kRed,
-			hex::ColorId::kGreen,
-			hex::ColorId::kYellow,
-			hex::ColorId::kBlue,
-			hex::ColorId::kPurple
-		};
-
-		std::random_device rd;
-		std::mt19937 rng(rd());
-		std::shuffle(count.begin(), count.end(), rng);
-
-		std::vector<hex::ColorId> colorBag;
-		for (size_t i = 0; i < arr.size(); ++i) {
-			colorBag.insert(colorBag.end(), count[i], arr[i]);
-		}
-		std::shuffle(colorBag.begin(), colorBag.end(), rng);
-		return colorBag;
-	}
-}
-
-
 namespace hex
 {
 	HexGrid::HexGrid()
@@ -61,7 +34,7 @@ namespace hex
 {
 	HexTile* HexGrid::spawnNewTile(const cocos2d::Vec2& pos, const int pRingIndex, const int pTileIndex)
 	{
-		static auto colors = getRandomColors();
+		static auto colors = HexTileUtils::getRandomColors();
 		auto colorId = ColorId::kNone;
 		if (pRingIndex < RING_COUNT) {
 			colorId = colors.back();

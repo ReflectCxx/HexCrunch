@@ -12,6 +12,8 @@ namespace hex
 
 		static const std::string bgStr(const ColorId pId);
 
+		static std::vector<hex::ColorId> getRandomColors();
+
 		static const cocos2d::Color4F toColor(const ColorId pId);
 
 		static void swapTileColor(HexTile* pTileA, HexTile* pTileB);

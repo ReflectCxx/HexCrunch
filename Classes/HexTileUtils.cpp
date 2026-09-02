@@ -52,6 +52,33 @@ namespace hex
 
 namespace hex
 {
+	std::vector<ColorId> HexTileUtils::getRandomColors()
+	{
+		std::vector<int> count = { 6, 12, 18, 24, 30 };
+		std::vector<ColorId> arr = {
+			ColorId::kRed,
+			ColorId::kGreen,
+			ColorId::kYellow,
+			ColorId::kBlue,
+			ColorId::kPurple
+		};
+
+		std::random_device rd;
+		std::mt19937 rng(rd());
+		std::shuffle(count.begin(), count.end(), rng);
+
+		std::vector<ColorId> colorBag;
+		for (size_t i = 0; i < arr.size(); ++i) {
+			colorBag.insert(colorBag.end(), count[i], arr[i]);
+		}
+		std::shuffle(colorBag.begin(), colorBag.end(), rng);
+		return colorBag;
+	}
+}
+
+
+namespace hex
+{
 	void HexTileUtils::drawLinkCapsule(const PathLink& pLink, ColorId pColor, const cocos2d::Size& pSize, bool pClear)
 	{
 		if (pClear) {

@@ -44,6 +44,7 @@ build/
 Build/
 build-*/
 proj.*
+proj.*/
 
 # CMake generated files
 CMakeFiles/
