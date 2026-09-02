@@ -31,7 +31,7 @@ namespace hex
 
         bool switchToState(state_t pNextState)
         {
-            auto& derived = *(static_cast<derived_t*>(this));
+            auto& derived = static_cast<derived_t&>(*this);
             if (derived.stateOnDeactivate() && derived.stateOnActivate(pNextState))
             {
                 m_previousState = m_currentState;

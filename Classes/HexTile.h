@@ -45,9 +45,7 @@ namespace hex
 		GETPREF(cocos2d::DrawNode, Highlight, m_bgHighlight)
 		GETPREF(cocos2d::DrawNode, Link, (m_pathLink.node))
 
-		void setState(TileState pState) {
-			switchToState(pState);
-		}
+		void setState(TileState pState);
 
 		bool stateOnDeactivate();
 
@@ -57,4 +55,12 @@ namespace hex
 
 		static HexTile* create(const ColorId pId, const int pRingIndex, const int pTileIndex);
 	};
+}
+
+
+namespace hex
+{
+	inline void HexTile::setState(TileState pState) {
+		switchToState(pState);
+	}
 }

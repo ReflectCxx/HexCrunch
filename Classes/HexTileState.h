@@ -6,7 +6,7 @@ namespace hex
 
 	struct HexTileState
 	{
-		static bool initNoState(HexTile&);
+		static bool initStateZero(HexTile&);
 
 		static bool turnOnIdle(HexTile&);
 		static bool turnOffIdle(HexTile&);

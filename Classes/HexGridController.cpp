@@ -63,12 +63,24 @@ namespace hex
 		runScale(pActorT);
 		runScale(pOtherT);
 
+		pActorT.getClipped().setVisible(false);
+		pActorT.getForeground().setVisible(true);
+		pOtherT.getClipped().setVisible(false);
+		pOtherT.getForeground().setVisible(true);
+
 		m_isGridIdle = false;
 		m_grid.scheduleOnce([=, &pActorT, &pOtherT](float)
 		{
+			HexTileUtils::swapTileColor(&pActorT, &pOtherT);
+			
 			pActorT.setPosition(actorPos);
 			pOtherT.setPosition(otherPos);
-			HexTileUtils::swapTileColor(&pActorT, &pOtherT);
+
+			pActorT.getClipped().setVisible(true);
+			pActorT.getForeground().setVisible(false);
+			pOtherT.getClipped().setVisible(true);
+			pOtherT.getForeground().setVisible(false);
+
 			pOnEndCb();
 			m_isGridIdle = true;
 		}, DT + 0.01, "cb");

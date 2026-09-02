@@ -62,27 +62,29 @@ namespace hex
 		if (!m_grid.controller().isGridIdle()) {
 			return;
 		}
+
 		if (pDir == Swipe::kSingleTap) {
 			swapSelectionAndMove();
 			return;
 		}
 
 		m_currentSwipe = pDir;
-		auto currentActor = m_actorTile;
-		int curOtherTileIndex = m_otherTileIndex;
+		auto prevoiusActor = m_actorTile;
+		auto previousTileI = m_otherTileIndex;
 		bool movedSuccessfully = false;
 
 		do {
 			movedSuccessfully = moveSliderTiles(pDir);
-			if (!movedSuccessfully && actorTile().getColorId() == otherTile().getColorId())
-			{
-				highlightCurrentRing(false);
-				m_actorTile = currentActor;
-				m_otherTileIndex = curOtherTileIndex;
-				updateOuterRingPathQ();
-				highlightCurrentRing(true);
-			}
 		} while (movedSuccessfully && actorTile().getColorId() == otherTile().getColorId());
+
+		if (!movedSuccessfully)
+		{
+			highlightCurrentRing(false);
+			m_actorTile = prevoiusActor;
+			m_otherTileIndex = previousTileI;
+			updateOuterRingPathQ();
+			highlightCurrentRing(true);
+		}
 		m_grid.controller().correctOrientation(actorTile(), otherTile());
 	}
 }
@@ -92,9 +94,6 @@ namespace hex
 {
 	void TouchConsumer::swapSelectionAndMove()
 	{
-		if (otherTile().getRingIndex() == RING_COUNT) {
-			return;
-		}
 		const auto onEndCb = [this]() {};
 		m_grid.controller().swapSelection(actorTile(), otherTile(), onEndCb);
 	}
@@ -117,17 +116,6 @@ namespace hex
 			m_grid.controller().setRingTilesState(actorTile(), TileState::kClipped);
 			actorTile().setState(TileState::kActing);
 			otherTile().setState(TileState::kHighlighted);
-			//if (otherTile().getRingIndex() == RING_COUNT) 
-			//{
-			//	auto& link = otherTile().getLink();
-			//	if (m_currentSwipe == Swipe::kLeft) {
-			//		const auto color = actorTile().getPrevoiusRingTile()->getColorId();
-			//		HexTileUtils::drawLinkCapsule(, color, { LINK_WIDTH, LINK_HEIGHT });
-			//	}
-			//	else if (m_currentSwipe == Swipe::kRight) {
-			//		const auto color = actorTile().getNextRingTile()->getColorId();
-			//	}
-			//}
 		}
 		else {
 			otherTile().setState(TileState::kIdle);
@@ -156,7 +144,7 @@ namespace hex
 	{
 		bool movedSuccessfully = false;
 		highlightCurrentRing(false);
-		if (actorTile().getRingIndex() < (RING_COUNT - 1))
+		if (actorTile().getRingIndex() < (RING_COUNT - 2))
 		{
 			moveActorDown();
 			updateOuterRingPathQ();

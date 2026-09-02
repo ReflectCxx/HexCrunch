@@ -20,7 +20,7 @@ namespace hex
 	bool HexTile::stateOnDeactivate()
 	{
 		switch (getCurrentState()) {
-			case TileState::kNone:return HexTileState::initNoState(*this);;
+			case TileState::kNone:return HexTileState::initStateZero(*this);;
 			case TileState::kIdle: return HexTileState::turnOffIdle(*this);
 			case TileState::kClipped: return HexTileState::turnOffClipped(*this);
 			case TileState::kActing: return HexTileState::turnOffActing(*this);

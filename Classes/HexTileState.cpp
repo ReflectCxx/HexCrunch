@@ -8,7 +8,7 @@ USING_NS_CC;
 
 namespace hex
 {
-	bool HexTileState::initNoState(HexTile& pTile)
+	bool HexTileState::initStateZero(HexTile& pTile)
 	{
 		pTile.getLink().setVisible(false);
 		pTile.getClipped().setVisible(false);
