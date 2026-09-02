@@ -45,7 +45,7 @@ namespace hex
 		case ColorId::kPurple: return HEXCOL_PURPLE;
 		default:break;
 		}
-		return cocos2d::Color4F::ORANGE;
+		return cocos2d::Color4F::WHITE;
 	}
 }
 

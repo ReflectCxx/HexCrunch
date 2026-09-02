@@ -90,6 +90,7 @@ list(APPEND GAME_HEADER
      Classes/HexGridController.h
      Classes/CommandManager.h
      Classes/Command.h
+     Classes/StateMachine.h
      )
 
 if(ANDROID)

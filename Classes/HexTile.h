@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 
 #include "Hex.h"
+#include "StateMachine.h"
 
 namespace hex
 {
@@ -13,9 +14,10 @@ namespace hex
 	};
 
 
-	class HexTile : public Hex, public cocos2d::Node
+	class HexTile : public Hex, public StateMachine<TileState, HexTile>, public cocos2d::Node
 	{
 		friend struct HexTileUtils;
+		friend struct HexTileState;
 
 	protected:
 
@@ -38,12 +40,18 @@ namespace hex
 		SETP(cocos2d::DrawNode, Background, m_background)
 
 		GETPREF(cocos2d::Node, Clipped, m_clipped)
-		GETPREF(cocos2d::Node, Link, m_pathLink.node)
 		GETPREF(cocos2d::Node, Foreground, m_foreground)
 		GETPREF(cocos2d::Node, Background, m_background)
 		GETPREF(cocos2d::DrawNode, Highlight, m_bgHighlight)
+		GETPREF(cocos2d::DrawNode, Link, (m_pathLink.node))
 
-		void setState(TileState pState);
+		void setState(TileState pState) {
+			switchToState(pState);
+		}
+
+		bool stateOnDeactivate();
+
+		bool stateOnActivate(TileState pState);
 
 		void setRingPathLink(const PathLink& pLink);
 

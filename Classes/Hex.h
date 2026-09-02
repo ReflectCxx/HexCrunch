@@ -13,7 +13,6 @@ namespace hex
 
 		Hex* m_next;
 		Hex* m_previous;
-		TileState m_state;
 
 		std::unordered_set<Hex*> m_neighbours;
 
@@ -22,14 +21,12 @@ namespace hex
 		ColorId m_tileId = ColorId::kNone;
 
 		SET(ColorId, ColorId, m_tileId);
-		SET(TileState, CurrentState, m_state);
 		
 	public:
 
 		Hex(const int pRingIndex, const int pTileIndex);
 
 		GET(ColorId, ColorId, m_tileId);
-		GET(TileState, CurrentState, m_state);
 		GET(int, RingIndex, m_ringIndex);
 		GET(int, TileIndex, m_tileIndex);
 

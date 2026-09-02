@@ -10,7 +10,6 @@ namespace hex
 		, m_tileIndex(pTileIndex)
 		, m_next(nullptr)
 		, m_previous(nullptr)
-		, m_state(TileState::kNone)
 	{ }
 
 

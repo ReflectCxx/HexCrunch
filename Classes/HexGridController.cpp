@@ -53,14 +53,6 @@ namespace hex
 		pActorT.runAction(MoveTo::create(DT, otherPos));
 		pOtherT.runAction(MoveTo::create(DT, actorPos));
 
-		pActorT.setState(TileState::kIdle);
-		pOtherT.setState(TileState::kIdle);
-
-		pActorT.getLink().setVisible(true);
-		pOtherT.getLink().setVisible(true);
-		pActorT.getBackground().setVisible(true);
-		pOtherT.getBackground().setVisible(true);
-
 		const auto runScale = [](HexTile& tile) {
 			tile.runAction(
 				Sequence::create(
@@ -76,8 +68,6 @@ namespace hex
 		{
 			pActorT.setPosition(actorPos);
 			pOtherT.setPosition(otherPos);
-			pActorT.setState(TileState::kActing);
-			pOtherT.setState(TileState::kActing);
 			HexTileUtils::swapTileColor(&pActorT, &pOtherT);
 			pOnEndCb();
 			m_isGridIdle = true;

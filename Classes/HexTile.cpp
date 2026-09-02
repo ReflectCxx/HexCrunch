@@ -14,6 +14,39 @@ namespace
 }
 
 
+
+namespace hex
+{
+	bool HexTile::stateOnDeactivate()
+	{
+		switch (getCurrentState()) {
+			case TileState::kNone:return HexTileState::initNoState(*this);;
+			case TileState::kIdle: return HexTileState::turnOffIdle(*this);
+			case TileState::kClipped: return HexTileState::turnOffClipped(*this);
+			case TileState::kActing: return HexTileState::turnOffActing(*this);
+			case TileState::kHighlighted: return HexTileState::turnOffHighlighted(*this);
+			default: return false;
+		}
+	}
+
+
+	bool HexTile::stateOnActivate(TileState pState)
+	{
+		if (pState == getCurrentState()) {
+			return false;
+		}
+		switch (pState) {
+			case TileState::kIdle: return HexTileState::turnOnIdle(*this);
+			case TileState::kClipped: return HexTileState::turnOnClipped(*this);
+			case TileState::kActing: return HexTileState::turnOnActing(*this);
+			case TileState::kHighlighted: return HexTileState::turnOnHighlighted(*this);
+			default: return false;
+		}
+	}
+}
+
+
+
 namespace hex
 {
 	HexTile::HexTile(const int pRingIndex, const int pTileIndex)
@@ -51,7 +84,6 @@ namespace hex
 
 		m_bgHighlight = DrawNode::create();
 		m_bgHighlight->setContentSize(sz);
-		m_bgHighlight->setVisible(false);
 		m_bgHighlight->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
 		addChild(m_bgHighlight, Z_BG_HIGHLIGHT);
 
@@ -66,7 +98,7 @@ namespace hex
 }
 
 
- 
+
 namespace hex
 {
 	void HexTile::refreshTileColor()
@@ -109,50 +141,11 @@ namespace hex
 		HexTileUtils::drawLinkCapsule({ pLink.angle, pLink.origin, capsule }, color, clipSz);
 		addChild(clipped, Z_CLIPPED);
 
-		m_pathLink = pLink;
-		getLink().setVisible(false);
-		getClipped().setVisible(false);
-
-		const auto num = getTileIndex() / (getRingIndex() + 1);
-		const auto theta = -60.f * (1.f + float(num));
+		const auto num = (getTileIndex() / (getRingIndex() + 1));
+		const auto theta = (- 60.f * (1.f + float(num)));
 		getClipped().setRotation(theta);
 		getForeground().setRotation(theta);
-	}
-
-
-	void HexTile::setState(TileState pState)
-	{
-		if (pState == getCurrentState()) {
-			return;
-		}
-		if (pState != TileState::kIdle) {
-			setState(TileState::kIdle);
-		}
-
-		setCurrentState(pState);
-		switch (getCurrentState())
-		{
-		case TileState::kIdle: {
-			HexTileState::setToIdle(*this);
-			return;
-		}
-		case TileState::kClipped:
-		{
-			HexTileState::setToClipped(*this);
-			return;
-		}
-		case TileState::kActing:
-		{
-			HexTileState::setToActing(*this);
-			return;
-		}
-		case TileState::kHighlighted:
-		{
-			HexTileState::setToHighlighted(*this);
-			return;
-		}
-		default: return;
-		}
+		m_pathLink = pLink;
 	}
 }
 

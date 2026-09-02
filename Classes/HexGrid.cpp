@@ -195,7 +195,8 @@ namespace hex
 			m_hexRings.push_back(ringTiles);
 			outwardNeighboursMatrix.push_back(tileOutwardNeighbourCount);
 			Hex::initRingPath(previousTile, ringTiles.front());
-			if (ringIndex != RING_COUNT) {
+			//if (ringIndex != RING_COUNT) 
+			{
 				initHexTileBackground(hexGridBGNode, hexGridLinkNode, ringIndex);
 			}
 		}
