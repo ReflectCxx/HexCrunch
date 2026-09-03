@@ -16,6 +16,7 @@ namespace hex
         cocos2d::Vec2 m_startPos;
         cocos2d::Node* m_target;
         cocos2d::EventListenerTouchOneByOne* m_listener;
+        std::chrono::steady_clock::time_point m_lastSwipeEndTime;
 
         void init();
         void onTouchBegan(const cocos2d::Vec2& pPos);

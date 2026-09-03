@@ -6,6 +6,7 @@ USING_NS_CC;
 namespace {
     constexpr float MIN_SWIPE_DISTANCE = hex::SCALE * 100.f;
     constexpr float MIN_TAP_DRIFT_OFFSET = hex::SCALE * 15.f;
+    constexpr float TAP_COOLDOWN_AFTER_SWIPE = 0.18f;
 }
 
 namespace hex
@@ -16,7 +17,8 @@ namespace hex
         , m_callback(pCallback)
         , m_startPos(Vec2::ZERO)
         , m_target(pTarget)
-        , m_listener(nullptr) {
+        , m_listener(nullptr)
+        , m_lastSwipeEndTime{} {
         init();
     }
 
@@ -53,22 +55,13 @@ namespace hex
 
 namespace hex
 {
-    void TouchTracker::onTouchEnded(const Vec2& pPos)
-    {
-        const auto drift = pPos.distance(m_startPos);
-        CCLOG("Tap loc offset : %f", drift);
-
-        if (!m_isSwiping && m_isTapCandidate) {
-            m_callback(Swipe::kSingleTap);
-        }
-    }
-
     void TouchTracker::onTouchBegan(const Vec2& pPos)
     {
         m_startPos = pPos;
         m_isSwiping = false;
         m_isTapCandidate = true;
     }
+
 
     void TouchTracker::onTouchMoved(const Vec2& pPos)
     {
@@ -91,5 +84,30 @@ namespace hex
         }
         m_isSwiping = true;
         m_startPos = pPos;
+    }
+
+
+    void TouchTracker::onTouchEnded(const Vec2& pPos)
+    {
+        const auto currentTime = std::chrono::steady_clock::now();
+
+        if (m_isSwiping) {
+            m_lastSwipeEndTime = currentTime;
+            return;
+        }
+
+        if (m_lastSwipeEndTime.time_since_epoch().count() != 0)
+        {
+            const auto dt = (currentTime - m_lastSwipeEndTime);
+            const auto interval = std::chrono::duration<float>(dt).count();
+            if (interval < TAP_COOLDOWN_AFTER_SWIPE) {
+                return;
+            }
+        }
+
+        CCLOG("Tap loc offset : %f", pPos.distance(m_startPos));
+        if (m_isTapCandidate) {
+            m_callback(Swipe::kSingleTap);
+        }
     }
 }
