@@ -46,7 +46,7 @@ namespace hex
 
 	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, const std::function<void()>& pOnEndCb)
 	{
-		constexpr auto DT = 0.2f;
+		constexpr auto DT = ANIM_SCALE * 0.25f;
 		const auto& actorPos = pActorT.getPosition();
 		const auto& otherPos = pOtherT.getPosition();
 
@@ -64,23 +64,22 @@ namespace hex
 		runScale(pOtherT);
 
 		pActorT.getClipped().setVisible(false);
-		pActorT.getForeground().setVisible(true);
 		pOtherT.getClipped().setVisible(false);
+		pActorT.getForeground().setVisible(true);
 		pOtherT.getForeground().setVisible(true);
 
 		m_isGridIdle = false;
 		m_grid.scheduleOnce([=, &pActorT, &pOtherT](float)
 		{
-			HexTileUtils::swapTileColor(&pActorT, &pOtherT);
+			m_isGridIdle = true;
+			HexTileUtils::swapTileColor(pActorT, pOtherT);
 			
 			pActorT.setPosition(actorPos);
 			pOtherT.setPosition(otherPos);
-
 			pActorT.getClipped().setVisible(true);
-			pActorT.getForeground().setVisible(false);
 			pOtherT.getClipped().setVisible(true);
+			pActorT.getForeground().setVisible(false);
 			pOtherT.getForeground().setVisible(false);
-			m_isGridIdle = true;
 			pOnEndCb();
 		}, DT + 0.01, "cb");
 	}

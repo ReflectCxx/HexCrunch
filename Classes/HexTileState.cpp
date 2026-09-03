@@ -14,6 +14,7 @@ namespace hex
 		pTile.getClipped().setVisible(false);
 		pTile.getHighlight().setVisible(false);
 		pTile.getBackground().setVisible(false);
+		pTile.getForeground().setVisible(false);
 		return true;
 	}
 }

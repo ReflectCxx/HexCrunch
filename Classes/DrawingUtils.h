@@ -85,7 +85,7 @@ namespace hex::ut
     //Runs on schedular, not on any action.
     static void run_hex_bounce(cocos2d::Node* pNode, float pRadius, std::function<void(float)> pOnBounce)
     {
-        constexpr float SPEED = 110.f;
+        constexpr float SPEED = SCALE * 110.f;
         constexpr auto KEY = "hex_bounce";
 
         if (!pNode || pRadius <= 0.0f)

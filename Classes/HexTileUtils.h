@@ -16,7 +16,7 @@ namespace hex
 
 		static const cocos2d::Color4F toColor(const ColorId pId);
 
-		static void swapTileColor(HexTile* pTileA, HexTile* pTileB);
+		static void swapTileColor(HexTile& pTileA, HexTile& pTileB);
 
 		static cocos2d::ClippingNode* createClipped(cocos2d::Node* pNode,
 													cocos2d::Node* pClip);

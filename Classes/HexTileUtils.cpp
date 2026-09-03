@@ -88,11 +88,11 @@ namespace hex
 		ut::draw_capsule(pLink.node, pSize, color, pLink.origin, pLink.angle);
 	}
 
-	void HexTileUtils::swapTileColor(HexTile* pTileA, HexTile* pTileB)
+	void HexTileUtils::swapTileColor(HexTile& pTileA, HexTile& pTileB)
 	{
-		std::swap(pTileA->m_tileId, pTileB->m_tileId);
-		pTileA->refreshTileColor();
-		pTileB->refreshTileColor();
+		std::swap(pTileA.m_tileId, pTileB.m_tileId);
+		pTileA.refreshTileColor();
+		pTileB.refreshTileColor();
 	}
 
 	 
