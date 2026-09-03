@@ -9,16 +9,18 @@ namespace hex
 {
     class TouchTracker
     {
-        bool m_isSwiping = false;
-
+        bool m_isSwiping;
+        bool m_isTapCandidate;
         std::function<void(Swipe)> m_callback;
-        std::chrono::steady_clock::time_point m_lastTapTime;
 
         cocos2d::Vec2 m_startPos;
-        cocos2d::Node* m_target = nullptr;
-        cocos2d::EventListenerTouchOneByOne* m_listener = nullptr;
+        cocos2d::Node* m_target;
+        cocos2d::EventListenerTouchOneByOne* m_listener;
 
         void init();
+        void onTouchBegan(const cocos2d::Vec2& pPos);
+        void onTouchMoved(const cocos2d::Vec2& pPos);
+        void onTouchEnded(const cocos2d::Vec2& pPos);
 
     public:
 

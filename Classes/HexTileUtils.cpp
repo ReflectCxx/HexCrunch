@@ -40,12 +40,12 @@ namespace hex
 		switch (pId) {
 		case ColorId::kRed: return HEXCOL_RED;
 		case ColorId::kBlue: return HEXCOL_BLUE;
-		case ColorId::kGreen: return HEXCOL_TEAL_GREEN;
+		case ColorId::kGreen: return HEXCOL_GREEN; //*/HEXCOL_TEAL_GREEN;
 		case ColorId::kYellow: return HEXCOL_YELLOW;
 		case ColorId::kPurple: return HEXCOL_PURPLE;
 		default:break;
 		}
-		return cocos2d::Color4F::WHITE;
+		return HEXCOL_BIEGE;
 	}
 }
 

@@ -149,12 +149,12 @@ namespace hex
 
 		const auto onEndCb = [=]()-> bool
 		{
+			CCLOG("Same dir swap count : %d", m_sameDirSwapCount);
 			if (m_sameDirSwapCount > 1) {
 				onInputRecieved(m_currentSlideDir);
 				m_grid.controller().correctOrientation(actorTile(), otherTile());
 				return true;
 			}
-			CCLOG("Same dir swap count : %d", m_sameDirSwapCount);
 			return false;
 		};
 		m_grid.controller().swapSelection(actorTile(), otherTile(), onEndCb);
