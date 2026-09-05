@@ -143,8 +143,8 @@ namespace hex
 		getClippedFace().setScale(BOUNCE_SCALE);
 
 		getLink().setVisible(true);
-		const auto pt = static_cast<HexTState*>(getPrevoiusRingTile());
-		pt->getLink().setVisible(true);
+		//const auto pt = static_cast<HexTState*>(getPrevoiusRingTile());
+		//pt->getLink().setVisible(true);
 
 		getRingFace().setVisible(true);
 		getBackground().setVisible(true);
@@ -160,8 +160,8 @@ namespace hex
 		getClippedFace().setRotation(getHexRingEdgeAngle());
 
 		getLink().setVisible(false);
-		const auto pt = static_cast<HexTState*>(getPrevoiusRingTile());
-		pt->getLink().setVisible(false);
+		//const auto pt = static_cast<HexTState*>(getPrevoiusRingTile());
+		//pt->getLink().setVisible(false);
 
 		getRingFace().setVisible(false);
 		getBackground().setVisible(false);

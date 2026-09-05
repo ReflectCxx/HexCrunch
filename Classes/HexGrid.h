@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Slider.h"
 #include "TouchTracker.h"
 #include "TouchConsumer.h"
 #include "HexGridController.h"
@@ -8,9 +9,7 @@ namespace hex
 {
 	class HexGrid : public cocos2d::Node
 	{
-		HexgonRingMatrix m_hexRings;
-
-		HexGridController m_controller;
+		HexRingMatrix m_hexRings;
 
 		std::unique_ptr<TouchTracker> m_swipeTracker = nullptr;
 
@@ -22,21 +21,19 @@ namespace hex
 
 		void initHexGrid();
 
-		HexTile* spawnNewTile(const cocos2d::Vec2& pos, 
+		HexTile* spawnNewTile(const cocos2d::Vec2& pos,
 							  const int pRingIndex, const int pTileIndex);
 
-		void initRingHexTiles(cocos2d::Node* pBgNode, 
+		void initRingHexTiles(cocos2d::Node* pBgNode,
 						      cocos2d::Node* pLinkNode, int pRingIndex);
 
 		void linkNeighbouringRingTiles(const NeighboursMat& pFaceCounts);
 
 	public:
 
-		constexpr const HexgonRingMatrix& getHexagonRings() const;
+		constexpr const HexRingMatrix& getHexagonRings() const;
 
 		CREATE_FUNC(HexGrid)
-
-		constexpr HexGridController& controller();
 	};
 }
 
@@ -44,11 +41,7 @@ namespace hex
 
 namespace hex
 {
-	inline constexpr HexGridController& HexGrid::controller() {
-		return m_controller;
-	}
-
-	inline constexpr const HexgonRingMatrix& HexGrid::getHexagonRings() const {
+	inline constexpr const HexRingMatrix& HexGrid::getHexagonRings() const {
 		return m_hexRings;
 	};
 }

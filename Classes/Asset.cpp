@@ -25,11 +25,11 @@ namespace
 	inline const std::string hexNormal(const hex::ColorId pColor)
 	{
 		switch (pColor) {
-		case hex::ColorId::Red: return hex::TILE_RED;
-		case hex::ColorId::Blue: return hex::TILE_BLUE;
-		case hex::ColorId::Green: return hex::TILE_GREEN;
-		case hex::ColorId::Yellow: return hex::TILE_YELLOW;
-		case hex::ColorId::Purple: return hex::TILE_PURPLE;
+		case hex::ColorId::Red: return hex::TILE_RED_BG;
+		case hex::ColorId::Blue: return hex::TILE_BLUE_BG;
+		case hex::ColorId::Green: return hex::TILE_GREEN_BG;
+		case hex::ColorId::Yellow: return hex::TILE_YELLOW_BG;
+		case hex::ColorId::Purple: return hex::TILE_PURPLE_BG;
 		default: return hex::TILE_BIEGE;
 		}
 	}
@@ -38,11 +38,11 @@ namespace
 	inline const std::string hexBlocked(const hex::ColorId pColor)
 	{
 		switch (pColor) {
-		case hex::ColorId::Red: return hex::TILE_RED_BG;
-		case hex::ColorId::Blue: return hex::TILE_BLUE_BG;
-		case hex::ColorId::Green: return hex::TILE_GREEN_BG;
-		case hex::ColorId::Yellow: return hex::TILE_YELLOW_BG;
-		case hex::ColorId::Purple: return hex::TILE_PURPLE_BG;
+		case hex::ColorId::Red: return hex::TILE_RED;
+		case hex::ColorId::Blue: return hex::TILE_BLUE;
+		case hex::ColorId::Green: return hex::TILE_GREEN;
+		case hex::ColorId::Yellow: return hex::TILE_YELLOW;
+		case hex::ColorId::Purple: return hex::TILE_PURPLE;
 		default: return hex::TILE_BIEGE;
 		}
 	}
@@ -54,7 +54,7 @@ namespace hex
 {
 	cocos2d::Sprite* Asset::createTileBg(const Size& pSz)
 	{
-		return createTile(TILE_BG, pSz);
+		return createTile(TILE_BG, pSz * 1.1f);
 	}
 
 

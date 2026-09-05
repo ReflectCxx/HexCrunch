@@ -6,7 +6,7 @@ namespace hex
 {
 	class HexTile;
 	using NeighboursMat = std::vector<std::vector<int>>;
-	using HexgonRingMatrix = std::vector<std::vector<HexTile*>>;
+	using HexRingMatrix = std::vector<std::vector<HexTile*>>;
 }
 
 

@@ -43,14 +43,14 @@ namespace hex
 	}
 
 
-	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, const std::function<void()>& pOnEndCb)
+	void HexGridController::swapSelection(HexTile& actor, HexTile& follower, const std::function<void()>& pOnEndCb)
 	{
-		constexpr auto DT = ANIM_SCALE * 2.25f;
-		const auto& actorPos = pActorT.getPosition();
-		const auto& otherPos = pOtherT.getPosition();
+		constexpr auto DT = ANIM_SCALE * 0.25f;
+		const auto& actorPos = actor.getPosition();
+		const auto& otherPos = follower.getPosition();
 
-		pActorT.runAction(MoveTo::create(DT, otherPos));
-		pOtherT.runAction(MoveTo::create(DT, actorPos));
+		actor.runAction(MoveTo::create(DT, otherPos));
+		follower.runAction(MoveTo::create(DT, actorPos));
 
 		const auto runScale = [](HexTile& tile) {
 			tile.runAction(
@@ -59,28 +59,28 @@ namespace hex
 					ScaleTo::create(DT / 2.f, 1.f), nullptr));
 		};
 
-		runScale(pActorT);
-		runScale(pOtherT);
+		runScale(actor);
+		runScale(follower);
 
-		pActorT.getForeground().setVisible(true);
-		pActorT.getClippedFace().setVisible(false);
+		actor.getForeground().setVisible(true);
+		actor.getClippedFace().setVisible(false);
 
-		pOtherT.getForeground().setVisible(true);
-		pOtherT.getClippedFace().setVisible(false);
+		follower.getForeground().setVisible(true);
+		follower.getClippedFace().setVisible(false);
 
 		m_isGridIdle = false;
-		m_grid.scheduleOnce([=, &pActorT, &pOtherT](float)
+		m_grid.scheduleOnce([=, &actor, &follower](float)
 		{
 			m_isGridIdle = true;
-			pActorT.swapColors(pOtherT);
-			pActorT.setPosition(actorPos);
-			pOtherT.setPosition(otherPos);
+			actor.swapColors(follower);
+			actor.setPosition(actorPos);
+			follower.setPosition(otherPos);
 
-			pActorT.getClippedFace().setVisible(true);
-			pActorT.getForeground().setVisible(false);
+			actor.getClippedFace().setVisible(true);
+			actor.getForeground().setVisible(false);
 
-			pOtherT.getClippedFace().setVisible(true);
-			pOtherT.getForeground().setVisible(false);
+			follower.getClippedFace().setVisible(true);
+			follower.getForeground().setVisible(false);
 			pOnEndCb();
 		}, DT + 0.01, "cb");
 	}
