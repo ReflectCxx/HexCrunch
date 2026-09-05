@@ -1,7 +1,6 @@
 
 #include "HexGrid.h"
-#include "HexTile.h"
-#include "HexTileUtils.h"
+#include "HexTile.hpp"
 #include "HexGridController.h"
 
 #include "CommandManager.h"
@@ -63,8 +62,8 @@ namespace hex
 		runScale(pActorT);
 		runScale(pOtherT);
 
-		pActorT.getClipped().setVisible(false);
-		pOtherT.getClipped().setVisible(false);
+		pActorT.getRingFace().setVisible(false);
+		pOtherT.getRingFace().setVisible(false);
 		pActorT.getForeground().setVisible(true);
 		pOtherT.getForeground().setVisible(true);
 
@@ -72,13 +71,13 @@ namespace hex
 		m_grid.scheduleOnce([=, &pActorT, &pOtherT](float)
 		{
 			m_isGridIdle = true;
-			HexTileUtils::swapTileColor(pActorT, pOtherT);
-			
+			pActorT.swapColors(pOtherT);
 			pActorT.setPosition(actorPos);
-			pOtherT.setPosition(otherPos);
-			pActorT.getClipped().setVisible(true);
-			pOtherT.getClipped().setVisible(true);
+			pActorT.getRingFace().setVisible(true);
 			pActorT.getForeground().setVisible(false);
+
+			pOtherT.setPosition(otherPos);
+			pOtherT.getRingFace().setVisible(true);
 			pOtherT.getForeground().setVisible(false);
 			pOnEndCb();
 		}, DT + 0.01, "cb");

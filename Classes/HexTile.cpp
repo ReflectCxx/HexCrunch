@@ -1,66 +1,55 @@
 
 
-#include "HexTileUtils.h"
-#include "HexTileState.h"
+#include "Asset.h"
+#include "HexTile.h"
+#include "HexTState.h"
 #include "DrawingUtils.h"
 
 USING_NS_CC;
 
 namespace
 {
-	static constexpr auto Z_BG_HIGHLIGHT = 0;
-	static constexpr auto Z_FOREGROUND = 1;
-	static constexpr auto Z_CLIPPED = 2;
-}
+	static constexpr auto Z_FOREGROUND = 0;
+	static constexpr auto Z_RING_ON = 1;
+	static constexpr auto Z_BLOCKED = 2;
 
-
-
-namespace hex
-{
-	bool HexTile::stateOnDeactivate()
+	static ClippingNode* create_clipped(Node* pNode, Node* pStencil)
 	{
-		switch (getCurrentState()) {
-			case TileState::kNone:return HexTileState::initStateZero(*this);;
-			case TileState::kIdle: return HexTileState::turnOffIdle(*this);
-			case TileState::kClipped: return HexTileState::turnOffClipped(*this);
-			case TileState::kActing: return HexTileState::turnOffActing(*this);
-			case TileState::kHighlighted: return HexTileState::turnOffHighlighted(*this);
-			default: return false;
-		}
+		auto clippingNode = ClippingNode::create();
+		clippingNode->setStencil(pStencil);
+		clippingNode->setInverted(true);
+		clippingNode->setAlphaThreshold(0.05f);
+		clippingNode->addChild(pNode);
+		return clippingNode;
 	}
 
-
-	bool HexTile::stateOnActivate(TileState pState)
+	static void show_index(hex::HexTile& pT)
 	{
-		if (pState == getCurrentState()) {
-			return false;
-		}
-		switch (pState) {
-			case TileState::kIdle: return HexTileState::turnOnIdle(*this);
-			case TileState::kClipped: return HexTileState::turnOnClipped(*this);
-			case TileState::kActing: return HexTileState::turnOnActing(*this);
-			case TileState::kHighlighted: return HexTileState::turnOnHighlighted(*this);
-			default: return false;
-		}
+		const auto ri = pT.getRingIndex();
+		const auto ti = pT.getTileIndex();
+		std::string str;// = std::to_string(ri) + ", ";
+		str += std::to_string(ti);
+		auto label = Label::createWithTTF(str, hex::FONT, 50.f);
+		//pT.addChild(label, 3);
 	}
 }
 
 
-
 namespace hex
 {
-	HexTile::HexTile(const int pRingIndex, const int pTileIndex)
-		: Hex(pRingIndex, pTileIndex)
-		, m_clipped(nullptr)
-		, m_background(nullptr)
+	HexTile::HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex)
+		: Hex(pId, pRingIndex, pTileIndex)
+		, m_blocked(nullptr)
+		, m_ringFace(nullptr)
 		, m_foreground(nullptr)
-		, m_bgHighlight(nullptr)
+		, m_hexLink(nullptr)
+		, m_background(nullptr)
 	{ }
 
 
 	HexTile* HexTile::create(const ColorId pId, const int pRingIndex, const int pTileIndex)
 	{
-		auto pRet = new(std::nothrow) HexTile(pRingIndex, pTileIndex);
+		auto pRet = new(std::nothrow) HexTState(pId, pRingIndex, pTileIndex);
 		if (pRet && pRet->init(pId, pRingIndex, pTileIndex)) {
 			pRet->autorelease();
 		}
@@ -70,6 +59,39 @@ namespace hex
 		}
 		return pRet;
 	}
+}
+
+
+
+namespace hex
+{
+	void HexTile::swapColors(HexTile& pOther)
+	{
+		std::swap(m_colorId, pOther.m_colorId);
+		pOther.refreshView();
+		refreshView();
+	}
+
+
+	void HexTile::refreshView()
+	{
+		const auto& sz = getForeground().getContentSize();
+		const auto color = getColorId();
+
+		getForeground().removeAllChildren();
+		getForeground().addChild(Asset::createNormalTile(color, sz));
+
+		getRingFace().removeAllChildren();
+		getRingFace().addChild(Asset::createNormalTile(color, sz));
+
+		getBlocked().removeAllChildren();
+		getBlocked().addChild(Asset::createBlockedTile(color, sz));
+
+		auto& pt = *getPrevoiusRingTile();
+		const auto linkSz = Size{ LINK_WIDTH, LINK_HEIGHT };
+		const auto linkPos = Vec2{ pt.m_linkPos.first, pt.m_linkPos.second };
+		Asset::drawHexLink(pt.m_hexLink, color, linkPos, linkSz, pt.m_edgeAngle);
+	}
 
 
 	bool HexTile::init(const ColorId pId, const int pRingIndex, const int pTileIndex)
@@ -77,89 +99,103 @@ namespace hex
 		if (!Node::init()) {
 			return false;
 		}
-		setColorId(pId);
 
 		constexpr auto radius = (HEX_RAD - HEX_BORDER);
 		const auto sz = Size{ SQRT_3 * radius, 2.f * radius };
-
-		m_bgHighlight = DrawNode::create();
-		m_bgHighlight->setContentSize(sz);
-		m_bgHighlight->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
-		addChild(m_bgHighlight, Z_BG_HIGHLIGHT);
-
+		
 		m_foreground = Node::create();
+		m_foreground->addChild(Asset::createNormalTile(pId, sz));
 		m_foreground->setContentSize(sz);
 		addChild(m_foreground, Z_FOREGROUND);
+		
+		m_ringFace = Node::create();
+		m_ringFace->addChild(Asset::createNormalTile(pId, sz));
 
-		refreshTileColor();
-		addIndexLabel();
+		auto stencil = DrawNode::create();
+		auto clipped = create_clipped(m_ringFace, stencil);
+		clipped->setContentSize(sz);
+		addChild(clipped, Z_RING_ON);
+		
+		m_blocked = Node::create();
+		m_blocked->setContentSize(sz);
+		m_blocked->addChild(Asset::createBlockedTile(pId, sz));
+		addChild(m_blocked, Z_BLOCKED);
+
+		show_index(*this);
 		return true;
 	}
-}
 
 
-
-namespace hex
-{
-	void HexTile::refreshTileColor()
+	void HexTile::initRingPlacement(Node* pGridNode, Node* pLinkNode)
 	{
-		const auto& sz = getForeground().getContentSize();
-		const auto color = getColorId();
-		const auto tileStr = HexTileUtils::toStr(color);
-		{
-			auto tile = HexTileUtils::tileSprite(sz, tileStr);
-			getForeground().removeAllChildren();
-			getForeground().addChild(tile);
-		}
+		const auto& nextTile = *getNextRingTile();
+		const auto color = nextTile.getColorId();
+		const auto pos = convertToNodeSpace(nextTile.convertToWorldSpace({ 0.f, 0.f }));
+		m_edgeAngle = float(-atan(pos.y / pos.x) * (180.f / M_PI));
 
-		if (m_clipped != nullptr)
-		{
-			auto tile = HexTileUtils::tileSprite(sz, tileStr);
-			getClipped().removeAllChildren();
-			getClipped().addChild(tile);
-		}
+		const auto linkPos = Vec2{ pos.x / 2.f, pos.y / 2.f };
+		m_linkPos = { linkPos.x, linkPos.y };
 
-		if (m_pathLink.node != nullptr) {
-			HexTileUtils::drawLinkCapsule(m_pathLink, color, { LINK_WIDTH, LINK_HEIGHT });
-		}
-	}
+		m_hexLink = DrawNode::create();
+		const auto linkSz = Size{ LINK_WIDTH, LINK_HEIGHT };
+		Asset::drawHexLink(m_hexLink, color, linkPos, linkSz, m_edgeAngle);
+		
+		m_hexLink->setPosition(getPosition());
+		pLinkNode->addChild(m_hexLink);
 
+		const auto clipSz = Size{ LINK_CLIP_W, LINK_CLIP_H };
+		const auto clipper = static_cast<ClippingNode*>(getRingFace().getParent());
+		const auto stencil = static_cast<DrawNode*>(clipper->getStencil());
+		Asset::drawHexLink(stencil, ColorId::None, linkPos, clipSz, m_edgeAngle);
 
-	void HexTile::setRingPathLink(const PathLink& pLink)
-	{
-		const auto& tileSz = getForeground().getContentSize();
-		const auto clipSz = Size{ CLIP_WIDTH, CLIP_HEIGHT };
-		const auto color = getColorId();
-		const auto tileStr = HexTileUtils::toStr(color);
+		initClippedBg(pGridNode);
 
-		m_clipped = Node::create();
-		auto tile = HexTileUtils::tileSprite(tileSz, tileStr);
-		getClipped().addChild(tile);
-
-		auto capsule = DrawNode::create();
-		auto clipped = HexTileUtils::createClipped(m_clipped, capsule);
-		HexTileUtils::drawLinkCapsule({ pLink.angle, pLink.origin, capsule }, color, clipSz);
-		addChild(clipped, Z_CLIPPED);
-
-		const auto num = (getTileIndex() / (getRingIndex() + 1));
-		const auto theta = (- 60.f * (1.f + float(num)));
-		getClipped().setRotation(theta);
+		const auto theta = getHexRingEdgeAngle();
+		getRingFace().setRotation(theta);
+		getBlocked().setRotation(theta);
 		getForeground().setRotation(theta);
-		m_pathLink = pLink;
 	}
-}
 
 
-
-namespace hex
-{
-	void HexTile::addIndexLabel()
+	void HexTile::initClippedBg(Node* pGridBgNode)
 	{
-		const auto ri = getRingIndex();
+		auto stencil = DrawNode::create();
+		const auto clipSz = Size{ LINK_CLIP_W, LINK_CLIP_H };
+		const auto pos = Vec2{ m_linkPos.first, m_linkPos.second };
+		Asset::drawHexLink(stencil, ColorId::None, pos, clipSz, m_edgeAngle);
+
 		const auto ti = getTileIndex();
-		std::string str;// = std::to_string(ri) + ", ";
-		str += std::to_string(ti);
-		auto label = Label::createWithTTF(str, FONT, 50.f);
-		//addChild(label, 3);
+		const auto ri = getRingIndex();
+		if (ti % (ri + 1) == 0) {
+			constexpr float theta = 120.f * (M_PI / 180.f);
+			const auto rOrg = Vec2{
+				pos.x * std::cos(theta) - pos.y * std::sin(theta),
+				pos.x * std::sin(theta) + pos.y * std::cos(theta)
+			};
+			Asset::drawHexLink(stencil, ColorId::None, rOrg, clipSz, (m_edgeAngle + 60.f), false);
+		}
+		else {
+			constexpr float theta = 180.f * (M_PI / 180.f);
+			const auto rOrg = Vec2{
+				pos.x * std::cos(theta) - pos.y * std::sin(theta),
+				pos.x * std::sin(theta) + pos.y * std::cos(theta)
+			};
+			Asset::drawHexLink(stencil, ColorId::None, rOrg, clipSz, m_edgeAngle, false);
+		}
+
+		m_background = DrawNode::create();
+		m_background->setContentSize({ HEX_WIDTH, HEX_HEIGHT });
+		m_background->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
+		ut::draw_hexagon(m_background, HEX_RAD, Color4F::WHITE, CORNER_RAD);
+		
+		auto clipped = create_clipped(m_background, stencil);
+		clipped->setPosition(getPosition());
+		pGridBgNode->addChild(clipped);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+		clipped->setVisible(true);
+#else
+		clipped->setVisible(false);
+#endif
 	}
 }

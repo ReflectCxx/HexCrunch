@@ -17,12 +17,21 @@ namespace hex
 
 		HexGridController(HexGrid& pGrid);
 		
-		GETB(GridIdle, m_isGridIdle)
-
-		void swapSelection(HexTile& pActor, HexTile& pOther, const std::function<void()>& pOnEndCb);
+		constexpr bool isGridIdle() const;
 
 		void correctOrientation(HexTile& pActorT, HexTile& pOtherT);
 
 		void setRingTilesState(HexTile& pStartTile, TileState pState);
+
+		void swapSelection(HexTile& pActor, HexTile& pOther, const std::function<void()>& pOnEndCb);
 	};
+}
+
+
+
+namespace hex
+{
+	inline constexpr bool HexGridController::isGridIdle() const {
+		return m_isGridIdle;
+	}
 }

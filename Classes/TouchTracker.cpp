@@ -65,7 +65,8 @@ namespace hex
 
     void TouchTracker::onTouchMoved(const Vec2& pPos)
     {
-        if (m_isTapCandidate && pPos.distance(m_startPos) > MIN_TAP_DRIFT_OFFSET) {
+        constexpr auto DS = (MIN_TAP_DRIFT_OFFSET * MIN_TAP_DRIFT_OFFSET);
+        if (m_isTapCandidate && pPos.distanceSquared(m_startPos) > DS) {
             m_isTapCandidate = false;
         }
 
@@ -74,13 +75,13 @@ namespace hex
             if (std::abs(delta.x) < MIN_SWIPE_DISTANCE) {
                 return;
             }
-            m_callback(delta.x > 0 ? Swipe::kRight : Swipe::kLeft);
+            m_callback(delta.x > 0 ? Swipe::Right : Swipe::Left);
         }
         else {
             if (std::abs(delta.y) < MIN_SWIPE_DISTANCE) {
                 return;
             }
-            m_callback(delta.y > 0 ? Swipe::kUp : Swipe::kDown);
+            m_callback(delta.y > 0 ? Swipe::Up : Swipe::Down);
         }
         m_isSwiping = true;
         m_startPos = pPos;
@@ -105,9 +106,8 @@ namespace hex
             }
         }
 
-        CCLOG("Tap loc offset : %f", pPos.distance(m_startPos));
         if (m_isTapCandidate) {
-            m_callback(Swipe::kSingleTap);
+            m_callback(Swipe::SingleTap);
         }
     }
 }

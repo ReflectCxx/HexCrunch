@@ -8,8 +8,6 @@ namespace hex
     {
         bool init() override;
 
-        void initMenuButtons();
-
     public:
 
         CREATE_FUNC(GameScene);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <deque>
 
 namespace hex
@@ -19,8 +20,9 @@ namespace hex
 		HexGrid& m_grid;
 
 		HexTile* m_actorTile;
+		std::set<HexTile*> m_blockedTiles;
 		std::deque<HexTile*> m_outerNeighbours;
-
+		
 		HexTile& actorTile();
 		HexTile& otherTile();
 
@@ -32,10 +34,12 @@ namespace hex
 		bool moveSelectionRight();
 
 		void updateOuterRingPathQ();
-		void highlightCurrentRing(bool pStateOn);
+		void highlightCurrentRing(const Turn pFlag);
 
 		void swapSelection();
 		bool moveSliderTiles(const Swipe pDir);
+		void highlightBlockedTiles(const Turn pFlag = Turn::On);
+		void undoSliderMove(HexTile* pPreviousActor, const int pPrvOtherTileIndex);
 
 		void trackTapToPredictNextSwap();
 		void trackSwipeToPredictNextSwap(const Swipe pDir);
@@ -45,6 +49,6 @@ namespace hex
 		TouchConsumer(HexGrid& pHexGrid);
 
 		void init();
-		void onInputRecieved(const Swipe pDir);
+		void onInputRecieved(const Swipe pDir, const bool pIsMockInput = false);
 	};
 }

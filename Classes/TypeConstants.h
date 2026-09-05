@@ -12,50 +12,49 @@ namespace hex
 
 namespace hex
 {
-	enum class ColorId
-	{
-		kNone,
-		kRed,
-		kBlue,
-		kGreen,
-		kPurple,
-		kYellow
+	enum class Turn {
+		On,
+		Off
 	};
 
+	enum class ExecutionKind {
+		None,
+		Synchronous,
+		ASynchronous
+	};
+
+	enum class CmdKind {
+		None = -1,
+		SpawnTile,
+		SwapTiles,
+		PullDownTile,
+		Count
+	};
+
+	enum class ColorId {
+		None,
+		Red,
+		Blue,
+		Green,
+		Purple,
+		Yellow
+	};
 
 	enum class Swipe {
-		kNone,
-		kUp,
-		kLeft,
-		kDown,
-		kRight,
-		kSingleTap
+		None,
+		Up,
+		Left,
+		Down,
+		Right,
+		SingleTap
 	};
 
-	enum class TileState
-	{
-		kNone,
-		kIdle,
-		kActing,
-		kClipped,
-		kHighlighted
-	};
-
-
-	enum class ExecutionKind
-	{
-		kNone,
-		kSynchronous,
-		kASynchronous
-	};
-
-
-	enum class CmdKind
-	{
-		kNone = -1,
-		kSpawnTile,
-		kSwapTiles,
-		kPullDownTile,
-		kCount
+	enum class TileState {
+		None,
+		Idle,
+		Actor,
+		Blocked,
+		RingFace,
+		Highlighted
 	};
 }

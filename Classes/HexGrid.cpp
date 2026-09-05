@@ -1,9 +1,44 @@
 
+#include <random>
+#include <utility>
+
 #include "HexGrid.h"
-#include "HexTileUtils.h"
+#include "HexTile.h"
 #include "DrawingUtils.h"
 
 USING_NS_CC;
+
+
+namespace
+{
+	static std::vector<hex::ColorId>& get_colors() 
+	{
+		static auto colors = []()->auto {
+
+			std::vector<int> count = { 6, 12, 18, 24, 30 };		//total tiles 90 tiles.
+			std::vector<hex::ColorId> arr = {
+				hex::ColorId::Red,
+				hex::ColorId::Green,
+				hex::ColorId::Yellow,
+				hex::ColorId::Blue,
+				hex::ColorId::Purple
+			};
+
+			std::random_device rd;
+			std::mt19937 rng(rd());
+			std::shuffle(count.begin(), count.end(), rng);
+
+			std::vector<hex::ColorId> colorBag;
+			for (size_t i = 0; i < arr.size(); ++i) {
+				colorBag.insert(colorBag.end(), count[i], arr[i]);
+			}
+			std::shuffle(colorBag.begin(), colorBag.end(), rng);
+			return colorBag;
+		}();
+
+		return colors;
+	}
+}
 
 
 namespace hex
@@ -32,10 +67,22 @@ namespace hex
 
 namespace hex
 {
+	void HexGrid::initRingHexTiles(Node* pBgNode, cocos2d::Node* pLinkNode, int pRingIndex)
+	{
+		auto startTile = m_hexRings[pRingIndex][0];
+		auto currentTile = startTile;
+		do {
+			currentTile->initRingPlacement(pBgNode, pLinkNode);
+			currentTile->setState(TileState::Idle);
+			currentTile = currentTile->getNextRingTile();;
+		} while (currentTile != startTile);
+	}
+
+
 	HexTile* HexGrid::spawnNewTile(const cocos2d::Vec2& pos, const int pRingIndex, const int pTileIndex)
 	{
-		static auto colors = HexTileUtils::getRandomColors();
-		auto colorId = ColorId::kNone;
+		auto& colors = get_colors();
+		auto colorId = ColorId::None;
 		if (pRingIndex < RING_COUNT) {
 			colorId = colors.back();
 			colors.pop_back();
@@ -74,73 +121,6 @@ namespace hex
 	}
 
 
-	void HexGrid::initHexTileBackground(Node* pBgNode, cocos2d::Node* pLinkNode, int pRingIndex)
-	{
-		auto startTile = m_hexRings[pRingIndex][0];
-		auto currentTile = startTile;
-		do
-		{
-			const auto nextTile = static_cast<HexTile*>(currentTile->getNextRingTile());
-			const auto ntWpos = nextTile->convertToWorldSpace(cocos2d::Vec2::ZERO);
-			const auto ntNpos = currentTile->convertToNodeSpace(ntWpos);
-			const auto angle = static_cast<float>(-atan(ntNpos.y / ntNpos.x) * (180.f / M_PI));
-			const auto origin = Vec2{ ntNpos.x / 2.f, ntNpos.y / 2.f };
-
-			initClippedBGTile(pBgNode, currentTile,  origin, pRingIndex, angle);
-
-			const auto node = DrawNode::create();
-			const auto color = currentTile->getColorId();
-			const auto pathLink = PathLink{ angle, origin, node };
-			currentTile->setRingPathLink(pathLink);
-
-			HexTileUtils::drawLinkCapsule(pathLink, color, { LINK_WIDTH, LINK_HEIGHT });
-			node->setPosition(currentTile->getPosition());
-			pLinkNode->addChild(node);
-
-			currentTile->setState(TileState::kIdle);
-			currentTile = nextTile;
-
-		} while (currentTile != startTile);
-	}
-
-
-	void HexGrid::initClippedBGTile(Node* pBgNode, HexTile* pTile, 
-									const cocos2d::Vec2& pOrigin, int pRingIndex, float pAngle)
-	{
-		const auto node = DrawNode::create();
-		ut::draw_hexagon(node, HEX_RAD, Color4F::WHITE, CORNER_RAD);
-		node->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
-
-		auto capsule = DrawNode::create();
-		auto clipped = HexTileUtils::createClipped(node, capsule);
-		HexTileUtils::drawLinkCapsule({ pAngle, pOrigin, capsule }, ColorId::kNone, { CLIP_WIDTH, CLIP_HEIGHT });
-
-		const auto ti = pTile->getTileIndex();
-		if (ti % (pRingIndex + 1) == 0)
-		{
-			constexpr float theta = 120.f * (M_PI / 180.f);
-			const auto rOrg = Vec2{
-				pOrigin.x * std::cos(theta) - pOrigin.y * std::sin(theta),
-				pOrigin.x * std::sin(theta) + pOrigin.y * std::cos(theta)
-			};
-			HexTileUtils::drawLinkCapsule({ pAngle + 60.f, rOrg, capsule }, ColorId::kNone, { CLIP_WIDTH, CLIP_HEIGHT }, false);
-		}
-		else
-		{
-			constexpr float theta = 180.f * (M_PI / 180.f);
-			const auto rOrg = Vec2{
-				pOrigin.x * std::cos(theta) - pOrigin.y * std::sin(theta),
-				pOrigin.x * std::sin(theta) + pOrigin.y * std::cos(theta)
-			};
-			HexTileUtils::drawLinkCapsule({ pAngle, rOrg, capsule }, ColorId::kNone, { CLIP_WIDTH, CLIP_HEIGHT }, false);
-		}
-
-		clipped->setPosition(pTile->getPosition());
-		pBgNode->addChild(clipped);
-		pTile->setBackground(node);
-	}
-
-
 	void HexGrid::initHexGrid()
 	{
 		std::vector<std::vector<int>> outwardNeighboursMatrix;
@@ -171,7 +151,7 @@ namespace hex
 				tileIndex++;
 
 				if (previousTile) {
-					Hex::initRingPath(previousTile, nextTile);
+					previousTile->setNextRingTile(nextTile);
 				}
 				previousTile = nextTile;
 
@@ -186,7 +166,7 @@ namespace hex
 					tileIndex++;
 
 					if (previousTile) {
-						Hex::initRingPath(previousTile, nextTile);
+						previousTile->setNextRingTile(nextTile);
 					}
 					previousTile = nextTile;
 				}
@@ -194,11 +174,8 @@ namespace hex
 
 			m_hexRings.push_back(ringTiles);
 			outwardNeighboursMatrix.push_back(tileOutwardNeighbourCount);
-			Hex::initRingPath(previousTile, ringTiles.front());
-			//if (ringIndex != RING_COUNT) 
-			{
-				initHexTileBackground(hexGridBGNode, hexGridLinkNode, ringIndex);
-			}
+			previousTile->setNextRingTile(ringTiles.front());
+			initRingHexTiles(hexGridBGNode, hexGridLinkNode, ringIndex);
 		}
 		linkNeighbouringRingTiles(outwardNeighboursMatrix);
 	}

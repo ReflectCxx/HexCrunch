@@ -25,17 +25,14 @@ namespace hex
 		HexTile* spawnNewTile(const cocos2d::Vec2& pos, 
 							  const int pRingIndex, const int pTileIndex);
 
-		void initClippedBGTile(cocos2d::Node* pBgNode, HexTile* pTile,
-							   const cocos2d::Vec2& pOrigin, int pRingIndex, float pAngle);
-
-		void initHexTileBackground(cocos2d::Node* pBgNode, 
-								   cocos2d::Node* pLinkNode, int pRingIndex);
+		void initRingHexTiles(cocos2d::Node* pBgNode, 
+						      cocos2d::Node* pLinkNode, int pRingIndex);
 
 		void linkNeighbouringRingTiles(const NeighboursMat& pFaceCounts);
 
 	public:
 
-		GET(HexgonRingMatrix, HexagonRings, m_hexRings);
+		constexpr const HexgonRingMatrix& getHexagonRings() const;
 
 		CREATE_FUNC(HexGrid)
 
@@ -44,9 +41,14 @@ namespace hex
 }
 
 
+
 namespace hex
 {
-	constexpr HexGridController& HexGrid::controller() {
+	inline constexpr HexGridController& HexGrid::controller() {
 		return m_controller;
 	}
+
+	inline constexpr const HexgonRingMatrix& HexGrid::getHexagonRings() const {
+		return m_hexRings;
+	};
 }

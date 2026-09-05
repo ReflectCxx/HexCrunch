@@ -5,8 +5,8 @@ namespace hex
     template<class state_t, class derived_t>
     class StateMachine
     {
-        state_t m_currentState = state_t::kNone;
-        state_t m_previousState = state_t::kNone;
+        state_t m_currentState = state_t::None;
+        state_t m_previousState = state_t::None;
 
     public:
 
@@ -31,13 +31,18 @@ namespace hex
 
         bool switchToState(state_t pNextState)
         {
+            const auto prevState = m_previousState;
             auto& derived = static_cast<derived_t&>(*this);
-            if (derived.stateOnDeactivate() && derived.stateOnActivate(pNextState))
+
+            if (derived.stateOnDeactivate())
             {
                 m_previousState = m_currentState;
-                m_currentState = pNextState;
-                return true;
+                if (derived.stateOnActivate(pNextState)) {
+                    m_currentState = pNextState;
+                    return true;
+                }
             }
+            m_previousState = prevState;
             return false;
         }
     };

@@ -17,7 +17,7 @@ namespace hex
 	constexpr auto TILE_GREEN_BG = "hex_green_bg.png";
 	constexpr auto TILE_YELLOW_BG = "hex_yellow_bg.png";
 	constexpr auto TILE_PURPLE_BG = "hex_purple_bg.png";
-	
+
 	constexpr auto BTN_EXIT_NORMAL = "exit_normal.png";
 	constexpr auto BTN_EXIT_SELECTED = "exit_selected";
 	constexpr auto FONT = "fonts/Marker Felt.ttf";

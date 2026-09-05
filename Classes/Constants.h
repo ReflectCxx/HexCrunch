@@ -1,15 +1,13 @@
 #pragma once
 
 #include "Defines.h"
-#include "AssetStrings.h"
 #include "TypeConstants.h"
-
 
 namespace hex
 {
-	constexpr auto SCALE = 0.5f;
-	constexpr auto ANIM_SCALE = 1.0f;
-	constexpr auto WIN_SCALE = 1.25f;
+	constexpr auto SCALE = 1.f;
+	constexpr auto ANIM_SCALE = 1.f;
+	constexpr auto WIN_SCALE = 0.6f;
 
 	constexpr auto EDGE_GAP = SCALE * 35.f;
 	constexpr auto SCR_WIDTH = SCALE * 1800.f; //*/1080.f;
@@ -33,6 +31,6 @@ namespace hex
 
 	constexpr auto LINK_WIDTH = SCALE * 100.f;
 	constexpr auto LINK_HEIGHT = SCALE * 20.f;
-	constexpr auto CLIP_WIDTH = LINK_WIDTH * 1.1f;
-	constexpr auto CLIP_HEIGHT = LINK_HEIGHT * 1.5;
+	constexpr auto LINK_CLIP_W = LINK_WIDTH * 1.1f;
+	constexpr auto LINK_CLIP_H = LINK_HEIGHT * 1.5;
 }

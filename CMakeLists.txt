@@ -61,36 +61,38 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/TouchTracker.cpp
+     Classes/Asset.cpp
+     Classes/CommandManager.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
-     Classes/TouchConsumer.cpp
-     Classes/Hex.cpp
-     Classes/HexTileUtils.cpp
-     Classes/HexTile.cpp
-     Classes/HexTileState.cpp
      Classes/HexGridController.cpp
-     Classes/CommandManager.cpp
+     Classes/HexTile.cpp
+     Classes/HexTState.cpp
+     Classes/TouchConsumer.cpp
+     Classes/TouchTracker.cpp
      )
+
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/TouchTracker.h
+     Classes/Asset.h
+     Classes/AssetConsts.h
+     Classes/Command.h
+     Classes/CommandManager.h
+     Classes/Constants.h
+     Classes/Defines.h
+     Classes/DrawingUtils.h
      Classes/GameScene.h
      Classes/HexGrid.h
-     Classes/TouchConsumer.h
-     Classes/DrawingUtils.h
-     Classes/Constants.h
-     Classes/TypeConstants.h
-     Classes/AssetStrings.h
-     Classes/Defines.h
-     Classes/Hex.h
-     Classes/HexTileUtils.h
-     Classes/HexTile.h
-     Classes/HexTileState.h
      Classes/HexGridController.h
-     Classes/CommandManager.h
-     Classes/Command.h
+     Classes/HexT.h
+     Classes/HexT.hpp
+     Classes/HexTile.h
+     Classes/HexTile.hpp
+     Classes/HexTState.h
      Classes/StateMachine.h
+     Classes/TouchConsumer.h
+     Classes/TouchTracker.h
+     Classes/TypeConstants.h
      )
 
 if(ANDROID)
