@@ -15,6 +15,7 @@ namespace hex
 	public:
 
 		static cocos2d::Sprite* createGameBg();
+		static cocos2d::Sprite* createTileBg(const cocos2d::Size&);
 		static cocos2d::Sprite* createNormalTile(const ColorId, const cocos2d::Size&);
 		static cocos2d::Sprite* createBlockedTile(const ColorId, const cocos2d::Size&);
 

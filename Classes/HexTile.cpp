@@ -40,9 +40,11 @@ namespace hex
 	HexTile::HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex)
 		: Hex(pId, pRingIndex, pTileIndex)
 		, m_blocked(nullptr)
-		, m_ringFace(nullptr)
+		, m_clippedFace(nullptr)
 		, m_foreground(nullptr)
+		, m_clippedBg(nullptr)
 		, m_hexLink(nullptr)
+		, m_ringFace(nullptr)
 		, m_background(nullptr)
 	{ }
 
@@ -78,14 +80,14 @@ namespace hex
 		const auto& sz = getForeground().getContentSize();
 		const auto color = getColorId();
 
-		getForeground().removeAllChildren();
-		getForeground().addChild(Asset::createNormalTile(color, sz));
+		m_foreground->removeAllChildren();
+		m_foreground->addChild(Asset::createNormalTile(color, sz));
 
-		getRingFace().removeAllChildren();
-		getRingFace().addChild(Asset::createNormalTile(color, sz));
+		m_clippedFace->removeAllChildren();
+		m_clippedFace->addChild(Asset::createNormalTile(color, sz));
 
-		getBlocked().removeAllChildren();
-		getBlocked().addChild(Asset::createBlockedTile(color, sz));
+		m_blocked->removeAllChildren();
+		m_blocked->addChild(Asset::createBlockedTile(color, sz));
 
 		auto& pt = *getPrevoiusRingTile();
 		const auto linkSz = Size{ LINK_WIDTH, LINK_HEIGHT };
@@ -108,13 +110,12 @@ namespace hex
 		m_foreground->setContentSize(sz);
 		addChild(m_foreground, Z_FOREGROUND);
 		
-		m_ringFace = Node::create();
-		m_ringFace->addChild(Asset::createNormalTile(pId, sz));
+		m_clippedFace = Node::create();
+		m_clippedFace->addChild(Asset::createNormalTile(pId, sz));
 
-		auto stencil = DrawNode::create();
-		auto clipped = create_clipped(m_ringFace, stencil);
-		clipped->setContentSize(sz);
-		addChild(clipped, Z_RING_ON);
+		m_ringFace = create_clipped(m_clippedFace, DrawNode::create());
+		m_ringFace->setContentSize(sz);
+		addChild(m_ringFace, Z_RING_ON);
 		
 		m_blocked = Node::create();
 		m_blocked->setContentSize(sz);
@@ -144,16 +145,15 @@ namespace hex
 		pLinkNode->addChild(m_hexLink);
 
 		const auto clipSz = Size{ LINK_CLIP_W, LINK_CLIP_H };
-		const auto clipper = static_cast<ClippingNode*>(getRingFace().getParent());
-		const auto stencil = static_cast<DrawNode*>(clipper->getStencil());
+		const auto stencil = static_cast<DrawNode*>(m_ringFace->getStencil());
 		Asset::drawHexLink(stencil, ColorId::None, linkPos, clipSz, m_edgeAngle);
 
 		initClippedBg(pGridNode);
 
 		const auto theta = getHexRingEdgeAngle();
-		getRingFace().setRotation(theta);
-		getBlocked().setRotation(theta);
-		getForeground().setRotation(theta);
+		m_clippedFace->setRotation(theta);
+		m_blocked->setRotation(theta);
+		m_foreground->setRotation(theta);
 	}
 
 
@@ -183,19 +183,10 @@ namespace hex
 			Asset::drawHexLink(stencil, ColorId::None, rOrg, clipSz, m_edgeAngle, false);
 		}
 
-		m_background = DrawNode::create();
-		m_background->setContentSize({ HEX_WIDTH, HEX_HEIGHT });
-		m_background->setOpacity(255 * TILE_HIGHLIGHT_ALPHA);
-		ut::draw_hexagon(m_background, HEX_RAD, Color4F::WHITE, CORNER_RAD);
-		
-		auto clipped = create_clipped(m_background, stencil);
-		clipped->setPosition(getPosition());
-		pGridBgNode->addChild(clipped);
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-		clipped->setVisible(true);
-#else
-		clipped->setVisible(false);
-#endif
+		const auto sz = Size{ HEX_WIDTH, HEX_HEIGHT };
+		m_clippedBg = Asset::createTileBg(sz);
+		m_background = create_clipped(m_clippedBg, stencil);
+		m_background->setPosition(getPosition());
+		pGridBgNode->addChild(m_background);
 	}
 }

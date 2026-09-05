@@ -3,6 +3,7 @@
 namespace hex
 {
 	constexpr auto GAME_BG = "game_bg.png";
+	constexpr auto TILE_BG = "tile_bg.png";
 
 	constexpr auto TILE_RED = "hex_red.png";
 	constexpr auto TILE_BLUE = "hex_blue.png";

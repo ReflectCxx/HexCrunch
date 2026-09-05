@@ -15,7 +15,7 @@ namespace hex
 	{ }
 
 
-	void HexGridController::setRingTilesState(HexTile& pStartTile, TileState pState)
+	void HexGridController::setRingTilesState(HexTile& pStartTile, TileState pState) const
 	{
 		auto nextTile = &pStartTile;
 		do {
@@ -45,7 +45,7 @@ namespace hex
 
 	void HexGridController::swapSelection(HexTile& pActorT, HexTile& pOtherT, const std::function<void()>& pOnEndCb)
 	{
-		constexpr auto DT = ANIM_SCALE * 0.25f;
+		constexpr auto DT = ANIM_SCALE * 2.25f;
 		const auto& actorPos = pActorT.getPosition();
 		const auto& otherPos = pOtherT.getPosition();
 
@@ -62,10 +62,11 @@ namespace hex
 		runScale(pActorT);
 		runScale(pOtherT);
 
-		pActorT.getRingFace().setVisible(false);
-		pOtherT.getRingFace().setVisible(false);
 		pActorT.getForeground().setVisible(true);
+		pActorT.getClippedFace().setVisible(false);
+
 		pOtherT.getForeground().setVisible(true);
+		pOtherT.getClippedFace().setVisible(false);
 
 		m_isGridIdle = false;
 		m_grid.scheduleOnce([=, &pActorT, &pOtherT](float)
@@ -73,11 +74,12 @@ namespace hex
 			m_isGridIdle = true;
 			pActorT.swapColors(pOtherT);
 			pActorT.setPosition(actorPos);
-			pActorT.getRingFace().setVisible(true);
+			pOtherT.setPosition(otherPos);
+
+			pActorT.getClippedFace().setVisible(true);
 			pActorT.getForeground().setVisible(false);
 
-			pOtherT.setPosition(otherPos);
-			pOtherT.getRingFace().setVisible(true);
+			pOtherT.getClippedFace().setVisible(true);
 			pOtherT.getForeground().setVisible(false);
 			pOnEndCb();
 		}, DT + 0.01, "cb");

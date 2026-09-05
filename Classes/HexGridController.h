@@ -20,13 +20,10 @@ namespace hex
 		constexpr bool isGridIdle() const;
 
 		void correctOrientation(HexTile& pActorT, HexTile& pOtherT);
-
-		void setRingTilesState(HexTile& pStartTile, TileState pState);
-
+		void setRingTilesState(HexTile& pStartTile, TileState pState) const;
 		void swapSelection(HexTile& pActor, HexTile& pOther, const std::function<void()>& pOnEndCb);
 	};
 }
-
 
 
 namespace hex

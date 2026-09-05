@@ -34,7 +34,7 @@ namespace
 		}
 	}
 
-	//sprite used for rendering hexagon tile foreground (Bg).
+	//sprite used for rendering hexagon tile as blocked.
 	inline const std::string hexBlocked(const hex::ColorId pColor)
 	{
 		switch (pColor) {
@@ -52,6 +52,12 @@ namespace
 
 namespace hex
 {
+	cocos2d::Sprite* Asset::createTileBg(const Size& pSz)
+	{
+		return createTile(TILE_BG, pSz);
+	}
+
+
 	Sprite* Asset::createNormalTile(const ColorId pColor, const Size& pSz)
 	{
 		return createTile(hexNormal(pColor), pSz);

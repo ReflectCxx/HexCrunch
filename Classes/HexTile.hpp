@@ -4,11 +4,6 @@
 
 namespace hex
 {
-	inline constexpr bool HexTile::isBgEnabled() const {
-		return m_background->getParent()->isVisible();
-	}
-
-
 	inline void HexTile::setState(TileState pState) {
 		switchToState(pState);
 	}
@@ -19,6 +14,11 @@ namespace hex
 
 	inline constexpr cocos2d::Node& HexTile::getForeground() {
 		return *m_foreground;
+	}
+
+	inline constexpr cocos2d::Node& HexTile::getClippedFace()
+	{
+		return *m_clippedFace;
 	}
 
 	inline constexpr cocos2d::Node& HexTile::getBackground() {

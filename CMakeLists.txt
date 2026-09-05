@@ -68,6 +68,7 @@ list(APPEND GAME_SOURCE
      Classes/HexGridController.cpp
      Classes/HexTile.cpp
      Classes/HexTState.cpp
+     Classes/Slider.cpp
      Classes/TouchConsumer.cpp
      Classes/TouchTracker.cpp
      )
@@ -89,6 +90,7 @@ list(APPEND GAME_HEADER
      Classes/HexTile.h
      Classes/HexTile.hpp
      Classes/HexTState.h
+     Classes/Slider.h
      Classes/StateMachine.h
      Classes/TouchConsumer.h
      Classes/TouchTracker.h

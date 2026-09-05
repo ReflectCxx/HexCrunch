@@ -10,10 +10,12 @@ namespace hex
 	class HexTile : public Hex<HexTile>, public StateMachine<TileState, HexTile>, public cocos2d::Node
 	{
 		cocos2d::Node* m_blocked;
-		cocos2d::Node* m_ringFace;
+		cocos2d::Node* m_clippedFace;
 		cocos2d::Node* m_foreground;
+		cocos2d::Node* m_clippedBg;
 		cocos2d::DrawNode* m_hexLink;
-		cocos2d::DrawNode* m_background;
+		cocos2d::ClippingNode* m_ringFace;
+		cocos2d::ClippingNode* m_background;
 
 		void refreshView();
 		void initClippedBg(cocos2d::Node* pGridNode);
@@ -23,7 +25,6 @@ namespace hex
 
 		HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
-		constexpr bool isBgEnabled() const;
 		constexpr cocos2d::Node& getBlocked();
 		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::DrawNode& getLink();
@@ -38,6 +39,7 @@ namespace hex
 
 		constexpr cocos2d::Node& getRingFace();
 		constexpr cocos2d::Node& getForeground();
+		constexpr cocos2d::Node& getClippedFace();
 
 		virtual bool stateOnDeactivate() = 0;
 		virtual bool stateOnActivate(TileState) = 0;

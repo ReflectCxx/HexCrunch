@@ -28,6 +28,8 @@ namespace hex
 
 	public:
 
-		HexTState(const ColorId pId, const int pRingIndex, const int pTileIndex);
+		HexTState(const ColorId pId, 
+				  const int pRingIndex, 
+				  const int pTileIndex) :HexTile(pId, pRingIndex, pTileIndex) { }
 	};
 }
