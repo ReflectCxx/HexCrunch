@@ -43,14 +43,6 @@ namespace
 
 namespace hex
 {
-	HexGrid::HexGrid()
-		: m_swipeConsumer(std::make_unique<TouchConsumer>(*this))
-		, m_swipeTracker(std::make_unique<TouchTracker>(this,
-			[this](Swipe pDir) {
-				m_swipeConsumer->onInputRecieved(pDir);
-			}))
-	{ }
-
 	bool HexGrid::init()
 	{
 		if (!Node::init()) {
@@ -58,7 +50,6 @@ namespace hex
 		}
 		initHexGrid();
 		setRotation(30.f);
-		m_swipeConsumer->init(m_hexRings[RING_COUNT - 2][0]);
 		return true;
 	}
 }

@@ -62,7 +62,6 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/Asset.cpp
-     Classes/CommandManager.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
      Classes/HexGridController.cpp
@@ -78,7 +77,9 @@ list(APPEND GAME_HEADER
      Classes/Asset.h
      Classes/AssetConsts.h
      Classes/Command.h
-     Classes/CommandManager.h
+     Classes/Command.hpp
+     Classes/CmdManager.h
+     Classes/CmdManager.hpp
      Classes/Constants.h
      Classes/Defines.h
      Classes/DrawingUtils.h

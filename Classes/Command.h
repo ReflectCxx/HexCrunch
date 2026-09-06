@@ -3,40 +3,23 @@
 #include <functional>
 
 #include "Constants.h"
-#include "CommandManager.h"
+#include "CmdManager.h"
 
 namespace hex
 {
-	class CommandManager;
+	class CmdManager;
 
-	class Command
+	struct Command
 	{
+		const bool m_blocksCmdQ;
 		const CmdKind m_cmdKind;
-		const ExecutionKind m_exeKind;
-		std::function<bool()> m_command;
-
-	public:
-
-		~Command();
-		Command(CmdKind pCmdType, ExecutionKind pExeType);
-
-		GET(CmdKind, CommandKind, m_cmdKind)
-		GET(ExecutionKind, ExecutionKind, m_exeKind)
+		const std::function<bool()> m_command;
 
 		bool execute();
-		//virtual void finishedExecution();
+
+	protected:
+
+		void executionEnds(CmdManager&);
+		void executionBegins(CmdManager&);
 	};
-}
-
-
-namespace hex
-{
-	inline Command::Command(CmdKind pCmdKind, ExecutionKind pExeKind)
-		: m_cmdKind(pCmdKind)
-		, m_exeKind(pExeKind)
-	{ }
-
-	inline bool Command::execute() {
-		return m_command();
-	}
 }

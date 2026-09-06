@@ -17,18 +17,11 @@ namespace hex
 		Off
 	};
 
-	enum class ExecutionKind {
-		None,
-		Synchronous,
-		ASynchronous
-	};
-
 	enum class CmdKind {
-		None = -1,
+		None,
 		SpawnTile,
 		SwapTiles,
-		PullDownTile,
-		Count
+		PullDownTile
 	};
 
 	enum class ColorId {

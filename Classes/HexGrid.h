@@ -1,21 +1,13 @@
 #pragma once
 
-#include "Slider.h"
-#include "TouchTracker.h"
-#include "TouchConsumer.h"
-#include "HexGridController.h"
+#include "cocos2d.h"
+#include "Constants.h"
 
 namespace hex
 {
 	class HexGrid : public cocos2d::Node
 	{
 		HexRingMatrix m_hexRings;
-
-		std::unique_ptr<TouchTracker> m_swipeTracker = nullptr;
-
-		std::unique_ptr<TouchConsumer> m_swipeConsumer = nullptr;
-
-		HexGrid();
 
 		bool init() override;
 

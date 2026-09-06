@@ -3,8 +3,6 @@
 #include "HexTile.hpp"
 #include "HexGridController.h"
 
-#include "CommandManager.h"
-
 USING_NS_CC;
 
 namespace hex
