@@ -1,10 +1,11 @@
 #pragma once
 
 #include "HexTile.hpp"
+#include "StateMachine.h"
 
 namespace hex
 {
-	class HexTState : public HexTile
+	class HexTState : public HexTile, public StateMachine<TileState, HexTState>
 	{
 		bool initStateZero();
 
@@ -23,13 +24,14 @@ namespace hex
 		bool turnOnHighlighted();
 		bool turnOffHighlighted();
 
-		virtual bool stateOnDeactivate() override;
-		virtual bool stateOnActivate(TileState) override;
-
 	public:
 
 		HexTState(const ColorId pId, 
 				  const int pRingIndex, 
 				  const int pTileIndex) :HexTile(pId, pRingIndex, pTileIndex) { }
+
+		bool stateOnDeactivate();
+		bool stateOnActivate(TileState);
+		void setState(TileState) override;
 	};
 }

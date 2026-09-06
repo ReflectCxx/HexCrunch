@@ -20,8 +20,7 @@ namespace hex
 		, m_actorTile(nullptr)
 		, m_grid(grid)
 		, m_controller(grid)
-	{
-	}
+	{ }
 
 	void Slider::init(HexTile* actorTile)
 	{

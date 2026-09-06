@@ -40,7 +40,7 @@ namespace hex
 	HexTile::HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex)
 		: Hex(pId, pRingIndex, pTileIndex)
 		, m_blocked(nullptr)
-		, m_clippedFace(nullptr)
+		, m_clipped(nullptr)
 		, m_foreground(nullptr)
 		, m_clippedBg(nullptr)
 		, m_hexLink(nullptr)
@@ -83,8 +83,8 @@ namespace hex
 		m_foreground->removeAllChildren();
 		m_foreground->addChild(Asset::createNormalTile(color, sz));
 
-		m_clippedFace->removeAllChildren();
-		m_clippedFace->addChild(Asset::createNormalTile(color, sz));
+		m_clipped->removeAllChildren();
+		m_clipped->addChild(Asset::createNormalTile(color, sz));
 
 		m_blocked->removeAllChildren();
 		m_blocked->addChild(Asset::createBlockedTile(color, sz));
@@ -110,10 +110,10 @@ namespace hex
 		m_foreground->setContentSize(sz);
 		addChild(m_foreground, Z_FOREGROUND);
 		
-		m_clippedFace = Node::create();
-		m_clippedFace->addChild(Asset::createNormalTile(pId, sz));
+		m_clipped = Node::create();
+		m_clipped->addChild(Asset::createNormalTile(pId, sz));
 
-		m_ringFace = create_clipped(m_clippedFace, DrawNode::create());
+		m_ringFace = create_clipped(m_clipped, DrawNode::create());
 		m_ringFace->setContentSize(sz);
 		addChild(m_ringFace, Z_RING_ON);
 		
@@ -151,7 +151,7 @@ namespace hex
 		initClippedBg(pGridNode);
 
 		const auto theta = getHexRingEdgeAngle();
-		m_clippedFace->setRotation(theta);
+		m_clipped->setRotation(theta);
 		m_blocked->setRotation(theta);
 		m_foreground->setRotation(theta);
 	}

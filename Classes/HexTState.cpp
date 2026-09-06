@@ -8,11 +8,17 @@ USING_NS_CC;
 
 namespace hex
 {
+	void HexTState::setState(TileState state)
+	{
+		switchToState(state);
+	}
+
+
 	bool HexTState::initStateZero()
 	{
 		getLink().setVisible(false);
 		getRingFace().setVisible(false);
-		getBlocked().setVisible(false);
+		getBlockedFace().setVisible(false);
 		getBackground().setVisible(false);
 		getForeground().setVisible(false);
 		return true;
@@ -68,7 +74,7 @@ namespace hex
 namespace hex
 {
 	bool HexTState::turnOffBlocked() {
-		getBlocked().setVisible(false);
+		getBlockedFace().setVisible(false);
 		return true;
 	}
 
@@ -78,7 +84,7 @@ namespace hex
 		if (getPreviousState() == TileState::RingFace) {
 			getLink().setVisible(true);
 		}
-		getBlocked().setVisible(true);
+		getBlockedFace().setVisible(true);
 		return true;
 	}
 }

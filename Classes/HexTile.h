@@ -3,14 +3,13 @@
 #include "cocos2d.h"
 
 #include "HexT.hpp"
-#include "StateMachine.h"
 
 namespace hex
 {
-	class HexTile : public Hex<HexTile>, public StateMachine<TileState, HexTile>, public cocos2d::Node
+	class HexTile : public Hex<HexTile>, public cocos2d::Node
 	{
 		cocos2d::Node* m_blocked;
-		cocos2d::Node* m_clippedFace;
+		cocos2d::Node* m_clipped;
 		cocos2d::Node* m_foreground;
 		cocos2d::Node* m_clippedBg;
 		cocos2d::DrawNode* m_hexLink;
@@ -25,13 +24,12 @@ namespace hex
 
 		HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
-		constexpr cocos2d::Node& getBlocked();
 		constexpr cocos2d::Node& getBackground();
+		constexpr cocos2d::Node& getBlockedFace();
 		constexpr cocos2d::DrawNode& getLink();
 
 	public:
 
-		void setState(TileState);
 		void swapColors(HexTile&);
 		void initRingPlacement(cocos2d::Node* pGridNode, cocos2d::Node* pLinkNode);
 
@@ -41,7 +39,6 @@ namespace hex
 		constexpr cocos2d::Node& getForeground();
 		constexpr cocos2d::Node& getClippedFace();
 
-		virtual bool stateOnDeactivate() = 0;
-		virtual bool stateOnActivate(TileState) = 0;
+		virtual void setState(TileState) = 0;
 	};
 }

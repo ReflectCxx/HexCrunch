@@ -4,10 +4,6 @@
 
 namespace hex
 {
-	inline void HexTile::setState(TileState pState) {
-		switchToState(pState);
-	}
-
 	inline constexpr cocos2d::Node& HexTile::getRingFace() {
 		return *m_ringFace;
 	}
@@ -18,14 +14,14 @@ namespace hex
 
 	inline constexpr cocos2d::Node& HexTile::getClippedFace()
 	{
-		return *m_clippedFace;
+		return *m_clipped;
 	}
 
 	inline constexpr cocos2d::Node& HexTile::getBackground() {
 		return *m_background;
 	}
 
-	inline constexpr cocos2d::Node& HexTile::getBlocked() {
+	inline constexpr cocos2d::Node& HexTile::getBlockedFace() {
 		return *m_blocked;
 	}
 
