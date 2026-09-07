@@ -17,6 +17,14 @@ namespace hex
 		Off
 	};
 
+	enum class CmdState {
+		None,
+		Ready,
+		Queued,
+		Running,
+		Expired
+	};
+
 	enum class CmdKind {
 		None,
 		CallBack,

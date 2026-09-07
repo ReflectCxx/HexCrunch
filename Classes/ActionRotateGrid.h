@@ -15,8 +15,10 @@ namespace hex
 		static Command create(CommandController& pController, HexGrid& pGrid, const float pAngle)
 		{
 			const auto action = ActionRotateGrid{ pAngle, pGrid };
-			return Command{ 
-				pController, CmdKind::RotateGrid, true,
+			return Command {
+				true,
+				pController,
+				CmdKind::RotateGrid,
 				[action](Command& pCmd) { 
 					action.run(pCmd); 
 				} 
@@ -31,14 +33,13 @@ namespace hex
 {
 	void ActionRotateGrid::run(Command& pCmd) const
 	{
-		pCmd.executionBegins();
-
 		m_grid.runAction(
 			cocos2d::Sequence::create(
-				cocos2d::RotateBy::create(0.5f, m_angle),
+				cocos2d::RotateBy::create(0.5f, m_angle), 
 				cocos2d::CallFunc::create([&]() {
-					pCmd.executionEnds();
+					pCmd.end();
 				}),
-				nullptr));
+				nullptr)
+		);
 	}
 }

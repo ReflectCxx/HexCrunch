@@ -12,8 +12,8 @@ namespace hex
 
 	void GridFxController::update()
 	{
-		while (true) 
-		{
+		CommandController::update();
+		while (true) {
 			const auto command = nextCmd();
 			if (command) {
 				command->get().execute();
@@ -25,17 +25,16 @@ namespace hex
 
 	void GridFxController::pushCb(const std::function<void()>& pCallBack)
 	{
-		auto cmd = Command{
-			*this, CmdKind::SwapTiles, true,
+		push(Command{ true, *this, CmdKind::CallBack,
 			[=](Command& pCmd) {
-				pCmd.executionBegins();
+				pCmd.end();
+				//Mock's touch input. works only when no running commands.
 				pCallBack();
-				pCmd.executionEnds();
 			}
-		};
-		push(std::move(cmd));
+		});
 	}
 }
+
 
 
 namespace hex

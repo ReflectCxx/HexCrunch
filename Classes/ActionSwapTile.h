@@ -15,9 +15,11 @@ namespace hex
 		static Command create(CommandController& pController, HexTile& pTileA, HexTile& pTileB)
 		{
 			const auto action = ActionSwapTile{ pTileA, pTileB };
-			return Command{ 
-				pController, CmdKind::SwapTiles, true,
-				[action](Command& pCmd) { 
+			return Command {
+				true,
+				pController,
+				CmdKind::SwapTiles,
+				[action](Command& pCmd) {
 					action.run(pCmd); 
 				} 
 			};

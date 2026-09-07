@@ -39,7 +39,7 @@ namespace hex
 	}
 
 	constexpr bool GridManager::isGridIdle() {
-		return (m_controller.getRunningCmd() == CmdKind::None);
+		return (m_controller.getRunningCmdCount() == 0);
 	}
 
 	constexpr CommandController& GridManager::controller() {

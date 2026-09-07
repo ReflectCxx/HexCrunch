@@ -14,8 +14,6 @@ namespace hex
 {
 	void ActionSwapTile::run(Command& pCmd) const
 	{
-		pCmd.executionBegins();
-
 		const auto& actorPos = m_tileA.getPosition();
 		const auto& otherPos = m_tileB.getPosition();
 
@@ -49,8 +47,8 @@ namespace hex
 
 			m_tileB.getClippedFace().setVisible(true);
 			m_tileB.getForeground().setVisible(false);
+			pCmd.end();
 
-			pCmd.executionEnds();
 		}, DT + 0.01f, "cb");
 	}
 }

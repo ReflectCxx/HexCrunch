@@ -77,8 +77,8 @@ namespace hex
 	void TouchConsumer::onInputRecieved(const Swipe pDir, const bool pIsMockInput)
 	{
 		if (!m_slider.isReady()) {
-			const auto cmdK = m_slider.fxController().getRunningCmd();
-			CCLOG("Running : %s", cmd_name(cmdK));
+			const auto cmdK = m_slider.fxController().getRunningCmdCount();
+			CCLOG("Grid not idle! %d cmds running.", cmdK);
 			return;
 		}
 

@@ -1,54 +1,72 @@
 #pragma once
 
+#include "cocos2d.h"
+
 #include "Command.h"
 
 namespace hex
 {
-	inline Command::Command(CommandController& pCC, const CmdKind pCmdK, bool pBlocksQ,
-						    const std::function<void(Command&)>& pCmd)
-		: m_blocksCmdQ(pBlocksQ)
-		, m_cmdKind(pCmdK)
-		, m_controller(pCC)
-		, m_command(pCmd)
-		, m_cmdId(m_counter++)
-	{ }
-
 	constexpr CmdKind Command::getKind() const {
 		return m_cmdKind;
 	}
 
-	inline void Command::execute() {
-		m_command(*this);
+
+	inline Command::Command(bool pBlocksQ, CommandController& pCC,
+						    const CmdKind pCmdK, std::function<void(Command&)> pCmd)
+		: m_blocksCmdQ(pBlocksQ)
+		, m_cmdKind(pCmdK)
+		, m_command(std::move(pCmd))
+		, m_cmdState(CmdState::None)
+		, m_controller(pCC)
+		, m_cmdId(m_counter++){
 	}
 
 
-	inline void Command::executionEnds()
+	inline Command::Command(Command&& pOther) noexcept
+		: m_blocksCmdQ(pOther.m_blocksCmdQ)
+		, m_cmdKind(pOther.m_cmdKind)
+		, m_command(std::move(pOther.m_command))
+		, m_controller(pOther.m_controller)
+		, m_cmdState(pOther.m_cmdState)
+		, m_cmdId(pOther.m_cmdId) {
+		pOther.m_cmdState = CmdState::Expired;
+	}
+
+
+	inline void Command::execute()
 	{
+		if (m_cmdState != CmdState::Ready) {
+			return;
+		}
+		m_cmdState = CmdState::Running;
+		m_controller.runningCount()++;
+		if (m_blocksCmdQ) {
+			m_controller.blockQ(m_cmdId, true);
+		}
+		CCASSERT(m_command, "Command callback cannot be empty");
+		m_command(*this);
+	}
+
+	
+	inline void Command::end()
+	{
+		if (m_cmdState != CmdState::Running) {
+			return;
+		}
 		if (m_blocksCmdQ) {
 			m_controller.blockQ(m_cmdId, false);
 		}
 		m_controller.runningCount()--;
-		m_controller.pop();
-	}
-
-
-	inline void Command::executionBegins()
-	{
-		if (m_blocksCmdQ) {
-			m_controller.blockQ(m_cmdId, true);
-		}
-		m_controller.runningCount()++;
+		m_cmdState = CmdState::Expired;
 	}
 }
 
 
+
 namespace hex
 {
-	constexpr CmdKind CommandController::getRunningCmd() const {
-		if (m_runningCount != 0) {
-			return m_commandQ.front().getKind();
-		}
-		return CmdKind::None;
+	constexpr std::size_t CommandController::getRunningCmdCount() const {
+		return m_runningCount;
 	}
 
 
@@ -57,26 +75,43 @@ namespace hex
 	}
 
 
-	inline void CommandController::pop() {
-		m_commandQ.pop_front();
+	inline void CommandController::update()
+	{
+		int count = 0;
+		while (!m_commands.empty() && m_commands.front().m_cmdState == CmdState::Expired) {
+			m_commands.pop_front();
+			count++;
+		}
+		if (count > 0) {
+			CCLOG("Expired cmds count: %d", count);
+		}
 	}
 
 
-	inline void CommandController::push(Command pCmd) {
-		m_commandQ.push_back(std::move(pCmd));
+	inline void CommandController::push(Command pCmd)
+	{
+		if (pCmd.m_cmdState != CmdState::None) {
+			return;
+		}
+		m_commands.push_back(std::move(pCmd));
+		m_commandQ.push_back(m_commands.back());
+		m_commands.back().m_cmdState = CmdState::Queued;
 	}
 
 
 	inline std::optional<std::reference_wrapper<Command>> CommandController::nextCmd()
 	{
-		if (m_commandQ.empty() || m_qBlocked) {
+		if (m_qBlocked || m_commandQ.empty()) {
 			return std::nullopt;
 		}
-		return { std::reference_wrapper<Command>(m_commandQ.front()) };
+		auto& cmd = m_commandQ.front().get();
+		cmd.m_cmdState = CmdState::Ready;
+		m_commandQ.pop_front();
+		return cmd;
 	}
 
 
-	inline void CommandController::blockQ(std::uint64_t pByCmdId, bool pBlock)
+	inline void CommandController::blockQ(const std::uint64_t pByCmdId, const bool pBlock)
 	{
 		if (pBlock) {
 			if (!m_qBlocked) {

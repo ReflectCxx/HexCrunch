@@ -6,19 +6,24 @@
 
 #include "Constants.h"
 
+
 namespace hex
 {
 	class CommandController;
 
 	class Command final
 	{
+		friend CommandController;
+
 		inline static std::uint32_t m_counter{ 0 };
 
 		const bool m_blocksCmdQ;
 		const CmdKind m_cmdKind;
+		const std::size_t m_cmdId;
+		std::function<void(Command&)> m_command;
+
+		CmdState m_cmdState;
 		CommandController& m_controller;
-		const std::function<void(Command&)> m_command;
-		const std::uint32_t m_cmdId;
 
 		Command(const Command&) = delete;
 		Command& operator=(Command&&) = delete;
@@ -26,16 +31,16 @@ namespace hex
 
 	public:
 		
+		void end();
 		void execute();
-		void executionEnds();
-		void executionBegins();
 		constexpr CmdKind getKind() const;
 
-		Command(Command&&) = default;
-		Command(CommandController& pCC, const CmdKind pCmdK, bool pBlocksQ,
-				const std::function<void(Command&)>& pCmd);
+		Command(Command&&) noexcept;
+		Command(bool pBlocksQ, CommandController& pCC,
+				const CmdKind pCmdK, std::function<void(Command&)> pCmd);
 	};
 }
+
 
 
 namespace hex
@@ -45,28 +50,29 @@ namespace hex
 		friend Command;
 
 		bool m_qBlocked = false;
-		
 		std::size_t m_runningCount = 0;
-
 		std::uint64_t m_blockedByCmdId = -1;
+		std::deque<Command> m_commands;
+		std::deque<std::reference_wrapper<Command>> m_commandQ;
 
-		CmdKind m_runningCmd = CmdKind::None;
-
-		std::deque<Command> m_commandQ;
-
-		void pop();
-		void blockQ(std::uint64_t pByCmdId, bool);
+		void blockQ(const std::uint64_t pByCmdId, const bool);
 		constexpr std::size_t& runningCount();
 
 	public:
 
-		constexpr CmdKind getRunningCmd() const;
-
+		void update();
+		constexpr std::size_t getRunningCmdCount() const;
 		std::optional<std::reference_wrapper<Command>> nextCmd();
 
 	protected:
 
 		void push(Command);
+
+		CommandController() = default;
+		CommandController(CommandController&&) = delete;
+		CommandController(const CommandController&) = delete;
+		CommandController& operator=(CommandController&&) = delete;
+		CommandController& operator=(const CommandController&) = delete;
 	};
 }
 
