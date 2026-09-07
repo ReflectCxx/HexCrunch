@@ -50,13 +50,24 @@ namespace hex
 		}
 		initHexGrid();
 		setRotation(30.f);
+		scheduleUpdate();
 		return true;
+	}
+
+	void HexGrid::update(float) 
+	{
+		m_manager.update();
 	}
 }
 
 
 namespace hex
 {
+	GridManager& HexGrid::getManager() {
+		return m_manager;
+	}
+
+
 	void HexGrid::initRingHexTiles(Node* pBgNode, cocos2d::Node* pLinkNode, int pRingIndex)
 	{
 		auto startTile = m_hexRings[pRingIndex][0];
@@ -69,7 +80,7 @@ namespace hex
 	}
 
 
-	HexTile* HexGrid::spawnNewTile(const cocos2d::Vec2& pos, const int pRingIndex, const int pTileIndex)
+	HexTile* HexGrid::spawnNewTile(const cocos2d::Vec2& pPos, const int pRingIndex, const int pTileIndex)
 	{
 		auto& colors = get_colors();
 		auto colorId = ColorId::None;
@@ -79,7 +90,7 @@ namespace hex
 		}
 
 		auto tile = HexTile::create(colorId, pRingIndex, pTileIndex);
-		tile->setPosition(pos);
+		tile->setPosition(pPos);
 		addChild(tile);
 		if (pRingIndex == RING_COUNT) {
 			tile->setVisible(false);
@@ -99,7 +110,7 @@ namespace hex
 			for (size_t index = 0; index < innerRing.size(); index++)
 			{
 				HexTile* innerTile = innerRing[index];
-				for (size_t faceCount = 0; faceCount < pFaceCounts[ringIndex][index]; faceCount++) {
+				for (int faceCount = 0; faceCount < pFaceCounts[ringIndex][index]; faceCount++) {
 					const int outerRingIndex = indexCounter % outerRing.size();
 					innerTile->addNeighbour(outerRing[outerRingIndex]);
 					outerRing[outerRingIndex]->addNeighbour(innerTile);
@@ -109,6 +120,7 @@ namespace hex
 			}
 		}
 	}
+
 
 
 	void HexGrid::initHexGrid()
@@ -131,7 +143,7 @@ namespace hex
 
 			for (int angleI = 0; angleI < HEX_6; angleI++)
 			{
-				const float theta = angleI * (M_PI / 3.f);
+				const auto theta = float(angleI * (M_PI / 3.f));
 				const float centerPosX = HEX_WIDTH * (ringIndex + 1) * cos(theta);
 				const float centerPosY = HEX_WIDTH * (ringIndex + 1) * sin(theta);
 
@@ -146,7 +158,7 @@ namespace hex
 				previousTile = nextTile;
 
 				for (int i = 1; i <= ringIndex; i++) {
-					const float beta = theta + (M_PI * 2.f/ 3.f);
+					const auto beta = float(theta + (M_PI * 2.f/ 3.f));
 					const float adjPosX = centerPosX + i * HEX_WIDTH * cos(beta);
 					const float adjPosY = centerPosY + i * HEX_WIDTH * sin(beta);
 					auto nextTile = spawnNewTile({ adjPosX, adjPosY }, ringIndex, tileIndex);

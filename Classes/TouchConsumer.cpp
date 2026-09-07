@@ -5,16 +5,15 @@
 
 USING_NS_CC;
 
-namespace
-{
+namespace {
 	constexpr auto ENABLE_SAME_COLOR_SWAP = false;
 }
 
 
 namespace hex
 {
-	TouchConsumer::TouchConsumer(HexGrid& pHexGrid)
-		: m_slider(pHexGrid)
+	TouchConsumer::TouchConsumer(const Slider& pSlider)
+		: m_slider(pSlider)
 	{ }
 
 	void TouchConsumer::init(HexTile* pActor) {
@@ -24,7 +23,7 @@ namespace hex
 
 	bool TouchConsumer::moveSlider(const Swipe pDir)
 	{
-		switch (pDir){
+		switch (pDir) {
 		case Swipe::Up: return moveSliderUp();
 		case Swipe::Down: return moveSliderDown();
 		case Swipe::Left: return m_slider.moveActorLeft();
@@ -99,7 +98,7 @@ namespace hex
 				m_slider.highlightBlockedTiles(Turn::On);
 			}
 			if (!pIsMockInput) {
-				m_slider.controller().correctOrientation(m_slider.actor(), m_slider.follower());
+				m_slider.alignWithGrid();
 			}
 		}
 	}

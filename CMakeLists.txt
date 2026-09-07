@@ -60,11 +60,13 @@ endif()
 
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
+     Classes/ActionSwapTile.cpp
      Classes/AppDelegate.cpp
      Classes/Asset.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
-     Classes/HexGridController.cpp
+     Classes/GridFxController.cpp
+     Classes/GridManager.cpp
      Classes/HexTile.cpp
      Classes/HexTState.cpp
      Classes/Slider.cpp
@@ -73,19 +75,20 @@ list(APPEND GAME_SOURCE
      )
 
 list(APPEND GAME_HEADER
+     Classes/ActionSwapTile.h
+     Classes/ActionRotateGrid.h
      Classes/AppDelegate.h
      Classes/Asset.h
      Classes/AssetConsts.h
      Classes/Command.h
      Classes/Command.hpp
-     Classes/CmdManager.h
-     Classes/CmdManager.hpp
      Classes/Constants.h
      Classes/Defines.h
      Classes/DrawingUtils.h
      Classes/GameScene.h
      Classes/HexGrid.h
-     Classes/HexGridController.h
+     Classes/GridFxController.h
+     Classes/GridManager.h
      Classes/HexT.h
      Classes/HexT.hpp
      Classes/HexTile.h

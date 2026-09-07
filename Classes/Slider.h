@@ -4,19 +4,18 @@
 #include <deque>
 
 #include "Constants.h"
-#include "HexGridController.h"
+#include "HexGrid.h"
 
 namespace hex
 {
 	class HexTile;
-	class HexGrid;
 	class TouchConsumer;
 
 	class Slider
 	{
 	public:
 
-		int m_followerIndex;
+		std::size_t m_followerIndex;
 
 		int m_sameDirSwapCount;
 		int m_sameDirSlideCount;
@@ -30,7 +29,6 @@ namespace hex
 		std::deque<HexTile*> m_outerNeighbours;
 
 		HexGrid& m_grid;
-		HexGridController m_controller;
 		
 		void trackTap();
 		void updateOuterRingPathQ();
@@ -45,9 +43,9 @@ namespace hex
 
 		HexTile& follower() const;
 		constexpr HexTile& actor() const;
-		constexpr bool isReady() const;
-		constexpr HexGridController& controller();
+		bool isReady() const;
 
+		void alignWithGrid();
 		void trackSwipe(const Swipe);
 		void swapSelection(TouchConsumer&);
 
@@ -68,15 +66,15 @@ namespace hex
 		return *m_actorTile;
 	}
 
-	inline constexpr bool Slider::isReady() const {
-		return m_controller.isGridIdle();
-	}
-
-	inline constexpr HexGridController& Slider::controller() {
-		return m_controller;
-	}
-
 	inline HexTile& Slider::follower() const {
 		return (*m_outerNeighbours[m_followerIndex]);
+	}
+
+	inline bool Slider::isReady() const {
+		return m_grid.getManager().isGridIdle();
+	}
+
+	inline void Slider::alignWithGrid() {
+		m_grid.getManager().correctOrientation(*this);
 	}
 }

@@ -10,7 +10,7 @@ USING_NS_CC;
 
 namespace hex
 {
-	Slider::Slider(HexGrid& grid)
+	Slider::Slider(HexGrid& pGrid)
 		: m_followerIndex(-1)
 		, m_sameDirSwapCount(0)
 		, m_sameDirSlideCount(0)
@@ -18,17 +18,16 @@ namespace hex
 		, m_lastSwappedInDir(Swipe::None)
 		, m_lastSwappedIndices{ -1, -1 }
 		, m_actorTile(nullptr)
-		, m_grid(grid)
-		, m_controller(grid)
+		, m_grid(pGrid)
 	{ }
 
-	void Slider::init(HexTile* actorTile)
+	void Slider::init(HexTile* pActorTile)
 	{
 		m_followerIndex = 1;
-		m_actorTile = actorTile;
+		m_actorTile = pActorTile;
 		updateOuterRingPathQ();
 		highlightCurrentRing(Turn::On);
-		m_controller.correctOrientation(actor(), follower());
+		alignWithGrid();
 	}
 }
 
@@ -36,11 +35,11 @@ namespace hex
 
 namespace hex
 {
-	void Slider::undoSliderMove(HexTile* previousActor, const int previousFollowerI)
+	void Slider::undoSliderMove(HexTile* pPreviousActor, const int pPrevFollowerI)
 	{
 		highlightCurrentRing(Turn::Off);
-		m_actorTile = previousActor;
-		m_followerIndex = previousFollowerI;
+		m_actorTile = pPreviousActor;
+		m_followerIndex = pPrevFollowerI;
 		updateOuterRingPathQ();
 		highlightCurrentRing(Turn::On);
 	}
@@ -53,20 +52,20 @@ namespace hex
 		for (auto tile : outerTiles) {
 			m_outerNeighbours.push_back(tile);
 		}
-		m_followerIndex = std::clamp(m_followerIndex, 0, (int)m_outerNeighbours.size() - 1);
+		m_followerIndex = std::clamp(m_followerIndex, std::size_t{ 0 }, m_outerNeighbours.size() - 1);
 	}
 
 
-	void Slider::highlightCurrentRing(const Turn flag)
+	void Slider::highlightCurrentRing(const Turn pFlag)
 	{
-		if (flag == Turn::On) {
-			m_controller.setRingTilesState(actor(), TileState::RingFace);
+		if (pFlag == Turn::On) {
+			m_grid.getManager().setRingTilesState(actor(), TileState::RingFace);
 			actor().setState(TileState::Actor);
 			follower().setState(TileState::Highlighted);
 		}
 		else {
 			follower().setState(TileState::Idle);
-			m_controller.setRingTilesState(actor(), TileState::Idle);
+			m_grid.getManager().setRingTilesState(actor(), TileState::Idle);
 		}
 	}
 
@@ -85,9 +84,9 @@ namespace hex
 	}
 
 
-	void Slider::trackSwipe(const Swipe dir)
+	void Slider::trackSwipe(const Swipe pDir)
 	{
-		if (dir != m_currentSwipeDir || dir == Swipe::Up || dir == Swipe::Down) {
+		if (pDir != m_currentSwipeDir || pDir == Swipe::Up || pDir == Swipe::Down) {
 			m_sameDirSlideCount = 0;
 			m_lastSwappedInDir = Swipe::None;
 		}
@@ -98,13 +97,13 @@ namespace hex
 			}
 			m_sameDirSlideCount++;
 		}
-		m_currentSwipeDir = dir;
+		m_currentSwipeDir = pDir;
 	}
 
 
-	void Slider::highlightBlockedTiles(const Turn flag)
+	void Slider::highlightBlockedTiles(const Turn pFlag)
 	{
-		if (flag == Turn::Off) {
+		if (pFlag == Turn::Off) {
 			for (auto t : m_blockedTiles) {
 				if (t->getRingIndex() == actor().getRingIndex()) {
 					t->setState(TileState::RingFace);
@@ -125,7 +124,7 @@ namespace hex
 	}
 
 
-	void Slider::swapSelection(TouchConsumer& touch)
+	void Slider::swapSelection(TouchConsumer& pTouch)
 	{
 		const auto actorTi = actor().getTileIndex();
 		const auto otherTi = follower().getTileIndex();
@@ -138,23 +137,23 @@ namespace hex
 		}
 		m_lastSwappedIndices = { actorTi, otherTi };
 
-		const auto onEndCb = [&touch, this]()-> bool
+		const auto onEndCb = [&pTouch, this]()-> bool
 		{
 			if (m_sameDirSwapCount > 1)
 			{
-				touch.onInputRecieved(m_currentSwipeDir, true);
+				pTouch.onInputRecieved(m_currentSwipeDir, true);
 				const auto ri = follower().getRingIndex();
 				const auto ti = follower().getTileIndex();
 				if (ti % (ri + 1) == 0) {
 					m_sameDirSwapCount++;
-					touch.onInputRecieved(m_currentSwipeDir, true);
+					pTouch.onInputRecieved(m_currentSwipeDir, true);
 				}
-				controller().correctOrientation(actor(), follower());
+				alignWithGrid();
 				return true;
 			}
 			return false;
 		};
-		controller().swapSelection(actor(), follower(), onEndCb);
+		m_grid.getManager().swapSelection(*this, onEndCb);
 	}
 }
 
@@ -194,7 +193,7 @@ namespace hex
 			else {
 				const auto tilePosW = m_grid.convertToWorldSpace(follower().getPosition());
 				const auto i = m_followerIndex + (tilePosW.x < gridPosW.x ? 1 : -1);
-				m_actorTile = downTiles[std::clamp(i, 0, 2)];
+				m_actorTile = downTiles[std::clamp(i, std::size_t{ 0 }, std::size_t{ 2 })];
 			}
 		}
 		else {

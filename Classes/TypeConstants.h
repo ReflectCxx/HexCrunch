@@ -19,8 +19,10 @@ namespace hex
 
 	enum class CmdKind {
 		None,
+		CallBack,
 		SpawnTile,
 		SwapTiles,
+		RotateGrid,
 		PullDownTile
 	};
 

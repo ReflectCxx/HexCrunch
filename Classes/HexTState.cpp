@@ -8,9 +8,9 @@ USING_NS_CC;
 
 namespace hex
 {
-	void HexTState::setState(TileState state)
+	void HexTState::setState(TileState pState)
 	{
-		switchToState(state);
+		switchToState(pState);
 	}
 
 
@@ -116,6 +116,7 @@ namespace hex
 		getClippedFace().setScale(1.f);
 		getClippedFace().unscheduleAllCallbacks();
 		getClippedFace().setPosition(Vec2::ZERO);
+		getClippedFace().setRotation(getHexRingEdgeAngle());
 
 		getLink().setVisible(false);
 		getRingFace().setVisible(false);
@@ -127,7 +128,9 @@ namespace hex
 	bool HexTState::turnOnActing()
 	{
 		constexpr auto radius = HEX_BORDER + (HEX_RAD * (1 - BOUNCE_SCALE));
-		ut::run_hex_bounce(&getClippedFace(), radius, nullptr);
+		ut::run_hex_bounce(&getClippedFace(), radius, [&](float theta) {
+			getClippedFace().setRotation(theta);
+		});
 		getClippedFace().setScale(BOUNCE_SCALE);
 
 		getLink().setVisible(true);
@@ -149,9 +152,6 @@ namespace hex
 		getClippedFace().setScale(BOUNCE_SCALE);
 
 		getLink().setVisible(true);
-		//const auto pt = static_cast<HexTState*>(getPrevoiusRingTile());
-		//pt->getLink().setVisible(true);
-
 		getRingFace().setVisible(true);
 		getBackground().setVisible(true);
 		return true;
@@ -166,9 +166,6 @@ namespace hex
 		getClippedFace().setRotation(getHexRingEdgeAngle());
 
 		getLink().setVisible(false);
-		//const auto pt = static_cast<HexTState*>(getPrevoiusRingTile());
-		//pt->getLink().setVisible(false);
-
 		getRingFace().setVisible(false);
 		getBackground().setVisible(false);
 		return true;

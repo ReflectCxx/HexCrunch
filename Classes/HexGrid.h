@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 #include "Constants.h"
+#include "GridManager.h"
 
 namespace hex
 {
@@ -9,11 +10,13 @@ namespace hex
 	{
 		HexRingMatrix m_hexRings;
 
+		GridManager m_manager = GridManager(*this);
+
 		bool init() override;
 
 		void initHexGrid();
 
-		HexTile* spawnNewTile(const cocos2d::Vec2& pos,
+		HexTile* spawnNewTile(const cocos2d::Vec2& pPos,
 							  const int pRingIndex, const int pTileIndex);
 
 		void initRingHexTiles(cocos2d::Node* pBgNode,
@@ -23,17 +26,19 @@ namespace hex
 
 	public:
 
+		GridManager& getManager();
 		constexpr const HexRingMatrix& getHexagonRings() const;
-
+		
 		CREATE_FUNC(HexGrid)
+
+		void update(float) override;
 	};
 }
 
 
-
 namespace hex
 {
-	inline constexpr const HexRingMatrix& HexGrid::getHexagonRings() const {
+	constexpr const HexRingMatrix& HexGrid::getHexagonRings() const {
 		return m_hexRings;
 	};
 }

@@ -16,7 +16,7 @@ namespace hex
 		
 	public:
 
-		TouchConsumer(HexGrid&);
+		TouchConsumer(const Slider&);
 
 		void init(HexTile*);
 		void onInputRecieved(const Swipe, const bool = false);

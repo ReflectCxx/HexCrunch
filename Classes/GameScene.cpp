@@ -1,8 +1,9 @@
 
-#include "Constants.h"
-#include "Asset.h"
-#include "HexGrid.h"
 #include "GameScene.h"
+
+#include "Asset.h"
+#include "Slider.h"
+#include "HexGrid.h"
 #include "TouchTracker.h"
 #include "TouchConsumer.h"
 
@@ -25,7 +26,9 @@ namespace hex
         grid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
         addChild(grid);
 
-        m_touchConsumer = std::make_unique<TouchConsumer>(*grid);
+        auto cursor = Slider(*grid);
+
+        m_touchConsumer = std::make_unique<TouchConsumer>(cursor);
         m_touchConsumer->init(grid->getHexagonRings()[RING_COUNT - 2][0]);
 
         m_touchTracker = std::make_unique<TouchTracker>(this,
