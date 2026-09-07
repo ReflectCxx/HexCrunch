@@ -10,18 +10,16 @@ namespace hex
 		const float m_angle;
 		HexGrid& m_grid;
 
-		bool run(Command& pCmd) const;
+		void run(Command& pCmd) const;
 
 		static Command create(CommandController& pController, HexGrid& pGrid, const float pAngle)
 		{
 			const auto action = ActionRotateGrid{ pAngle, pGrid };
-			return {
-				.m_blocksCmdQ = true,
-				.m_cmdKind = CmdKind::RotateGrid,
-				.m_controller = pController,
-				.m_command = [action](Command& pCmd) {
-					return action.run(pCmd);
-				}
+			return Command{ 
+				pController, CmdKind::RotateGrid, true,
+				[action](Command& pCmd) { 
+					action.run(pCmd); 
+				} 
 			};
 		}
 	};
@@ -31,7 +29,7 @@ namespace hex
 
 namespace hex
 {
-	bool ActionRotateGrid::run(Command& pCmd) const
+	void ActionRotateGrid::run(Command& pCmd) const
 	{
 		pCmd.executionBegins();
 
@@ -42,6 +40,5 @@ namespace hex
 					pCmd.executionEnds();
 				}),
 				nullptr));
-		return true;
 	}
 }

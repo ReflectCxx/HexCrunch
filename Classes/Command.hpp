@@ -4,12 +4,21 @@
 
 namespace hex
 {
+	inline Command::Command(CommandController& pCC, const CmdKind pCmdK, bool pBlocksQ,
+						    const std::function<void(Command&)>& pCmd)
+		: m_blocksCmdQ(pBlocksQ)
+		, m_cmdKind(pCmdK)
+		, m_controller(pCC)
+		, m_command(pCmd)
+		, m_cmdId(m_counter++)
+	{ }
+
 	constexpr CmdKind Command::getKind() const {
 		return m_cmdKind;
 	}
 
-	inline bool Command::execute() {
-		return m_command(*this);
+	inline void Command::execute() {
+		m_command(*this);
 	}
 
 
@@ -53,8 +62,8 @@ namespace hex
 	}
 
 
-	inline void CommandController::push(const Command& pCmd) {
-		m_commandQ.push_back(pCmd);
+	inline void CommandController::push(Command pCmd) {
+		m_commandQ.push_back(std::move(pCmd));
 	}
 
 

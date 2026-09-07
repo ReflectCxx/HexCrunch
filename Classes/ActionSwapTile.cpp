@@ -12,7 +12,7 @@ namespace {
 
 namespace hex
 {
-	bool ActionSwapTile::run(Command& pCmd) const
+	void ActionSwapTile::run(Command& pCmd) const
 	{
 		pCmd.executionBegins();
 
@@ -52,6 +52,5 @@ namespace hex
 
 			pCmd.executionEnds();
 		}, DT + 0.01f, "cb");
-		return true;
 	}
 }

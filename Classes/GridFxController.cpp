@@ -25,17 +25,15 @@ namespace hex
 
 	void GridFxController::pushCb(const std::function<void()>& pCallBack)
 	{
-		push({
-			.m_blocksCmdQ = true,
-			.m_cmdKind = CmdKind::CallBack,
-			.m_controller = *this,
-			.m_command = [=](Command& pCmd) {
+		auto cmd = Command{
+			*this, CmdKind::SwapTiles, true,
+			[=](Command& pCmd) {
 				pCmd.executionBegins();
 				pCallBack();
 				pCmd.executionEnds();
-				return true;
 			}
-		});
+		};
+		push(std::move(cmd));
 	}
 }
 
@@ -44,12 +42,15 @@ namespace hex
 {
 	void GridFxController::rotateGrid(const float pAngle)
 	{
-		push(ActionRotateGrid::create(*this, m_grid, pAngle));
+		auto cmd = ActionRotateGrid::create(*this, m_grid, pAngle);
+		push(std::move(cmd));
 	}
+
 
 	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB, const std::function<void()>& pOnEndCb)
 	{
-		push(ActionSwapTile::create(*this, pTileA, pTileB));
+		auto cmd = ActionSwapTile::create(*this, pTileA, pTileB);
+		push(std::move(cmd));
 		pushCb(pOnEndCb);
 	}
 }

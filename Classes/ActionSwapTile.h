@@ -10,16 +10,16 @@ namespace hex
 		HexTile& m_tileA;
 		HexTile& m_tileB;
 
-		bool run(Command& pCmd) const;
+		void run(Command& pCmd) const;
 
 		static Command create(CommandController& pController, HexTile& pTileA, HexTile& pTileB)
 		{
 			const auto action = ActionSwapTile{ pTileA, pTileB };
-			return {
-				.m_blocksCmdQ = true,
-				.m_cmdKind = CmdKind::SwapTiles,
-				.m_controller = pController,
-				.m_command = [action](Command& pCmd) { return action.run(pCmd); }
+			return Command{ 
+				pController, CmdKind::SwapTiles, true,
+				[action](Command& pCmd) { 
+					action.run(pCmd); 
+				} 
 			};
 		}
 	};

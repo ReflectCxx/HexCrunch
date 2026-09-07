@@ -10,20 +10,30 @@ namespace hex
 {
 	class CommandController;
 
-	struct Command final
+	class Command final
 	{
+		inline static std::uint32_t m_counter{ 0 };
+
 		const bool m_blocksCmdQ;
 		const CmdKind m_cmdKind;
 		CommandController& m_controller;
-		const std::function<bool(Command&)> m_command;
+		const std::function<void(Command&)> m_command;
+		const std::uint32_t m_cmdId;
 
-		inline static std::uint32_t m_counter{ 0 };
-		const std::uint32_t m_cmdId = m_counter++;
+		Command(const Command&) = delete;
+		Command& operator=(Command&&) = delete;
+		Command& operator=(const Command&) = delete;
 
-		bool execute();
+	public:
+		
+		void execute();
 		void executionEnds();
 		void executionBegins();
 		constexpr CmdKind getKind() const;
+
+		Command(Command&&) = default;
+		Command(CommandController& pCC, const CmdKind pCmdK, bool pBlocksQ,
+				const std::function<void(Command&)>& pCmd);
 	};
 }
 
@@ -56,7 +66,7 @@ namespace hex
 
 	protected:
 
-		void push(const Command&);
+		void push(Command);
 	};
 }
 
