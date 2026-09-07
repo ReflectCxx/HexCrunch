@@ -59,13 +59,13 @@ namespace hex
 	void Slider::highlightCurrentRing(const Turn pFlag)
 	{
 		if (pFlag == Turn::On) {
-			m_grid.getManager().setRingTilesState(actor(), TileState::RingFace);
+			m_grid.manager().setRingTilesState(actor(), TileState::RingFace);
 			actor().setState(TileState::Actor);
 			follower().setState(TileState::Highlighted);
 		}
 		else {
 			follower().setState(TileState::Idle);
-			m_grid.getManager().setRingTilesState(actor(), TileState::Idle);
+			m_grid.manager().setRingTilesState(actor(), TileState::Idle);
 		}
 	}
 
@@ -153,7 +153,7 @@ namespace hex
 			}
 			return false;
 		};
-		m_grid.getManager().swapSelection(*this, onEndCb);
+		m_grid.manager().swapSelection(*this, onEndCb);
 	}
 }
 

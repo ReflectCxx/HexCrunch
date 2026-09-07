@@ -63,11 +63,6 @@ namespace hex
 
 namespace hex
 {
-	GridManager& HexGrid::getManager() {
-		return m_manager;
-	}
-
-
 	void HexGrid::initRingHexTiles(Node* pBgNode, cocos2d::Node* pLinkNode, int pRingIndex)
 	{
 		auto startTile = m_hexRings[pRingIndex][0];

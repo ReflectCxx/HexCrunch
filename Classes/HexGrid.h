@@ -26,7 +26,7 @@ namespace hex
 
 	public:
 
-		GridManager& getManager();
+		constexpr GridManager& manager();
 		constexpr const HexRingMatrix& getHexagonRings() const;
 		
 		CREATE_FUNC(HexGrid)
@@ -41,4 +41,8 @@ namespace hex
 	constexpr const HexRingMatrix& HexGrid::getHexagonRings() const {
 		return m_hexRings;
 	};
+
+	constexpr GridManager& HexGrid::manager() {
+		return m_manager;
+	}
 }

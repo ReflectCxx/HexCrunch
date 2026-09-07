@@ -20,7 +20,9 @@ namespace hex
 		GridManager(HexGrid& pGrid);
 		
 		void update();
-		bool isGridIdle();
+		
+		constexpr bool isGridIdle();
+		constexpr CommandController& controller();
 
 		void correctOrientation(const Slider&);
 		void setRingTilesState(HexTile& pStartTile, TileState) const;
@@ -36,7 +38,11 @@ namespace hex
 		m_controller.update();
 	}
 
-	inline bool GridManager::isGridIdle() {
+	constexpr bool GridManager::isGridIdle() {
 		return (m_controller.getRunningCmd() == CmdKind::None);
+	}
+
+	constexpr CommandController& GridManager::controller() {
+		return m_controller;
 	}
 }

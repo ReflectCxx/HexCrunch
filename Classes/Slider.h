@@ -10,6 +10,7 @@ namespace hex
 {
 	class HexTile;
 	class TouchConsumer;
+	class CommandController;
 
 	class Slider
 	{
@@ -43,7 +44,8 @@ namespace hex
 
 		HexTile& follower() const;
 		constexpr HexTile& actor() const;
-		bool isReady() const;
+		constexpr CommandController& fxController();
+		constexpr bool isReady() const;
 
 		void alignWithGrid();
 		void trackSwipe(const Swipe);
@@ -62,7 +64,15 @@ namespace hex
 
 namespace hex
 {
-	inline constexpr HexTile& Slider::actor() const {
+	constexpr CommandController& Slider::fxController() {
+		return m_grid.manager().controller();
+	}
+
+	constexpr bool Slider::isReady() const {
+		return m_grid.manager().isGridIdle();
+	}
+
+	constexpr HexTile& Slider::actor() const {
 		return *m_actorTile;
 	}
 
@@ -70,11 +80,7 @@ namespace hex
 		return (*m_outerNeighbours[m_followerIndex]);
 	}
 
-	inline bool Slider::isReady() const {
-		return m_grid.getManager().isGridIdle();
-	}
-
 	inline void Slider::alignWithGrid() {
-		m_grid.getManager().correctOrientation(*this);
+		m_grid.manager().correctOrientation(*this);
 	}
 }

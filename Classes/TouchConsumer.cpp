@@ -7,6 +7,17 @@ USING_NS_CC;
 
 namespace {
 	constexpr auto ENABLE_SAME_COLOR_SWAP = false;
+
+	auto cmd_name(hex::CmdKind pCmdK) {
+		switch (pCmdK) {
+		case hex::CmdKind::CallBack: return "CmdKind::CallBack";
+		case hex::CmdKind::SpawnTile: return "CmdKind::SpawnTile";
+		case hex::CmdKind::SwapTiles: return "CmdKind::SwapTiles";
+		case hex::CmdKind::RotateGrid: return "CmdKind::RotateGrid";
+		case hex::CmdKind::PullDownTile: return "CmdKind::PullDownTile";
+		default: return "(none)";
+		}
+	}
 }
 
 
@@ -66,40 +77,43 @@ namespace hex
 	void TouchConsumer::onInputRecieved(const Swipe pDir, const bool pIsMockInput)
 	{
 		if (!m_slider.isReady()) {
+			const auto cmdK = m_slider.fxController().getRunningCmd();
+			CCLOG("Running : %s", cmd_name(cmdK));
 			return;
 		}
+
 		if (pDir == Swipe::SingleTap) {
 			m_slider.swapSelection(*this);
+			return;
 		}
-		else
-		{
-			m_slider.highlightBlockedTiles(Turn::Off);
-			m_slider.trackSwipe(pDir);
-			if constexpr (ENABLE_SAME_COLOR_SWAP) {
-				moveSlider(pDir);
-			}
-			else
-			{
-				auto prevoiusActor = m_slider.m_actorTile;
-				auto previousTileI = m_slider.m_followerIndex;
-				bool movedSuccessfully = false;
 
-				do {
-					movedSuccessfully = moveSlider(pDir);
-					if (m_slider.actor().getColorId() == m_slider.follower().getColorId()) {
-						m_slider.m_blockedTiles.insert(&m_slider.actor());
-						m_slider.m_blockedTiles.insert(&m_slider.follower());
-					}
-				} while (movedSuccessfully && m_slider.actor().getColorId() == m_slider.follower().getColorId());
+		m_slider.trackSwipe(pDir);
+		m_slider.highlightBlockedTiles(Turn::Off);
+		
+		if constexpr (ENABLE_SAME_COLOR_SWAP) {
+			moveSlider(pDir);
+		}
+		else {
+			auto prevoiusActor = m_slider.m_actorTile;
+			auto previousTileI = m_slider.m_followerIndex;
+			bool movedSuccessfully = false;
 
-				if (!movedSuccessfully) {
-					m_slider.undoSliderMove(prevoiusActor, previousTileI);
+			do {
+				movedSuccessfully = moveSlider(pDir);
+				if (m_slider.actor().getColorId() == m_slider.follower().getColorId()) {
+					m_slider.m_blockedTiles.insert(&m_slider.actor());
+					m_slider.m_blockedTiles.insert(&m_slider.follower());
 				}
-				m_slider.highlightBlockedTiles(Turn::On);
+			} while (movedSuccessfully && m_slider.actor().getColorId() == m_slider.follower().getColorId());
+
+			if (!movedSuccessfully) {
+				m_slider.undoSliderMove(prevoiusActor, previousTileI);
 			}
-			if (!pIsMockInput) {
-				m_slider.alignWithGrid();
-			}
+			m_slider.highlightBlockedTiles(Turn::On);
+		}
+
+		if (!pIsMockInput) {
+			m_slider.alignWithGrid();
 		}
 	}
 }
