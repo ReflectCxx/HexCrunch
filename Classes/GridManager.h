@@ -13,6 +13,8 @@ namespace hex
 	{
 		GridFxController m_controller;
 
+		bool checkIfRingMade();
+
 	public:
 		
 		constexpr GridFxController& controller();
@@ -30,6 +32,7 @@ namespace hex
 	inline void GridManager::update() {
 		m_controller.update();
 	}
+
 
 	constexpr GridFxController& GridManager::controller() {
 		return m_controller;

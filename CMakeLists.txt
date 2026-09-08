@@ -62,7 +62,7 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/Asset.cpp
-     Classes/CmdSwapTile.cpp
+     Classes/CmdSliderSwap.cpp
      Classes/Game.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
@@ -79,8 +79,8 @@ list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/Asset.h
      Classes/AssetConsts.h
-     Classes/CmdSwapTile.h
      Classes/CmdRotateGrid.h
+     Classes/CmdSliderSwap.h
      Classes/Command.h
      Classes/Command.hpp
      Classes/Constants.h

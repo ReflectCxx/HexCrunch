@@ -61,6 +61,7 @@ namespace hex
 		None,
 		Idle,
 		Actor,
+		Follower,
 		Blocked,
 		RingFace,
 		Highlighted

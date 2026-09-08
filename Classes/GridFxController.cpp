@@ -2,7 +2,7 @@
 #include "Slider.h"
 #include "GridFxController.h"
 #include "CmdRotateGrid.h"
-#include "CmdSwapTile.h"
+#include "CmdSliderSwap.h"
 
 namespace hex
 {
@@ -24,7 +24,7 @@ namespace hex
 		push(Command{
 			BlocksQ::Yes,
 			CmdKind::CallBack,
-			*this, [=](Command& pCmd) {
+			*this, [=](Command& pCmd)->void {
 				pCmd.end();
 				pCallBack();
 			}
@@ -45,13 +45,13 @@ namespace hex
 
 	void GridFxController::swapTiles(const Slider& pSlider, const std::function<void()>& pOnEndCb)
 	{
-		auto cmd = CmdSwapTile::create(pSlider.actor(), pSlider.follower());
+		auto cmd = CmdSliderSwap::create(pSlider.actor(), pSlider.follower());
 		push(std::move(cmd));
 		pushCb(pOnEndCb);
 	}
 
 
-	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB, const std::function<void()>& pOnEndCb)
+	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB)
 	{
 		//auto cmd = CmdSwapTile::create(pTileA, pTileB, false);
 		//push(std::move(cmd));

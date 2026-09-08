@@ -31,6 +31,10 @@ namespace hex
 
         bool switchToState(state_t pNextState)
         {
+            if (pNextState == m_currentState) {
+                return false;
+            }
+
             const auto prevState = m_previousState;
             auto& derived = static_cast<derived_t&>(*this);
 

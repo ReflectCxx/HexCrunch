@@ -16,7 +16,7 @@ namespace hex
 				CmdKind::RotateGrid,
 				Game::instance().fxController(),
 				[action = CmdRotateGrid{ pAngle }]
-				(Command& pCmd) {
+				(Command& pCmd)->void {
 					action.run(pCmd); 
 				} 
 			};

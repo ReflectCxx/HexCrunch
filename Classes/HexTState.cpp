@@ -33,7 +33,8 @@ namespace hex
 		case TileState::None:return initStateZero();
 		case TileState::Idle: return turnOffIdle();
 		case TileState::Actor: return turnOffActing();
-		case TileState::RingFace: return turnOffClipped();
+		case TileState::Follower: return turnOffFollower();
+		case TileState::RingFace: return turnOffRingFace();
 		case TileState::Blocked: return turnOffBlocked();
 		case TileState::Highlighted: return turnOffHighlighted();
 		default: return false;
@@ -43,13 +44,11 @@ namespace hex
 
 	bool HexTState::stateOnActivate(TileState pState)
 	{
-		if (pState == getCurrentState()) {
-			return false;
-		}
 		switch (pState) {
 		case TileState::Idle: return turnOnIdle();
 		case TileState::Actor: return turnOnActing();
-		case TileState::RingFace: return turnOnClipped();
+		case TileState::Follower: return turnOnFollower();
+		case TileState::RingFace: return turnOnRingFace();
 		case TileState::Blocked: return turnOnBlocked();
 		case TileState::Highlighted: return turnOnHighlighted();
 		default: return false;
@@ -94,7 +93,7 @@ namespace hex
 
 namespace hex
 {
-	bool HexTState::turnOffClipped()
+	bool HexTState::turnOffRingFace()
 	{
 		getLink().setVisible(false);
 		getRingFace().setVisible(false);
@@ -102,10 +101,28 @@ namespace hex
 	}
 
 
-	bool HexTState::turnOnClipped()
+	bool HexTState::turnOnRingFace()
 	{
 		getLink().setVisible(true);
 		getRingFace().setVisible(true);
+		return true;
+	}
+
+
+	bool HexTState::turnOnHighlighted()
+	{
+		const auto ang = getForeground().getRotation();
+		getForeground().setRotation(ang + 60.f);
+		getForeground().setVisible(true);
+		return true;
+	}
+
+
+	bool HexTState::turnOffHighlighted()
+	{
+		const auto ang = getForeground().getRotation();
+		getForeground().setRotation(ang - 60.f);
+		getForeground().setVisible(false);
 		return true;
 	}
 }
@@ -145,7 +162,7 @@ namespace hex
 
 namespace hex 
 {
-	bool HexTState::turnOnHighlighted()
+	bool HexTState::turnOnFollower()
 	{
 		retain();
 		removeFromParentAndCleanup(false);
@@ -166,7 +183,7 @@ namespace hex
 	}
 
 
-	bool HexTState::turnOffHighlighted()
+	bool HexTState::turnOffFollower()
 	{
 		retain();
 		removeFromParentAndCleanup(false);

@@ -8,7 +8,7 @@
 namespace hex
 {
 	class HexTile;
-	struct CmdSwapTile
+	struct CmdSliderSwap
 	{
 		static Command create(HexTile& pActor, HexTile& pFollower)
 		{
@@ -17,8 +17,8 @@ namespace hex
 				BlocksQ::Yes,
 				CmdKind::SwapTiles,
 				Game::instance().fxController(),
-				[action = CmdSwapTile{ pActor, pFollower }]
-				(Command& pCmd) mutable {
+				[action = CmdSliderSwap{ pActor, pFollower }]
+				(Command& pCmd) mutable-> void{
 					action.run(pCmd); 
 				} 
 			};

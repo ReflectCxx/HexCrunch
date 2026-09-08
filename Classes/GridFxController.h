@@ -20,7 +20,7 @@ namespace hex
 		void pushCb(const std::function<void()>& pCallBack);
 
 		void rotateGrid(const float);
+		void swapTiles(HexTile&, HexTile&);
 		void swapTiles(const Slider&, const std::function<void()>& pOnEndCb);
-		void swapTiles(HexTile&, HexTile&, const std::function<void()>& pOnEndCb);
 	};
 }

@@ -1,7 +1,7 @@
 
 #include "HexGrid.h"
 #include "HexTile.hpp"
-#include "CmdSwapTile.h"
+#include "CmdSliderSwap.h"
 
 
 USING_NS_CC;
@@ -12,7 +12,7 @@ namespace {
 
 namespace hex
 {
-	void CmdSwapTile::setZOrder(int pZOdr)
+	void CmdSliderSwap::setZOrder(int pZOdr)
 	{
 		auto& grid = Game::instance().grid();
 
@@ -32,7 +32,7 @@ namespace hex
 	}
 
 
-	void CmdSwapTile::onEnd(Command& pCmd, int pZOdr, 
+	void CmdSliderSwap::onEnd(Command& pCmd, int pZOdr, 
 							const Vec2& pActorPos, const Vec2& pOtherPos)
 	{
 		setZOrder(pZOdr);
@@ -50,7 +50,7 @@ namespace hex
 	}
 
 
-	void CmdSwapTile::run(Command& pCmd)
+	void CmdSliderSwap::run(Command& pCmd)
 	{
 		const auto& actorPos = m_actor.getPosition();
 		const auto& otherPos = m_follower.getPosition();

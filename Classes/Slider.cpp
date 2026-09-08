@@ -16,8 +16,13 @@ namespace hex
 		m_followerIndex = 1;
 		m_actorTile = pActorTile;
 		updateOuterRingPathQ();
-		highlightCurrentRing(Turn::On);
+		setActive(true);
 		alignWithGrid();
+	}
+
+	void Slider::setActive(bool pActive) {
+		m_isActive = pActive;
+		highlightSelection(pActive ? Turn::On : Turn::Off);
 	}
 }
 
@@ -25,17 +30,17 @@ namespace hex
 
 namespace hex
 {
-	void Slider::alignWithGrid() {
+	void Slider::alignWithGrid() const {
 		Game::instance().gridManager().correctOrientation(*this);
 	}
 
-	void Slider::undoSliderMove(HexTile* pPreviousActor, const int pPrevFollowerI)
+	void Slider::resetToPosition(HexTile* pPreviousActor, const int pPrevFollowerI)
 	{
-		highlightCurrentRing(Turn::Off);
+		highlightSelection(Turn::Off);
 		m_actorTile = pPreviousActor;
 		m_followerIndex = pPrevFollowerI;
 		updateOuterRingPathQ();
-		highlightCurrentRing(Turn::On);
+		highlightSelection(Turn::On);
 	}
 
 
@@ -50,17 +55,18 @@ namespace hex
 	}
 
 
-	void Slider::highlightCurrentRing(const Turn pFlag)
+	void Slider::highlightSelection(const Turn pFlag)
 	{
 		auto& grid = Game::instance().grid();
 		if (pFlag == Turn::On) {
 			grid.manager().setRingTilesState(actor(), TileState::RingFace);
+			grid.manager().setRingTilesState(follower(), TileState::Highlighted);
 			actor().setState(TileState::Actor);
-			follower().setState(TileState::Highlighted);
+			follower().setState(TileState::Follower);
 		}
 		else {
-			follower().setState(TileState::Idle);
 			grid.manager().setRingTilesState(actor(), TileState::Idle);
+			grid.manager().setRingTilesState(follower(), TileState::Idle);
 		}
 	}
 
@@ -206,7 +212,7 @@ namespace hex
 		if (m_followerIndex > 0) {
 			follower().setState(TileState::Idle);
 			m_followerIndex--;
-			follower().setState(TileState::Highlighted);
+			follower().setState(TileState::Follower);
 		}
 		else {
 			actor().setState(TileState::RingFace);
@@ -243,7 +249,7 @@ namespace hex
 		{
 			follower().setState(TileState::Idle);
 			m_followerIndex++;
-			follower().setState(TileState::Highlighted);
+			follower().setState(TileState::Follower);
 		}
 		else {
 			actor().setState(TileState::RingFace);

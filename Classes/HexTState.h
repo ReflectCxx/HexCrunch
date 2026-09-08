@@ -15,8 +15,11 @@ namespace hex
 		bool turnOnActing();
 		bool turnOffActing();
 
-		bool turnOnClipped();
-		bool turnOffClipped();
+		bool turnOnFollower();
+		bool turnOffFollower();
+
+		bool turnOnRingFace();
+		bool turnOffRingFace();
 
 		bool turnOnBlocked();
 		bool turnOffBlocked();

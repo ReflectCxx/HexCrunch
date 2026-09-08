@@ -11,7 +11,14 @@ namespace hex
 {
 	void GridManager::swapSelection(const Slider& pSlider, const std::function<void()>& pOnEndCb) 
 	{
-		m_controller.swapTiles(pSlider, pOnEndCb);
+		m_controller.swapTiles(pSlider, [=, &pSlider]() {
+			if (checkIfRingMade()) {
+				
+			}
+			else {
+				pOnEndCb();
+			}
+		});
 	}
 
 
@@ -38,5 +45,30 @@ namespace hex
 			const auto theta = ((playerPos.x > gridPosW.x) ? 60.f : -60.f);
 			m_controller.rotateGrid(theta);
 		}
+	}
+
+
+	bool GridManager::checkIfRingMade()
+	{
+		auto isMakingRing = [](const std::vector<HexTile*>& pRing)->bool 
+		{
+			const auto color = pRing[0]->getColorId();
+			for (const auto tile : pRing) {
+				if (tile->getColorId() != color) {
+					return false;
+				}
+			}
+			return true;
+		};
+
+		bool ringMade = false;
+		auto& ringsMat = Game::instance().grid().getHexagonRings();
+		for (int i = 0; i < RING_COUNT; i++) {
+			if (isMakingRing(ringsMat[i])) {
+				//remove ring.
+				ringMade = true;
+			}
+		}
+		return ringMade;
 	}
 }
