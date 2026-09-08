@@ -12,6 +12,7 @@ namespace
 {
 	constexpr auto BG_NODE_Z = 0;
 	constexpr auto LINK_NODE_Z = 1;
+	constexpr auto HEXGRID_NODE_Z = 2;
 }
 
 
@@ -69,12 +70,12 @@ namespace hex
 
 namespace hex
 {
-	void HexGrid::initRingHexTiles(Node* pBgNode, cocos2d::Node* pLinkNode, int pRingIndex)
+	void HexGrid::initRingHexTiles(int pRingIndex)
 	{
 		auto startTile = m_hexRings[pRingIndex][0];
 		auto currentTile = startTile;
 		do {
-			currentTile->initRingPlacement(pBgNode, pLinkNode);
+			currentTile->initRingPlacement(m_hexBGNode, m_hexLinkNode);
 			currentTile->setState(TileState::Idle);
 			currentTile = currentTile->getNextRingTile();;
 		} while (currentTile != startTile);
@@ -96,8 +97,8 @@ namespace hex
 
 		auto tile = HexTile::create(colorId, pRingIndex, pTileIndex);
 		tile->setPosition(pPos);
-		tile->setLocalZOrder(zOrder + LINK_NODE_Z);
-		addChild(tile);
+		tile->setLocalZOrder(zOrder);
+		m_hexNode->addChild(tile);
 		if (pRingIndex == RING_COUNT) {
 			tile->setVisible(false);
 		}
@@ -133,11 +134,14 @@ namespace hex
 	{
 		std::vector<std::vector<int>> outwardNeighboursMatrix;
 
-		auto hexGridBGNode = Node::create();
-		addChild(hexGridBGNode);
+		m_hexBGNode = Node::create();
+		addChild(m_hexBGNode, BG_NODE_Z);
 
-		auto hexGridLinkNode = Node::create();
-		addChild(hexGridLinkNode);
+		m_hexLinkNode = Node::create();
+		addChild(m_hexLinkNode, LINK_NODE_Z);
+
+		m_hexNode = Node::create();
+		addChild(m_hexNode, HEXGRID_NODE_Z);
 
 		for (int ringIndex = 0; ringIndex <= RING_COUNT; ringIndex++)
 		{
@@ -183,7 +187,7 @@ namespace hex
 			m_hexRings.push_back(ringTiles);
 			outwardNeighboursMatrix.push_back(tileOutwardNeighbourCount);
 			previousTile->setNextRingTile(ringTiles.front());
-			initRingHexTiles(hexGridBGNode, hexGridLinkNode, ringIndex);
+			initRingHexTiles(ringIndex);
 		}
 		linkNeighbouringRingTiles(outwardNeighboursMatrix);
 	}

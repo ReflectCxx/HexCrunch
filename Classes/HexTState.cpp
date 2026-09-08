@@ -1,4 +1,6 @@
 
+#include "Game.h"
+#include "HexGrid.h"
 #include "HexTile.hpp"
 #include "HexTState.h"
 #include "DrawingUtils.h"
@@ -145,6 +147,11 @@ namespace hex
 {
 	bool HexTState::turnOnHighlighted()
 	{
+		retain();
+		removeFromParentAndCleanup(false);
+		Game::instance().grid().getHexBGNode()->addChild(this);
+		release();
+
 		constexpr auto radius = HEX_BORDER + (HEX_RAD * (1 - BOUNCE_SCALE));
 		ut::run_hex_bounce(&getClippedFace(), radius, [&](float theta) {
 			getClippedFace().setRotation(theta);
@@ -154,12 +161,18 @@ namespace hex
 		getLink().setVisible(true);
 		getRingFace().setVisible(true);
 		getBackground().setVisible(true);
+
 		return true;
 	}
 
 
 	bool HexTState::turnOffHighlighted()
 	{
+		retain();
+		removeFromParentAndCleanup(false);
+		Game::instance().grid().getHexNode()->addChild(this);
+		release();
+
 		getClippedFace().setScale(1.f);
 		getClippedFace().unscheduleAllCallbacks();
 		getClippedFace().setPosition(Vec2::ZERO);

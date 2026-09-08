@@ -8,16 +8,19 @@
 
 namespace hex
 {
+	class Slider;
 	class HexTile;
+	class GridManager;
 
 	class GridFxController : public CommandController
 	{
-		void pushCb(const std::function<void()>& pCallBack);
-
-	public:
+		friend GridManager;
 
 		void update();
+		void pushCb(const std::function<void()>& pCallBack);
+
 		void rotateGrid(const float);
+		void swapTiles(const Slider&, const std::function<void()>& pOnEndCb);
 		void swapTiles(HexTile&, HexTile&, const std::function<void()>& pOnEndCb);
 	};
 }

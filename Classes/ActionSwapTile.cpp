@@ -14,11 +14,20 @@ namespace hex
 {
 	void ActionSwapTile::run(Command& pCmd) const
 	{
-		const auto& actorPos = m_tileA.getPosition();
-		const auto& otherPos = m_tileB.getPosition();
+		const auto zOrder = m_tileA.getLocalZOrder();
+		if (m_sliderSwap) {
+			m_tileA.retain();
+			m_tileA.removeFromParentAndCleanup(false);
+			Game::instance().grid().getHexBGNode()->addChild(&m_tileA, zOrder - 1);
+			m_tileA.release();
+			m_tileA.getPrevoiusRingTile()->getLink().setVisible(false);
+		}
 
-		m_tileA.runAction(MoveTo::create(DT, otherPos));
-		m_tileB.runAction(MoveTo::create(DT, actorPos));
+		const auto& posA = m_tileA.getPosition();
+		const auto& posB = m_tileB.getPosition();
+
+		m_tileA.runAction(MoveTo::create(DT, posB));
+		m_tileB.runAction(MoveTo::create(DT, posA));
 
 		m_tileA.getForeground().setVisible(true);
 		m_tileA.getClippedFace().setVisible(false);
@@ -38,9 +47,17 @@ namespace hex
 
 		Game::instance().grid().scheduleOnce([=, &pCmd](float)
 		{
+			if (m_sliderSwap) {
+				m_tileA.retain();
+				m_tileA.removeFromParentAndCleanup(false);
+				Game::instance().grid().getHexNode()->addChild(&m_tileA, zOrder);
+				m_tileA.release();
+				m_tileA.getPrevoiusRingTile()->getLink().setVisible(true);
+			}
+
 			m_tileA.swapColors(m_tileB);
-			m_tileA.setPosition(actorPos);
-			m_tileB.setPosition(otherPos);
+			m_tileA.setPosition(posA);
+			m_tileB.setPosition(posB);
 
 			m_tileA.getClippedFace().setVisible(true);
 			m_tileA.getForeground().setVisible(false);

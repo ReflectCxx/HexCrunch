@@ -11,7 +11,7 @@ namespace hex
 {
 	void GridManager::swapSelection(const Slider& pSlider, const std::function<void()>& pOnEndCb) 
 	{
-		m_controller.swapTiles(pSlider.actor(), pSlider.follower(), pOnEndCb);
+		m_controller.swapTiles(pSlider, pOnEndCb);
 	}
 
 

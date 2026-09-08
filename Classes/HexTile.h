@@ -26,7 +26,6 @@ namespace hex
 
 		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getBlockedFace();
-		constexpr cocos2d::DrawNode& getLink();
 
 	public:
 
@@ -38,6 +37,7 @@ namespace hex
 		constexpr cocos2d::Node& getRingFace();
 		constexpr cocos2d::Node& getForeground();
 		constexpr cocos2d::Node& getClippedFace();
+		constexpr cocos2d::DrawNode& getLink();
 
 		virtual void setState(TileState) = 0;
 	};

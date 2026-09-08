@@ -142,7 +142,7 @@ namespace hex
 		Asset::drawHexLink(m_hexLink, color, linkPos, linkSz, m_edgeAngle);
 		
 		m_hexLink->setPosition(getPosition());
-		pLinkNode->addChild(m_hexLink);
+		pLinkNode->addChild(m_hexLink, getLocalZOrder());
 
 		const auto clipSz = Size{ LINK_CLIP_W, LINK_CLIP_H };
 		const auto stencil = static_cast<DrawNode*>(m_ringFace->getStencil());
@@ -187,6 +187,6 @@ namespace hex
 		m_clippedBg = Asset::createTileBg(sz);
 		m_background = create_clipped(m_clippedBg, stencil);
 		m_background->setPosition(getPosition());
-		pGridBgNode->addChild(m_background);
+		pGridBgNode->addChild(m_background, getLocalZOrder());
 	}
 }
