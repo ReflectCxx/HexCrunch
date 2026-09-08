@@ -17,6 +17,11 @@ namespace hex
 		Off
 	};
 
+	enum class BlocksQ {
+		No,
+		Yes
+	};
+
 	enum class CmdState {
 		None,
 		Ready,

@@ -1,8 +1,8 @@
 
 #include "Slider.h"
 #include "GridFxController.h"
-#include "ActionRotateGrid.h"
-#include "ActionSwapTile.h"
+#include "CmdRotateGrid.h"
+#include "CmdSwapTile.h"
 
 namespace hex
 {
@@ -17,19 +17,14 @@ namespace hex
 			else break;
 		}
 	}
-}
 
 
-
-namespace hex
-{
 	void GridFxController::pushCb(const std::function<void()>& pCallBack)
 	{
-		push(Command{ 
-			true,
-			CmdKind::CallBack, 
-			*this,
-			[=](Command& pCmd) {
+		push(Command{
+			BlocksQ::Yes,
+			CmdKind::CallBack,
+			*this, [=](Command& pCmd) {
 				pCmd.end();
 				pCallBack();
 			}
@@ -43,14 +38,14 @@ namespace hex
 {
 	void GridFxController::rotateGrid(const float pAngle)
 	{
-		auto cmd = ActionRotateGrid::create(pAngle);
+		auto cmd = CmdRotateGrid::create(pAngle);
 		push(std::move(cmd));
 	}
 
 
 	void GridFxController::swapTiles(const Slider& pSlider, const std::function<void()>& pOnEndCb)
 	{
-		auto cmd = ActionSwapTile::create(pSlider.actor(), pSlider.follower(), true);
+		auto cmd = CmdSwapTile::create(pSlider.actor(), pSlider.follower());
 		push(std::move(cmd));
 		pushCb(pOnEndCb);
 	}
@@ -58,8 +53,8 @@ namespace hex
 
 	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB, const std::function<void()>& pOnEndCb)
 	{
-		auto cmd = ActionSwapTile::create(pTileA, pTileB, false);
-		push(std::move(cmd));
-		pushCb(pOnEndCb);
+		//auto cmd = CmdSwapTile::create(pTileA, pTileB, false);
+		//push(std::move(cmd));
+		//pushCb(pOnEndCb);
 	}
 }

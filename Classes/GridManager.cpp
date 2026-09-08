@@ -27,10 +27,10 @@ namespace hex
 
 	void GridManager::correctOrientation(const Slider& pSlider)
 	{
-		auto& grid = Game::instance().grid();
-		const auto playerPos = grid.convertToWorldSpace(pSlider.actor().getPosition());
-		const auto gridPosW = grid.convertToWorldSpace(Vec2::ZERO);
-		const auto otherPosW = grid.convertToWorldSpace(pSlider.follower().getPosition());
+		auto& hexGrid = Game::instance().grid().getHexNode();
+		const auto playerPos = hexGrid.convertToWorldSpace(pSlider.actor().getPosition());
+		const auto gridPosW = hexGrid.convertToWorldSpace(Vec2::ZERO);
+		const auto otherPosW = hexGrid.convertToWorldSpace(pSlider.follower().getPosition());
 		const auto d = (otherPosW - gridPosW);
 		float theta = std::round(std::atan2(-d.y, d.x) * 180.0f / static_cast<float>(M_PI));
 		if (theta <= 30.f || theta >= 150.f)

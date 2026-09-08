@@ -75,7 +75,7 @@ namespace hex
 	{
 		if (!Game::instance().acceptInput()) {
 			const auto cmdK = Game::instance().fxController().getRunningCmdCount();
-			CCLOG("Grid not idle! %d cmds running.", cmdK);
+			CCLOG("Grid not idle! %lu cmds running.", cmdK);
 			return;
 		}
 

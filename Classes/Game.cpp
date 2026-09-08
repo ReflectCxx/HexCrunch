@@ -1,4 +1,3 @@
-#pragma once
 
 #include "HexGrid.h"
 #include "GridManager.h"

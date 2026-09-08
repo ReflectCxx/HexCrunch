@@ -1,12 +1,11 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "TouchTracker.h"
+#include "TouchConsumer.h"
 
 namespace hex
 {
-    class TouchTracker;
-    class TouchConsumer;
-
     class GameScene : public cocos2d::Scene
     {
         std::unique_ptr<TouchTracker> m_touchTracker = nullptr;

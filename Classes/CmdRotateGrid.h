@@ -6,36 +6,32 @@
 
 namespace hex
 {
-	struct ActionRotateGrid
+	struct CmdRotateGrid
 	{
-		const float m_angle;
-
-		void run(Command& pCmd) const;
-
 		static Command create(const float pAngle)
 		{
-			const auto action = ActionRotateGrid{ pAngle };
-			return Command {
-				true,
+			return Command{
+
+				BlocksQ::Yes,
 				CmdKind::RotateGrid,
 				Game::instance().fxController(),
-				[action](Command& pCmd) { 
+				[action = CmdRotateGrid{ pAngle }]
+				(Command& pCmd) {
 					action.run(pCmd); 
 				} 
 			};
 		}
+
+		const float m_angle;
+		void run(Command& pCmd) const;
 	};
-}
 
 
-
-namespace hex
-{
-	void ActionRotateGrid::run(Command& pCmd) const
+	void CmdRotateGrid::run(Command& pCmd) const
 	{
 		Game::instance().grid().runAction(
 			cocos2d::Sequence::create(
-				cocos2d::RotateBy::create(0.5f, m_angle), 
+				cocos2d::RotateBy::create(0.5f, m_angle),
 				cocos2d::CallFunc::create([&]() {
 					pCmd.end();
 				}), nullptr

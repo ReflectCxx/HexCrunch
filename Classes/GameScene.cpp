@@ -4,8 +4,6 @@
 
 #include "Asset.h"
 #include "HexGrid.h"
-#include "TouchTracker.h"
-#include "TouchConsumer.h"
 
 
 USING_NS_CC;

@@ -164,8 +164,8 @@ namespace hex
 		}
 		else {
 			auto& grid = Game::instance().grid();
-			const auto gridPosW = grid.convertToWorldSpace(Vec2::ZERO);
-			const auto tilePosW = grid.convertToWorldSpace(actor().getPosition());
+			const auto gridPosW = grid.getHexNode().convertToWorldSpace(Vec2::ZERO);
+			const auto tilePosW = grid.getHexNode().convertToWorldSpace(actor().getPosition());
 			const auto i = (tilePosW.x > gridPosW.x ? 1 : 0);
 
 			m_actorTile = upTiles[i];
@@ -182,19 +182,19 @@ namespace hex
 	{
 		auto& grid = Game::instance().grid();
 		const auto downTiles = actor().getOuterNeighbours();
-		const auto gridPosW = grid.convertToWorldSpace(Vec2::ZERO);
+		const auto gridPosW = grid.getHexNode().convertToWorldSpace(Vec2::ZERO);
 		if (downTiles.size() == 3) {
 			if (m_followerIndex == 1) {
 				m_actorTile = downTiles[1];
 			}
 			else {
-				const auto tilePosW = grid.convertToWorldSpace(follower().getPosition());
-				const auto i = m_followerIndex + (tilePosW.x < gridPosW.x ? 1 : -1);
-				m_actorTile = downTiles[std::clamp(i, std::size_t{ 0 }, std::size_t{ 2 })];
+				const auto tilePosW = grid.getHexNode().convertToWorldSpace(follower().getPosition());
+				const int i = m_followerIndex + (tilePosW.x < gridPosW.x ? 1 : -1);
+				m_actorTile = downTiles[std::clamp(i, 0, 2)];
 			}
 		}
 		else {
-			const auto tilePosW = grid.convertToWorldSpace(actor().getPosition());
+			const auto tilePosW = grid.getHexNode().convertToWorldSpace(actor().getPosition());
 			const auto i = (tilePosW.x > gridPosW.x ? 0 : 1);
 			m_actorTile = downTiles[i];
 		}

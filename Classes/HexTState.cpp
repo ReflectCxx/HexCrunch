@@ -149,7 +149,7 @@ namespace hex
 	{
 		retain();
 		removeFromParentAndCleanup(false);
-		Game::instance().grid().getHexBGNode()->addChild(this);
+		Game::instance().grid().getHexBGNode().addChild(this);
 		release();
 
 		constexpr auto radius = HEX_BORDER + (HEX_RAD * (1 - BOUNCE_SCALE));
@@ -170,7 +170,7 @@ namespace hex
 	{
 		retain();
 		removeFromParentAndCleanup(false);
-		Game::instance().grid().getHexNode()->addChild(this);
+		Game::instance().grid().getHexNode().addChild(this);
 		release();
 
 		getClippedFace().setScale(1.f);

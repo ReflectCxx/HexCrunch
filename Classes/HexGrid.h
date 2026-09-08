@@ -31,8 +31,8 @@ namespace hex
 		constexpr GridManager& manager();
 		constexpr const HexRingMatrix& getHexagonRings() const;
 		
-		constexpr cocos2d::Node* getHexNode();
-		constexpr cocos2d::Node* getHexBGNode();
+		constexpr cocos2d::Node& getHexNode();
+		constexpr cocos2d::Node& getHexBGNode();
 
 		CREATE_FUNC(HexGrid)
 
@@ -47,12 +47,12 @@ namespace hex
 		return m_hexRings;
 	}
 
-	constexpr cocos2d::Node* HexGrid::getHexNode() {
-		return m_hexNode;
+	constexpr cocos2d::Node& HexGrid::getHexNode() {
+		return *m_hexNode;
 	}
 
-	constexpr cocos2d::Node* HexGrid::getHexBGNode() {
-		return m_hexBGNode;
+	constexpr cocos2d::Node& HexGrid::getHexBGNode() {
+		return *m_hexBGNode;
 	}
 
 	constexpr GridManager& HexGrid::manager() {

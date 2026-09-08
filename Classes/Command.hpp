@@ -11,9 +11,9 @@ namespace hex
 	}
 
 
-	inline Command::Command(bool pBlocksQ, const CmdKind pCmdK ,
+	inline Command::Command(BlocksQ pBlockQ, const CmdKind pCmdK ,
 						    CommandController& pCC, std::function<void(Command&)> pCmd)
-		: m_blocksCmdQ(pBlocksQ)
+		: m_blockQ(pBlockQ)
 		, m_cmdKind(pCmdK)
 		, m_command(std::move(pCmd))
 		, m_cmdState(CmdState::None)
@@ -23,7 +23,7 @@ namespace hex
 
 
 	inline Command::Command(Command&& pOther) noexcept
-		: m_blocksCmdQ(pOther.m_blocksCmdQ)
+		: m_blockQ(pOther.m_blockQ)
 		, m_cmdKind(pOther.m_cmdKind)
 		, m_command(std::move(pOther.m_command))
 		, m_controller(pOther.m_controller)
@@ -40,7 +40,7 @@ namespace hex
 		}
 		m_cmdState = CmdState::Running;
 		m_controller.runningCount()++;
-		if (m_blocksCmdQ) {
+		if (m_blockQ == BlocksQ::Yes) {
 			m_controller.blockQ(m_cmdId, true);
 		}
 		CCASSERT(m_command, "Command callback cannot be empty");
@@ -53,7 +53,7 @@ namespace hex
 		if (m_cmdState != CmdState::Running) {
 			return;
 		}
-		if (m_blocksCmdQ) {
+		if (m_blockQ == BlocksQ::Yes) {
 			m_controller.blockQ(m_cmdId, false);
 		}
 		m_controller.runningCount()--;
