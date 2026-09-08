@@ -63,6 +63,7 @@ list(APPEND GAME_SOURCE
      Classes/ActionSwapTile.cpp
      Classes/AppDelegate.cpp
      Classes/Asset.cpp
+     Classes/Game.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
      Classes/GridFxController.cpp
@@ -85,6 +86,7 @@ list(APPEND GAME_HEADER
      Classes/Constants.h
      Classes/Defines.h
      Classes/DrawingUtils.h
+     Classes/Game.h
      Classes/GameScene.h
      Classes/HexGrid.h
      Classes/GridFxController.h

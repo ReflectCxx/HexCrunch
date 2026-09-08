@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Command.h"
+#include "Game.h"
 
 namespace hex
 {
@@ -12,13 +13,13 @@ namespace hex
 
 		void run(Command& pCmd) const;
 
-		static Command create(CommandController& pController, HexTile& pTileA, HexTile& pTileB)
+		static Command create(HexTile& pTileA, HexTile& pTileB)
 		{
 			const auto action = ActionSwapTile{ pTileA, pTileB };
 			return Command {
 				true,
-				pController,
 				CmdKind::SwapTiles,
+				Game::instance().fxController(),
 				[action](Command& pCmd) {
 					action.run(pCmd); 
 				} 

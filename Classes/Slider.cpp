@@ -1,6 +1,7 @@
 
 #include <algorithm>
 
+#include "Game.h"
 #include "Slider.h"
 #include "HexGrid.h"
 #include "HexTile.hpp"
@@ -10,17 +11,6 @@ USING_NS_CC;
 
 namespace hex
 {
-	Slider::Slider(HexGrid& pGrid)
-		: m_followerIndex(-1)
-		, m_sameDirSwapCount(0)
-		, m_sameDirSlideCount(0)
-		, m_currentSwipeDir(Swipe::None)
-		, m_lastSwappedInDir(Swipe::None)
-		, m_lastSwappedIndices{ -1, -1 }
-		, m_actorTile(nullptr)
-		, m_grid(pGrid)
-	{ }
-
 	void Slider::init(HexTile* pActorTile)
 	{
 		m_followerIndex = 1;
@@ -35,6 +25,10 @@ namespace hex
 
 namespace hex
 {
+	void Slider::alignWithGrid() {
+		Game::instance().gridManager().correctOrientation(*this);
+	}
+
 	void Slider::undoSliderMove(HexTile* pPreviousActor, const int pPrevFollowerI)
 	{
 		highlightCurrentRing(Turn::Off);
@@ -58,14 +52,15 @@ namespace hex
 
 	void Slider::highlightCurrentRing(const Turn pFlag)
 	{
+		auto& grid = Game::instance().grid();
 		if (pFlag == Turn::On) {
-			m_grid.manager().setRingTilesState(actor(), TileState::RingFace);
+			grid.manager().setRingTilesState(actor(), TileState::RingFace);
 			actor().setState(TileState::Actor);
 			follower().setState(TileState::Highlighted);
 		}
 		else {
 			follower().setState(TileState::Idle);
-			m_grid.manager().setRingTilesState(actor(), TileState::Idle);
+			grid.manager().setRingTilesState(actor(), TileState::Idle);
 		}
 	}
 
@@ -153,7 +148,7 @@ namespace hex
 			}
 			return false;
 		};
-		m_grid.manager().swapSelection(*this, onEndCb);
+		Game::instance().grid().manager().swapSelection(*this, onEndCb);
 	}
 }
 
@@ -168,8 +163,9 @@ namespace hex
 			m_actorTile = upTiles.back();
 		}
 		else {
-			const auto gridPosW = m_grid.convertToWorldSpace(Vec2::ZERO);
-			const auto tilePosW = m_grid.convertToWorldSpace(actor().getPosition());
+			auto& grid = Game::instance().grid();
+			const auto gridPosW = grid.convertToWorldSpace(Vec2::ZERO);
+			const auto tilePosW = grid.convertToWorldSpace(actor().getPosition());
 			const auto i = (tilePosW.x > gridPosW.x ? 1 : 0);
 
 			m_actorTile = upTiles[i];
@@ -184,20 +180,21 @@ namespace hex
 
 	void Slider::moveActorDown()
 	{
+		auto& grid = Game::instance().grid();
 		const auto downTiles = actor().getOuterNeighbours();
-		const auto gridPosW = m_grid.convertToWorldSpace(Vec2::ZERO);
+		const auto gridPosW = grid.convertToWorldSpace(Vec2::ZERO);
 		if (downTiles.size() == 3) {
 			if (m_followerIndex == 1) {
 				m_actorTile = downTiles[1];
 			}
 			else {
-				const auto tilePosW = m_grid.convertToWorldSpace(follower().getPosition());
+				const auto tilePosW = grid.convertToWorldSpace(follower().getPosition());
 				const auto i = m_followerIndex + (tilePosW.x < gridPosW.x ? 1 : -1);
 				m_actorTile = downTiles[std::clamp(i, std::size_t{ 0 }, std::size_t{ 2 })];
 			}
 		}
 		else {
-			const auto tilePosW = m_grid.convertToWorldSpace(actor().getPosition());
+			const auto tilePosW = grid.convertToWorldSpace(actor().getPosition());
 			const auto i = (tilePosW.x > gridPosW.x ? 0 : 1);
 			m_actorTile = downTiles[i];
 		}

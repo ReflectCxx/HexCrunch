@@ -1,8 +1,8 @@
 
 #include "GameScene.h"
+#include "Game.h"
 
 #include "Asset.h"
-#include "Slider.h"
 #include "HexGrid.h"
 #include "TouchTracker.h"
 #include "TouchConsumer.h"
@@ -22,16 +22,15 @@ namespace hex
         }
         addChild(Asset::createGameBg());
 
-        auto grid = HexGrid::create();
-        grid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
-        addChild(grid);
+        auto& grid = Game::instance().grid();
+        grid.setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
+        addChild(&grid);
+        
+        m_touchConsumer = std::make_unique<TouchConsumer>();
+        m_touchConsumer->init(grid.getHexagonRings()[RING_COUNT - 2][0]);
 
-        auto cursor = Slider(*grid);
-
-        m_touchConsumer = std::make_unique<TouchConsumer>(cursor);
-        m_touchConsumer->init(grid->getHexagonRings()[RING_COUNT - 2][0]);
-
-        m_touchTracker = std::make_unique<TouchTracker>(this,
+        m_touchTracker = std::make_unique<TouchTracker>(
+            this,
             [tc = m_touchConsumer.get()](Swipe pDir) {
                 tc->onInputRecieved(pDir);
             }
@@ -40,6 +39,7 @@ namespace hex
         addChild(Asset::createExitBtn([this](Ref*) {
             Director::getInstance()->end();
         }));
+
         return true;
     }
 }

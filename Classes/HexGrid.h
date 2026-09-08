@@ -8,9 +8,9 @@ namespace hex
 {
 	class HexGrid : public cocos2d::Node
 	{
-		HexRingMatrix m_hexRings;
+		GridManager m_manager;
 
-		GridManager m_manager = GridManager(*this);
+		HexRingMatrix m_hexRings;
 
 		bool init() override;
 

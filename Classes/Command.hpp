@@ -11,8 +11,8 @@ namespace hex
 	}
 
 
-	inline Command::Command(bool pBlocksQ, CommandController& pCC,
-						    const CmdKind pCmdK, std::function<void(Command&)> pCmd)
+	inline Command::Command(bool pBlocksQ, const CmdKind pCmdK ,
+						    CommandController& pCC, std::function<void(Command&)> pCmd)
 		: m_blocksCmdQ(pBlocksQ)
 		, m_cmdKind(pCmdK)
 		, m_command(std::move(pCmd))

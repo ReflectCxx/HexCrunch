@@ -36,8 +36,8 @@ namespace hex
 		constexpr CmdKind getKind() const;
 
 		Command(Command&&) noexcept;
-		Command(bool pBlocksQ, CommandController& pCC,
-				const CmdKind pCmdK, std::function<void(Command&)> pCmd);
+		Command(bool pBlocksQ, const CmdKind pCmdK,
+				CommandController& pCC, std::function<void(Command&)> pCmd);
 	};
 }
 

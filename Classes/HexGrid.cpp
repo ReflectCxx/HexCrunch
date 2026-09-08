@@ -8,6 +8,12 @@
 
 USING_NS_CC;
 
+namespace
+{
+	constexpr auto BG_NODE_Z = 0;
+	constexpr auto LINK_NODE_Z = 1;
+}
+
 
 namespace
 {
@@ -84,8 +90,13 @@ namespace hex
 			colors.pop_back();
 		}
 
+		constexpr auto HEX_TILES_COUNT = (HEX_6 / 2) * (RING_COUNT + 1) * (RING_COUNT + 2);
+		const auto count = ((HEX_6 / 2) * pRingIndex * (pRingIndex + 1) + pTileIndex + 1);
+		const auto zOrder = (HEX_TILES_COUNT - count);
+
 		auto tile = HexTile::create(colorId, pRingIndex, pTileIndex);
 		tile->setPosition(pPos);
+		tile->setLocalZOrder(zOrder + LINK_NODE_Z);
 		addChild(tile);
 		if (pRingIndex == RING_COUNT) {
 			tile->setVisible(false);

@@ -5,11 +5,6 @@
 
 namespace hex
 {
-	GridFxController::GridFxController(HexGrid& pGrid)
-		: m_grid(pGrid)
-	{ }
-
-
 	void GridFxController::update()
 	{
 		CommandController::update();
@@ -25,11 +20,11 @@ namespace hex
 
 	void GridFxController::pushCb(const std::function<void()>& pCallBack)
 	{
-		push(Command{ true, *this, CmdKind::CallBack,
+		push(Command{ true, CmdKind::CallBack, *this,
 			[=](Command& pCmd) {
 				pCmd.end();
-				//Mock's touch input. works only when no running commands.
-				pCallBack();
+				//Mock's touch input.
+				pCallBack(); //works only when no running commands.
 			}
 		});
 	}
@@ -41,14 +36,14 @@ namespace hex
 {
 	void GridFxController::rotateGrid(const float pAngle)
 	{
-		auto cmd = ActionRotateGrid::create(*this, m_grid, pAngle);
+		auto cmd = ActionRotateGrid::create(pAngle);
 		push(std::move(cmd));
 	}
 
 
 	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB, const std::function<void()>& pOnEndCb)
 	{
-		auto cmd = ActionSwapTile::create(*this, pTileA, pTileB);
+		auto cmd = ActionSwapTile::create(pTileA, pTileB);
 		push(std::move(cmd));
 		pushCb(pOnEndCb);
 	}

@@ -16,8 +16,6 @@ namespace hex
 		
 	public:
 
-		TouchConsumer(const Slider&);
-
 		void init(HexTile*);
 		void onInputRecieved(const Swipe, const bool = false);
 	};

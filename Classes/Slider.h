@@ -4,32 +4,28 @@
 #include <deque>
 
 #include "Constants.h"
-#include "HexGrid.h"
 
 namespace hex
 {
 	class HexTile;
 	class TouchConsumer;
-	class CommandController;
 
 	class Slider
 	{
 	public:
 
-		std::size_t m_followerIndex;
+		std::size_t m_followerIndex = - 1;
 
-		int m_sameDirSwapCount;
-		int m_sameDirSlideCount;
+		int m_sameDirSwapCount = 0;
+		int m_sameDirSlideCount = 0;
 
-		Swipe m_currentSwipeDir;
-		Swipe m_lastSwappedInDir;
-		std::pair<int, int> m_lastSwappedIndices;
+		Swipe m_currentSwipeDir = Swipe::None;
+		Swipe m_lastSwappedInDir = Swipe::None;
+		std::pair<int, int> m_lastSwappedIndices = { -1, -1 };
 
-		HexTile* m_actorTile;
+		HexTile* m_actorTile = nullptr;
 		std::set<HexTile*> m_blockedTiles;
 		std::deque<HexTile*> m_outerNeighbours;
-
-		HexGrid& m_grid;
 		
 		void trackTap();
 		void updateOuterRingPathQ();
@@ -40,12 +36,8 @@ namespace hex
 
 	public:
 
-		Slider(HexGrid&);
-
 		HexTile& follower() const;
 		constexpr HexTile& actor() const;
-		constexpr CommandController& fxController();
-		constexpr bool isReady() const;
 
 		void alignWithGrid();
 		void trackSwipe(const Swipe);
@@ -64,23 +56,11 @@ namespace hex
 
 namespace hex
 {
-	constexpr CommandController& Slider::fxController() {
-		return m_grid.manager().controller();
-	}
-
-	constexpr bool Slider::isReady() const {
-		return m_grid.manager().isGridIdle();
-	}
-
 	constexpr HexTile& Slider::actor() const {
 		return *m_actorTile;
 	}
 
 	inline HexTile& Slider::follower() const {
 		return (*m_outerNeighbours[m_followerIndex]);
-	}
-
-	inline void Slider::alignWithGrid() {
-		m_grid.manager().correctOrientation(*this);
 	}
 }

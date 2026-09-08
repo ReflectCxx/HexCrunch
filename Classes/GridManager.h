@@ -8,25 +8,18 @@ namespace hex
 {
 	class Slider;
 	class HexTile;
-	class HexGrid;
 	
 	class GridManager
 	{
-		HexGrid& m_grid;
 		GridFxController m_controller;
 
 	public:
-
-		GridManager(HexGrid& pGrid);
 		
+		constexpr GridFxController& controller();
+
 		void update();
-		
-		constexpr bool isGridIdle();
-		constexpr CommandController& controller();
-
 		void correctOrientation(const Slider&);
 		void setRingTilesState(HexTile& pStartTile, TileState) const;
-
 		void swapSelection(const Slider&, const std::function<void()>& pOnEndCb);
 	};
 }
@@ -38,11 +31,7 @@ namespace hex
 		m_controller.update();
 	}
 
-	constexpr bool GridManager::isGridIdle() {
-		return (m_controller.getRunningCmdCount() == 0);
-	}
-
-	constexpr CommandController& GridManager::controller() {
+	constexpr GridFxController& GridManager::controller() {
 		return m_controller;
 	}
 }

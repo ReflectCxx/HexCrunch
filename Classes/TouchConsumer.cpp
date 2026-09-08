@@ -1,6 +1,7 @@
 
 #include "HexGrid.h"
 #include "HexTile.hpp"
+#include "Game.h"
 #include "TouchConsumer.h"
 
 USING_NS_CC;
@@ -23,10 +24,6 @@ namespace {
 
 namespace hex
 {
-	TouchConsumer::TouchConsumer(const Slider& pSlider)
-		: m_slider(pSlider)
-	{ }
-
 	void TouchConsumer::init(HexTile* pActor) {
 		m_slider.init(pActor);
 	}
@@ -76,8 +73,8 @@ namespace hex
 
 	void TouchConsumer::onInputRecieved(const Swipe pDir, const bool pIsMockInput)
 	{
-		if (!m_slider.isReady()) {
-			const auto cmdK = m_slider.fxController().getRunningCmdCount();
+		if (!Game::instance().acceptInput()) {
+			const auto cmdK = Game::instance().fxController().getRunningCmdCount();
 			CCLOG("Grid not idle! %d cmds running.", cmdK);
 			return;
 		}

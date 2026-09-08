@@ -1,6 +1,6 @@
 
-
 #include "HexTile.h"
+#include "HexGrid.h"
 #include "ActionSwapTile.h"
 
 
@@ -36,7 +36,7 @@ namespace hex
 		runOn(m_tileA);
 		runOn(m_tileB);
 
-		m_tileA.scheduleOnce([=, &pCmd](float)
+		Game::instance().grid().scheduleOnce([=, &pCmd](float)
 		{
 			m_tileA.swapColors(m_tileB);
 			m_tileA.setPosition(actorPos);
