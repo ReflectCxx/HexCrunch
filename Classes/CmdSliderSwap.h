@@ -15,7 +15,7 @@ namespace hex
 			return Command{
 
 				BlocksQ::Yes,
-				CmdKind::SwapTiles,
+				CmdKind::SliderSwap,
 				Game::instance().fxController(),
 				[action = CmdSliderSwap{ pActor, pFollower }]
 				(Command& pCmd) mutable-> void{

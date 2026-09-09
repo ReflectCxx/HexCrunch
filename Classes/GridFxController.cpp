@@ -1,8 +1,12 @@
 
+#include "Game.h"
 #include "Slider.h"
+#include "HexGrid.h"
 #include "GridFxController.h"
 #include "CmdRotateGrid.h"
 #include "CmdSliderSwap.h"
+#include "CmdClearTile.h"
+#include "CmdSwapTiles.h"
 
 namespace hex
 {
@@ -51,10 +55,19 @@ namespace hex
 	}
 
 
+	void GridFxController::clearRingAtIndex(const int pIndex)
+	{
+		auto& ring = Game::instance().grid().getHexagonRings().at(pIndex);
+		for (const auto tile : ring) {
+			push(CmdClearTile::create(*tile));
+		}
+	}
+
+
 	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB)
 	{
-		//auto cmd = CmdSwapTile::create(pTileA, pTileB, false);
-		//push(std::move(cmd));
-		//pushCb(pOnEndCb);
+		auto cmd = CmdSwapTiles::create(pTileA, pTileB);
+		push(std::move(cmd));
+		pushCb([]()->void {});
 	}
 }

@@ -11,9 +11,11 @@ namespace hex
 	
 	class GridManager
 	{
+		std::vector<int> m_ringsMadeIndices = { RING_COUNT, -1 };
+
 		GridFxController m_controller;
 
-		bool checkIfRingMade();
+		bool clearRingsMade();
 
 	public:
 		
@@ -22,7 +24,7 @@ namespace hex
 		void update();
 		void correctOrientation(const Slider&);
 		void setRingTilesState(HexTile& pStartTile, TileState) const;
-		void swapSelection(const Slider&, const std::function<void()>& pOnEndCb);
+		void swapSelection(Slider&, const std::function<void()>& pOnEndCb);
 	};
 }
 

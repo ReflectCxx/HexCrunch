@@ -9,19 +9,6 @@ USING_NS_CC;
 
 namespace hex
 {
-	void GridManager::swapSelection(const Slider& pSlider, const std::function<void()>& pOnEndCb) 
-	{
-		m_controller.swapTiles(pSlider, [=, &pSlider]() {
-			if (checkIfRingMade()) {
-				
-			}
-			else {
-				pOnEndCb();
-			}
-		});
-	}
-
-
 	void GridManager::setRingTilesState(HexTile& ringTile, TileState state) const
 	{
 		auto nextTile = &ringTile;
@@ -48,7 +35,32 @@ namespace hex
 	}
 
 
-	bool GridManager::checkIfRingMade()
+	void GridManager::swapSelection(Slider& pSlider, const std::function<void()>& pOnEndCb) 
+	{
+		m_controller.swapTiles(pSlider, [=, &pSlider]()->void
+		{
+			if (clearRingsMade()) 
+			{
+				pSlider.setActive(false);
+				m_controller.pushCb([this, &pSlider]()->void
+				{
+					auto& ringsMat = Game::instance().grid().getHexagonRings();
+					for (auto ri : m_ringsMadeIndices) {
+						for (auto tile : ringsMat[ri]) {
+							tile->setState(TileState::None);
+						}
+					}
+					pSlider.setActive(true);
+				});
+			}
+			else {
+				pOnEndCb();
+			}
+		});
+	}
+
+
+	bool GridManager::clearRingsMade()
 	{
 		auto isMakingRing = [](const std::vector<HexTile*>& pRing)->bool 
 		{
@@ -61,14 +73,14 @@ namespace hex
 			return true;
 		};
 
-		bool ringMade = false;
+		m_ringsMadeIndices.clear();
 		auto& ringsMat = Game::instance().grid().getHexagonRings();
 		for (int i = 0; i < RING_COUNT; i++) {
 			if (isMakingRing(ringsMat[i])) {
-				//remove ring.
-				ringMade = true;
+				m_ringsMadeIndices.push_back(i);
+				m_controller.clearRingAtIndex(i);
 			}
 		}
-		return ringMade;
+		return !m_ringsMadeIndices.empty();
 	}
 }

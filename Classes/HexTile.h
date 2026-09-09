@@ -26,6 +26,7 @@ namespace hex
 
 		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getBlockedFace();
+		constexpr void updateViewColor(const ColorId pColor);
 
 	public:
 

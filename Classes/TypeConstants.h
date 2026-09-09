@@ -34,7 +34,9 @@ namespace hex
 		None,
 		CallBack,
 		SpawnTile,
+		ClearTile,
 		SwapTiles,
+		SliderSwap,
 		RotateGrid,
 		PullDownTile
 	};

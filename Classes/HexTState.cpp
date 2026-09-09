@@ -45,6 +45,11 @@ namespace hex
 	bool HexTState::stateOnActivate(TileState pState)
 	{
 		switch (pState) {
+		case TileState::None: {
+			updateViewColor(ColorId::None);
+			initStateZero();
+			return true;
+		}
 		case TileState::Idle: return turnOnIdle();
 		case TileState::Actor: return turnOnActing();
 		case TileState::Follower: return turnOnFollower();
@@ -111,8 +116,8 @@ namespace hex
 
 	bool HexTState::turnOnHighlighted()
 	{
-		const auto ang = getForeground().getRotation();
-		getForeground().setRotation(ang + 60.f);
+		//const auto ang = getForeground().getRotation();
+		//getForeground().setRotation(ang + 60.f);
 		getForeground().setVisible(true);
 		return true;
 	}
@@ -120,8 +125,8 @@ namespace hex
 
 	bool HexTState::turnOffHighlighted()
 	{
-		const auto ang = getForeground().getRotation();
-		getForeground().setRotation(ang - 60.f);
+		//const auto ang = getForeground().getRotation();
+		//getForeground().setRotation(ang - 60.f);
 		getForeground().setVisible(false);
 		return true;
 	}
