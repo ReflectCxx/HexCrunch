@@ -66,11 +66,13 @@ namespace hex
 
 namespace hex
 {
-	void HexTile::swapColors(HexTile& pOther)
+	void HexTile::swapColor(HexTile& pOther, bool pRefreshView)
 	{
 		std::swap(m_colorId, pOther.m_colorId);
-		pOther.refreshView();
-		refreshView();
+		if (pRefreshView) {
+			pOther.refreshView();
+			refreshView();
+		}
 	}
 
 

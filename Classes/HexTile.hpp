@@ -5,6 +5,7 @@
 namespace hex
 {	
 	constexpr void HexTile::assignColor(const ColorId pColor) {
+		m_previousColor = m_colorId;
 		m_colorId = pColor;
 	}
 

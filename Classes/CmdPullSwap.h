@@ -11,7 +11,7 @@ namespace hex
 	{
 		static std::optional<Command> create(HexTile& pTile)
 		{
-			auto action = CmdPullSwap{ pTile, nullptr };
+			auto action = CmdPullSwap{ pTile };
 			if (action.init()) {
 				return Command{
 
@@ -27,7 +27,7 @@ namespace hex
 		}
 
 		HexTile& m_tile;
-		HexTile* m_pullTile;
+		cocos2d::Vec2 m_pullFromPos = { 0.f, 0.f };
 
 		void run(Command& pCmd) const;
 

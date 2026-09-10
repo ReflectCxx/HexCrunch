@@ -37,7 +37,7 @@ namespace hex
 	{
 		setZOrder(pZOdr);
 
-		m_actor.swapColors(m_follower);
+		m_actor.swapColor(m_follower, true);
 		m_actor.setPosition(pActorPos);
 		m_follower.setPosition(pOtherPos);
 

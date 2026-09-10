@@ -51,6 +51,11 @@ namespace hex
 	}
 
 	template<class T>
+	inline constexpr ColorId Hex<T>::getPreviousColorId() const {
+		return m_previousColor;
+	}
+
+	template<class T>
 	constexpr const std::vector<T*>& Hex<T>::getNeighbours() {
 		return m_neighbours;
 	}

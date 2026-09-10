@@ -52,16 +52,13 @@ namespace hex
 	bool HexTState::stateOnActivate(TileState pState)
 	{
 		switch (pState) {
+		case TileState::None: return true;
 		case TileState::Idle: return turnOnIdle();
 		case TileState::Actor: return turnOnActing();
 		case TileState::Follower: return turnOnFollower();
 		case TileState::RingFace: return turnOnRingFace();
 		case TileState::Blocked: return turnOnBlocked();
 		case TileState::Highlighted: return turnOnHighlighted();
-		case TileState::None: {
-			assignColor(ColorId::None);
-			return true;
-		}
 		default: return false;
 		}
 	}

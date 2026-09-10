@@ -41,6 +41,7 @@ namespace hex
 				scaleDown,
 				cocos2d::CallFunc::create([&]()->void {
 					m_tile.getIdleFace().setScale(1.f);
+					m_tile.assignColor(ColorId::None);
 					m_tile.setState(TileState::None);
 					pCmd.end();
 				}), nullptr

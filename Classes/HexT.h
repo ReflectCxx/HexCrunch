@@ -21,6 +21,7 @@ namespace hex
 
 		float m_edgeAngle;
 		ColorId m_colorId;
+		ColorId m_previousColor;
 		std::pair<float, float> m_linkPos;
 
 	public:
@@ -29,11 +30,14 @@ namespace hex
 
 		constexpr int getTileIndex() const;
 		constexpr int getRingIndex() const;
-		constexpr T* getNextRingTile() const;
-		constexpr T* getPrevoiusRingTile() const;
-		constexpr ColorId getColorId() const;
 		constexpr float getHexRingEdgeAngle() const;
 
+		constexpr T* getNextRingTile() const;
+		constexpr T* getPrevoiusRingTile() const;
+
+		constexpr ColorId getColorId() const;
+		constexpr ColorId getPreviousColorId() const;
+		
 		void addNeighbour(T*);
 
 		std::vector<T*> getInnerNeighbours();

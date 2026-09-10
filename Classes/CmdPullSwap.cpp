@@ -12,14 +12,22 @@ namespace hex
 	void CmdPullSwap::run(Command& pCmd) const
 	{
 		const auto pos = m_tile.getPosition();
-		const auto vis = m_tile.getLink().isVisible();
-		m_tile.setPosition(m_pullTile->getPosition());
-		m_tile.setState(TileState::Idle);
-		m_tile.getLink().setVisible(vis);
+		m_tile.setPosition(m_pullFromPos);
+
+		auto resetV = m_tile.getLink().isVisible();
+		if (m_tile.getState() == TileState::None) {
+			m_tile.setState(TileState::Idle);
+			m_tile.getLink().setVisible(true);
+			resetV = false;
+		}
+		else {
+			m_tile.refreshView();
+		}
+		
 		m_tile.runAction(Sequence::create(
 			MoveTo::create(DT, pos),
-			CallFunc::create([&]() {
-				CCLOG("pulled tile: %d", m_tile.getTileIndex());
+			CallFunc::create([&, resetV]() {
+				m_tile.getLink().setVisible(resetV);
 				pCmd.end();
 			}), nullptr
 		));
@@ -43,11 +51,10 @@ namespace hex
 		std::random_device rd;
 		std::mt19937 rng(rd());
 		std::shuffle(ts.begin(), ts.end(), rng);
-		m_pullTile = ts.front();
-		
-		const auto color = m_pullTile->getColorId();
-		m_pullTile->assignColor(ColorId::None);
-		m_tile.assignColor(color);
+
+		const auto otherTile = ts.front();
+		m_pullFromPos = otherTile->getPosition();
+		m_tile.swapColor(*otherTile, false);		
 		return true;
 	}
 }

@@ -54,13 +54,20 @@ namespace hex
 		auto& ringsMat = Game::instance().grid().getHexagonRings();
 
 		bool success = false;
+		auto ringColor = ColorId::None;
 		for (int i = 0; i < RING_COUNT; i++) {
 			for (auto tile : ringsMat[i]) {
-				if (tile->getColorId() == ColorId::None) {
+				if (tile->getColorId() == ColorId::None)
+				{
+					if (ringColor == ColorId::None) {
+						ringColor = tile->getPreviousColorId();
+					}
 					if (i == RING_COUNT - 1) {
+						tile->assignColor(ringColor);
 						tile->setState(TileState::None);
 					}
-					else if (m_controller.pushAcquireNeighbour(*tile)) {
+					else 
+						if (m_controller.pushAcquireNeighbour(*tile)) {
 						success = true;
 					}
 				}
@@ -70,12 +77,6 @@ namespace hex
 		m_controller.pushCallback(
 			[&, success]()->void {
 				if (success) {
-					for (const auto t : ringsMat[RING_COUNT - 1]) {
-						if (t->getColorId() == ColorId::None) {
-							t->assignColor(ColorId::Red);
-							t->setState(TileState::Idle);
-						}
-					}
 					pullOuterRingTiles(pSlider);
 				}
 				else if (!clearRingsMade(pSlider)) {

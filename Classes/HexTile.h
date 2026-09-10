@@ -22,13 +22,13 @@ namespace hex
 
 		HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
-		void refreshView();
 		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getBlockedFace();
 
 	public:
 
-		void swapColors(HexTile&);
+		void refreshView();
+		void swapColor(HexTile&, bool pRefreshView);
 		void initRingPlacement(cocos2d::Node* pGridNode, cocos2d::Node* pLinkNode);
 
 		static HexTile* create(const ColorId pId, const int pRingIndex, const int pTileIndex);

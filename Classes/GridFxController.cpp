@@ -68,8 +68,7 @@ namespace hex
 		push(Command{
 			BlocksQ::Join,
 			CmdKind::CallBack,
-			*this, [=](Command& pCmd)->void
-			{
+			*this, [=](Command& pCmd)->void {
 				pCmd.end();
 				pCallBack();
 			}
