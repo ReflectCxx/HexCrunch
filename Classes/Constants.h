@@ -7,7 +7,7 @@ namespace hex
 {
 	constexpr auto SCALE = 1.f;
 	constexpr auto ANIM_SCALE = 1.f;
-	constexpr auto WIN_SCALE = 0.6f;
+	constexpr auto WIN_SCALE = 0.3f;
 
 	constexpr auto EDGE_GAP = SCALE * 35.f;
 	constexpr auto SCR_WIDTH = SCALE * 1800.f; //*/1080.f;

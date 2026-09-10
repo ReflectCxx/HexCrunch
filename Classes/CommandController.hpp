@@ -44,6 +44,12 @@ namespace hex
 		if (m_qBlocked || m_commandQ.empty()) {
 			return std::nullopt;
 		}
+
+		if (m_commandQ.front().get().m_blockQ == BlocksQ::Join && runningCount() != 0) {
+			CCLOG("Waiting to finish executions, running count: { %d }", runningCount());
+			return std::nullopt;
+		}
+
 		auto& cmd = m_commandQ.front().get();
 		cmd.m_cmdState = CmdState::Ready;
 		m_commandQ.pop_front();

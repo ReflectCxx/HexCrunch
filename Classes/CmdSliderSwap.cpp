@@ -42,10 +42,10 @@ namespace hex
 		m_follower.setPosition(pOtherPos);
 
 		m_actor.getClippedFace().setVisible(true);
-		m_actor.getForeground().setVisible(false);
+		m_actor.getIdleFace().setVisible(false);
 
 		m_follower.getClippedFace().setVisible(true);
-		m_follower.getForeground().setVisible(false);
+		m_follower.getIdleFace().setVisible(false);
 		pCmd.end();
 	}
 
@@ -61,17 +61,19 @@ namespace hex
 		m_actor.runAction(MoveTo::create(DT, otherPos));
 		m_follower.runAction(MoveTo::create(DT, actorPos));
 
-		m_actor.getForeground().setVisible(true);
+		m_actor.getIdleFace().setVisible(true);
 		m_actor.getClippedFace().setVisible(false);
 
-		m_follower.getForeground().setVisible(true);
+		m_follower.getIdleFace().setVisible(true);
 		m_follower.getClippedFace().setVisible(false);
 
 		const auto runOn = [](HexTile& tile) {
 			tile.runAction(
-				Sequence::create(ScaleTo::create(DT / 2.f, 0.5),
+				Sequence::create(
+					ScaleTo::create(DT / 2.f, 0.5),
 					ScaleTo::create(DT / 2.f, 1.f),
-					nullptr)
+					nullptr
+				)
 			);
 		};
 

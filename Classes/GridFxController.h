@@ -16,12 +16,13 @@ namespace hex
 	{
 		friend GridManager;
 
-		void update();
-		void pushCb(const std::function<void()>& pCallBack);
+		using CallBack = std::function<void()>;
 
-		void rotateGrid(const float);
-		void clearRingAtIndex(const int);
-		void swapTiles(HexTile&, HexTile&);
-		void swapTiles(const Slider&, const std::function<void()>& pOnEndCb);
+		void update();
+		void pushCallback(const CallBack& pCallBack);
+		void pushRotateGrid(const float);
+		void pushClearRing(const int pIndex);
+		void pushSliderSwap(const Slider&, const CallBack& pOnEndCb);
+		bool pushAcquireNeighbour(HexTile&);
 	};
 }

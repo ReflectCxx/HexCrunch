@@ -63,7 +63,7 @@ list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/Asset.cpp
      Classes/CmdSliderSwap.cpp
-     Classes/CmdSwapTiles.cpp
+     Classes/CmdPullSwap.cpp
      Classes/Game.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
@@ -80,10 +80,10 @@ list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/Asset.h
      Classes/AssetConsts.h
-     Classes/CmdClearTile.h
+     Classes/CmdClearRingTile.h
      Classes/CmdRotateGrid.h
      Classes/CmdSliderSwap.h
-     Classes/CmdSwapTiles.h
+     Classes/CmdPullSwap.h
      Classes/Command.h
      Classes/Command.hpp
      Classes/CommandController.h

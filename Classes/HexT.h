@@ -38,6 +38,7 @@ namespace hex
 
 		std::vector<T*> getInnerNeighbours();
 		std::vector<T*> getOuterNeighbours();
+		constexpr const std::vector<T*>& getNeighbours();
 
 		void setNextRingTile(T*);
 	};

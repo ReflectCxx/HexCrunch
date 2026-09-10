@@ -7,7 +7,7 @@ namespace hex
 {
 	class HexTState : public HexTile, public StateMachine<TileState, HexTState>
 	{
-		bool initStateZero();
+		void initStateZero();
 
 		bool turnOnIdle();
 		bool turnOffIdle();
@@ -35,6 +35,7 @@ namespace hex
 
 		bool stateOnDeactivate();
 		bool stateOnActivate(TileState);
-		void setState(TileState) override;
+		void setState(const TileState) override;
+		const TileState getState() override;
 	};
 }

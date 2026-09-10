@@ -34,18 +34,21 @@ namespace hex
 	
 	inline void Command::end()
 	{
+		if (m_cmdState != CmdState::Running) {
+			return;
+		}
 		unblockQ();
 		m_controller.runningCount()--;
 		m_cmdState = CmdState::Expired;
 	}
 
-
+	
 	inline void Command::unblockQ()
 	{
 		if (m_cmdState != CmdState::Running) {
 			return;
 		}
-		if (m_blockQ == BlocksQ::Yes) {
+		if (m_blockQ == BlocksQ::Yes || m_blockQ == BlocksQ::Join) {
 			m_controller.blockQ(m_cmdId, false);
 		}
 	}
@@ -58,7 +61,7 @@ namespace hex
 		}
 		m_cmdState = CmdState::Running;
 		m_controller.runningCount()++;
-		if (m_blockQ == BlocksQ::Yes) {
+		if (m_blockQ == BlocksQ::Yes || m_blockQ == BlocksQ::Join) {
 			m_controller.blockQ(m_cmdId, true);
 		}
 		CCASSERT(m_command, "Command callback cannot be empty.");

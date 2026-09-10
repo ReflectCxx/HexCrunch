@@ -3,10 +3,11 @@
 #include "Slider.h"
 #include "HexGrid.h"
 #include "GridFxController.h"
+
+#include "CmdPullSwap.h"
 #include "CmdRotateGrid.h"
 #include "CmdSliderSwap.h"
-#include "CmdClearTile.h"
-#include "CmdSwapTiles.h"
+#include "CmdClearRingTile.h"
 
 namespace hex
 {
@@ -21,53 +22,57 @@ namespace hex
 			else break;
 		}
 	}
-
-
-	void GridFxController::pushCb(const std::function<void()>& pCallBack)
-	{
-		push(Command{
-			BlocksQ::Yes,
-			CmdKind::CallBack,
-			*this, [=](Command& pCmd)->void {
-				pCmd.end();
-				pCallBack();
-			}
-		});
-	}
 }
 
 
 
 namespace hex
 {
-	void GridFxController::rotateGrid(const float pAngle)
+	void GridFxController::pushRotateGrid(const float pAngle)
 	{
 		auto cmd = CmdRotateGrid::create(pAngle);
 		push(std::move(cmd));
 	}
 
 
-	void GridFxController::swapTiles(const Slider& pSlider, const std::function<void()>& pOnEndCb)
+	void GridFxController::pushSliderSwap(const Slider& pSlider, const CallBack& pOnEndCb)
 	{
 		auto cmd = CmdSliderSwap::create(pSlider.actor(), pSlider.follower());
 		push(std::move(cmd));
-		pushCb(pOnEndCb);
+		pushCallback(pOnEndCb);
 	}
 
 
-	void GridFxController::clearRingAtIndex(const int pIndex)
+	void GridFxController::pushClearRing(const int pIndex)
 	{
 		auto& ring = Game::instance().grid().getHexagonRings().at(pIndex);
 		for (const auto tile : ring) {
-			push(CmdClearTile::create(*tile));
+			push(CmdClearRingTile::create(*tile));
 		}
 	}
 
 
-	void GridFxController::swapTiles(HexTile& pTileA, HexTile& pTileB)
+	bool GridFxController::pushAcquireNeighbour(HexTile& pTile)
 	{
-		auto cmd = CmdSwapTiles::create(pTileA, pTileB);
-		push(std::move(cmd));
-		pushCb([]()->void {});
+		auto cmd = CmdPullSwap::create(pTile);
+		if (cmd) {
+			push(std::move(cmd.value()));
+			return true;
+		}
+		return false;
+	}
+
+
+	void GridFxController::pushCallback(const CallBack& pCallBack)
+	{
+		push(Command{
+			BlocksQ::Join,
+			CmdKind::CallBack,
+			*this, [=](Command& pCmd)->void
+			{
+				pCmd.end();
+				pCallBack();
+			}
+		});
 	}
 }

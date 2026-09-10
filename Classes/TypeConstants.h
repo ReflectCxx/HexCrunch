@@ -18,8 +18,9 @@ namespace hex
 	};
 
 	enum class BlocksQ {
-		No,
-		Yes
+		No,   // Doesn't block the queue.
+		Yes,  // Blocks the queue until this command finishes.
+		Join, // Waits for all running commands to finish before dispatch.
 	};
 
 	enum class CmdState {
@@ -35,7 +36,7 @@ namespace hex
 		CallBack,
 		SpawnTile,
 		ClearTile,
-		SwapTiles,
+		PullSwap,
 		SliderSwap,
 		RotateGrid,
 		PullDownTile

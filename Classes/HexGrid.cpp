@@ -50,20 +50,27 @@ namespace
 
 namespace hex
 {
+	void HexGrid::update(float)
+	{
+		m_manager.update();
+	}
+
 	bool HexGrid::init()
 	{
 		if (!Node::init()) {
 			return false;
 		}
+
 		initHexGrid();
+		for (auto& rings : m_hexRings) {
+			for (const auto t : rings) {
+				t->setState(TileState::Idle);
+			}
+		}
+
 		setRotation(30.f);
 		scheduleUpdate();
 		return true;
-	}
-
-	void HexGrid::update(float) 
-	{
-		m_manager.update();
 	}
 }
 
@@ -76,7 +83,6 @@ namespace hex
 		auto currentTile = startTile;
 		do {
 			currentTile->initRingPlacement(m_hexBGNode, m_hexLinkNode);
-			currentTile->setState(TileState::Idle);
 			currentTile = currentTile->getNextRingTile();;
 		} while (currentTile != startTile);
 	}

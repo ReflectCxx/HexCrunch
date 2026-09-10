@@ -50,6 +50,11 @@ namespace hex
 		return m_colorId;
 	}
 
+	template<class T>
+	constexpr const std::vector<T*>& Hex<T>::getNeighbours() {
+		return m_neighbours;
+	}
+
 
 	template<class T>
 	inline void Hex<T>::addNeighbour(T* pTile) {

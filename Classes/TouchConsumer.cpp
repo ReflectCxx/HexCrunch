@@ -8,17 +8,6 @@ USING_NS_CC;
 
 namespace {
 	constexpr auto ENABLE_SAME_COLOR_SWAP = false;
-
-	auto cmd_name(hex::CmdKind pCmdK) {
-		switch (pCmdK) {
-		case hex::CmdKind::CallBack: return "CmdKind::CallBack";
-		case hex::CmdKind::SpawnTile: return "CmdKind::SpawnTile";
-		case hex::CmdKind::SwapTiles: return "CmdKind::SwapTiles";
-		case hex::CmdKind::RotateGrid: return "CmdKind::RotateGrid";
-		case hex::CmdKind::PullDownTile: return "CmdKind::PullDownTile";
-		default: return "(none)";
-		}
-	}
 }
 
 

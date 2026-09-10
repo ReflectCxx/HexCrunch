@@ -10,33 +10,40 @@ USING_NS_CC;
 
 namespace hex
 {
-	void HexTState::setState(TileState pState)
-	{
+	void HexTState::setState(TileState pState) {
 		switchToState(pState);
 	}
 
+	const TileState HexTState::getState() {
+		return getCurrentState();
+	}
 
-	bool HexTState::initStateZero()
+
+	void HexTState::initStateZero()
 	{
+		refreshView();
 		getLink().setVisible(false);
-		getRingFace().setVisible(false);
-		getBlockedFace().setVisible(false);
 		getBackground().setVisible(false);
-		getForeground().setVisible(false);
-		return true;
+
+		getRingFace().setVisible(false);
+		getIdleFace().setVisible(false);
+		getBlockedFace().setVisible(false);
 	}
 
 
 	bool HexTState::stateOnDeactivate()
 	{
 		switch (getCurrentState()) {
-		case TileState::None:return initStateZero();
 		case TileState::Idle: return turnOffIdle();
 		case TileState::Actor: return turnOffActing();
 		case TileState::Follower: return turnOffFollower();
 		case TileState::RingFace: return turnOffRingFace();
 		case TileState::Blocked: return turnOffBlocked();
 		case TileState::Highlighted: return turnOffHighlighted();
+		case TileState::None: {
+			initStateZero();
+			return true;
+		}	
 		default: return false;
 		}
 	}
@@ -45,17 +52,16 @@ namespace hex
 	bool HexTState::stateOnActivate(TileState pState)
 	{
 		switch (pState) {
-		case TileState::None: {
-			updateViewColor(ColorId::None);
-			initStateZero();
-			return true;
-		}
 		case TileState::Idle: return turnOnIdle();
 		case TileState::Actor: return turnOnActing();
 		case TileState::Follower: return turnOnFollower();
 		case TileState::RingFace: return turnOnRingFace();
 		case TileState::Blocked: return turnOnBlocked();
 		case TileState::Highlighted: return turnOnHighlighted();
+		case TileState::None: {
+			assignColor(ColorId::None);
+			return true;
+		}
 		default: return false;
 		}
 	}
@@ -65,13 +71,13 @@ namespace hex
 namespace hex
 {
 	bool HexTState::turnOffIdle() {
-		getForeground().setVisible(false);
+		getIdleFace().setVisible(false);
 		return true;
 	}
 
 
 	bool HexTState::turnOnIdle() {
-		getForeground().setVisible(true);
+		getIdleFace().setVisible(true);
 		return true;
 	}
 }
@@ -116,18 +122,18 @@ namespace hex
 
 	bool HexTState::turnOnHighlighted()
 	{
-		//const auto ang = getForeground().getRotation();
-		//getForeground().setRotation(ang + 60.f);
-		getForeground().setVisible(true);
+		//const auto ang = getIdleFace().getRotation();
+		//getIdleFace().setRotation(ang + 60.f);
+		getIdleFace().setVisible(true);
 		return true;
 	}
 
 
 	bool HexTState::turnOffHighlighted()
 	{
-		//const auto ang = getForeground().getRotation();
-		//getForeground().setRotation(ang - 60.f);
-		getForeground().setVisible(false);
+		//const auto ang = getIdleFace().getRotation();
+		//getIdleFace().setRotation(ang - 60.f);
+		getIdleFace().setVisible(false);
 		return true;
 	}
 }

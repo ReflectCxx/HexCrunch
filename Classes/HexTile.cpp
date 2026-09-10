@@ -28,7 +28,7 @@ namespace
 		const auto ri = pT.getRingIndex();
 		const auto ti = pT.getTileIndex();
 		std::string str;// = std::to_string(ri) + ", ";
-		str += std::to_string(ti);
+		str += std::to_string(ri);
 		auto label = Label::createWithTTF(str, hex::FONT, 50.f);
 		//pT.addChild(label, 3);
 	}
@@ -39,10 +39,9 @@ namespace hex
 {
 	HexTile::HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex)
 		: Hex(pId, pRingIndex, pTileIndex)
-		, m_blocked(nullptr)
+		, m_blockFace(nullptr)
 		, m_clipped(nullptr)
-		, m_foreground(nullptr)
-		, m_clippedBg(nullptr)
+		, m_idleFace(nullptr)
 		, m_hexLink(nullptr)
 		, m_ringFace(nullptr)
 		, m_background(nullptr)
@@ -77,17 +76,20 @@ namespace hex
 
 	void HexTile::refreshView()
 	{
-		const auto& sz = getForeground().getContentSize();
 		const auto color = getColorId();
-
-		m_foreground->removeAllChildren();
-		m_foreground->addChild(Asset::createNormalTile(color, sz));
+		if (color == ColorId::None) {
+			return;
+		}
+		const auto& sz = getIdleFace().getContentSize();
+		
+		m_idleFace->removeAllChildren();
+		m_idleFace->addChild(Asset::createNormalTile(color, sz));
 
 		m_clipped->removeAllChildren();
 		m_clipped->addChild(Asset::createNormalTile(color, sz));
 
-		m_blocked->removeAllChildren();
-		m_blocked->addChild(Asset::createBlockedTile(color, sz));
+		m_blockFace->removeAllChildren();
+		m_blockFace->addChild(Asset::createBlockedTile(color, sz));
 
 		auto& pt = *getPrevoiusRingTile();
 		const auto linkSz = Size{ LINK_WIDTH, LINK_HEIGHT };
@@ -105,22 +107,18 @@ namespace hex
 		constexpr auto radius = (HEX_RAD - HEX_BORDER);
 		const auto sz = Size{ SQRT_3 * radius, 2.f * radius };
 		
-		m_foreground = Node::create();
-		m_foreground->addChild(Asset::createNormalTile(pId, sz));
-		m_foreground->setContentSize(sz);
-		addChild(m_foreground, Z_FOREGROUND);
+		m_idleFace = Node::create();
+		m_idleFace->setContentSize(sz);
+		addChild(m_idleFace, Z_FOREGROUND);
 		
 		m_clipped = Node::create();
-		m_clipped->addChild(Asset::createNormalTile(pId, sz));
-
 		m_ringFace = create_clipped(m_clipped, DrawNode::create());
 		m_ringFace->setContentSize(sz);
 		addChild(m_ringFace, Z_RING_ON);
 		
-		m_blocked = Node::create();
-		m_blocked->setContentSize(sz);
-		m_blocked->addChild(Asset::createBlockedTile(pId, sz));
-		addChild(m_blocked, Z_BLOCKED);
+		m_blockFace = Node::create();
+		m_blockFace->setContentSize(sz);
+		addChild(m_blockFace, Z_BLOCKED);
 
 		show_index(*this);
 		return true;
@@ -152,8 +150,8 @@ namespace hex
 
 		const auto theta = getHexRingEdgeAngle();
 		m_clipped->setRotation(theta);
-		m_blocked->setRotation(theta);
-		m_foreground->setRotation(theta);
+		m_blockFace->setRotation(theta);
+		m_idleFace->setRotation(theta);
 	}
 
 
@@ -184,8 +182,8 @@ namespace hex
 		}
 
 		const auto sz = Size{ HEX_WIDTH, HEX_HEIGHT };
-		m_clippedBg = Asset::createTileBg(sz);
-		m_background = create_clipped(m_clippedBg, stencil);
+		const auto clippedBg = Asset::createTileBg(sz);
+		m_background = create_clipped(clippedBg, stencil);
 		m_background->setPosition(getPosition());
 		pGridBgNode->addChild(m_background, getLocalZOrder());
 	}

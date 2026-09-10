@@ -11,11 +11,10 @@ namespace hex
 	
 	class GridManager
 	{
-		std::vector<int> m_ringsMadeIndices = { RING_COUNT, -1 };
-
 		GridFxController m_controller;
 
-		bool clearRingsMade();
+		bool clearRingsMade(Slider&);
+		void pullOuterRingTiles(Slider&);
 
 	public:
 		

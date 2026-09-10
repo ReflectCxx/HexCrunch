@@ -8,15 +8,13 @@ namespace hex
 {
 	class HexTile : public Hex<HexTile>, public cocos2d::Node
 	{
-		cocos2d::Node* m_blocked;
+		cocos2d::Node* m_blockFace;
 		cocos2d::Node* m_clipped;
-		cocos2d::Node* m_foreground;
-		cocos2d::Node* m_clippedBg;
+		cocos2d::Node* m_idleFace;
 		cocos2d::DrawNode* m_hexLink;
 		cocos2d::ClippingNode* m_ringFace;
 		cocos2d::ClippingNode* m_background;
 
-		void refreshView();
 		void initClippedBg(cocos2d::Node* pGridNode);
 		bool init(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
@@ -24,9 +22,9 @@ namespace hex
 
 		HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
+		void refreshView();
 		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getBlockedFace();
-		constexpr void updateViewColor(const ColorId pColor);
 
 	public:
 
@@ -36,10 +34,12 @@ namespace hex
 		static HexTile* create(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
 		constexpr cocos2d::Node& getRingFace();
-		constexpr cocos2d::Node& getForeground();
+		constexpr cocos2d::Node& getIdleFace();
 		constexpr cocos2d::Node& getClippedFace();
 		constexpr cocos2d::DrawNode& getLink();
+		constexpr void assignColor(const ColorId pColor);
 
-		virtual void setState(TileState) = 0;
+		virtual void setState(const TileState) = 0;
+		virtual const TileState getState() = 0;
 	};
 }
