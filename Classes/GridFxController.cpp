@@ -74,4 +74,28 @@ namespace hex
 			}
 		});
 	}
+
+
+	void GridFxController::pushSpawnTile(HexTile& pTile)
+	{
+		push(Command{
+			BlocksQ::No,
+			CmdKind::CallBack,
+			*this, [&](Command& pCmd)->void {
+
+				pTile.setState(TileState::Idle);
+				pTile.setScale(0.01f);
+				pTile.runAction(
+					cocos2d::Sequence::create(
+						cocos2d::ScaleTo::create(0.25f, 1.f),
+						cocos2d::CallFunc::create(
+							[&]() { 
+								pCmd.end(); 
+							}),
+						nullptr
+					)
+				);
+			}
+		});
+	}
 }

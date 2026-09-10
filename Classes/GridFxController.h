@@ -19,10 +19,12 @@ namespace hex
 		using CallBack = std::function<void()>;
 
 		void update();
-		void pushCallback(const CallBack& pCallBack);
-		void pushRotateGrid(const float);
-		void pushClearRing(const int pIndex);
-		void pushSliderSwap(const Slider&, const CallBack& pOnEndCb);
+		void pushSpawnTile(HexTile&);
+		void pushCallback(const CallBack&);
+		void pushSliderSwap(const Slider&, const CallBack&);
+
 		bool pushAcquireNeighbour(HexTile&);
+		void pushClearRing(const int pIndex);
+		void pushRotateGrid(const float);
 	};
 }

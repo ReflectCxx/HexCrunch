@@ -119,7 +119,15 @@ namespace hex
 					pullOuterRingTiles(pSlider);
 				}
 				else if (!clearRingsMade(pSlider)) {
-					pSlider.setActive(true);
+					for (auto tile : ringsMat[RING_COUNT - 1]) {
+						if (tile->getState() == TileState::None) {
+							m_controller.pushSpawnTile(*tile);
+						}
+					}
+
+					m_controller.pushCallback([&]() { 
+						pSlider.setActive(true); 
+					});
 				}
 			}
 		);
