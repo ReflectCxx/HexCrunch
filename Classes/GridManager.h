@@ -12,6 +12,7 @@ namespace hex
 	class GridManager
 	{
 		GridFxController m_controller;
+		std::vector<std::pair<std::size_t, ColorId>> m_ringsMade;
 
 		bool clearRingsMade(Slider&);
 		void pullOuterRingTiles(Slider&);

@@ -49,44 +49,6 @@ namespace hex
 	}
 
 
-	void GridManager::pullOuterRingTiles(Slider& pSlider)
-	{
-		auto& ringsMat = Game::instance().grid().getHexagonRings();
-
-		bool success = false;
-		auto ringColor = ColorId::None;
-		for (int i = 0; i < RING_COUNT; i++) {
-			for (auto tile : ringsMat[i]) {
-				if (tile->getColorId() == ColorId::None)
-				{
-					if (ringColor == ColorId::None) {
-						ringColor = tile->getPreviousColorId();
-					}
-					if (i == RING_COUNT - 1) {
-						tile->assignColor(ringColor);
-						tile->setState(TileState::None);
-					}
-					else 
-						if (m_controller.pushAcquireNeighbour(*tile)) {
-						success = true;
-					}
-				}
-			}
-		}
-
-		m_controller.pushCallback(
-			[&, success]()->void {
-				if (success) {
-					pullOuterRingTiles(pSlider);
-				}
-				else if (!clearRingsMade(pSlider)) {
-					pSlider.setActive(true);
-				}
-			}
-		);
-	}
-
-
 	bool GridManager::clearRingsMade(Slider& pSlider)
 	{
 		auto isMakingRing = [](const std::vector<HexTile*>& pRing)->bool {
@@ -99,26 +61,67 @@ namespace hex
 			return true;
 		};
 
-		auto count = 0;
 		auto& ringsMat = Game::instance().grid().getHexagonRings();
-		for (int i = 0; i < RING_COUNT; i++) {
-			if (isMakingRing(ringsMat[i])) {
-				count++;
-				m_controller.pushClearRing(i);
+		for (int ri = 0; ri < RING_COUNT; ri++) {
+			if (isMakingRing(ringsMat[ri])) {
+				m_ringsMade.push_back({ ri, ringsMat[ri][0]->getColorId() });
+				m_controller.pushClearRing(ri);
 			}
 		}
 
-		if (count == 0) {
+		if (m_ringsMade.empty()) {
 			CCLOG("No rings to clear.");
 			return false;
 		}
 
-		CCLOG("Rings made : { %s }", std::to_string(count).c_str());
+		CCLOG("Rings made : { %s }", std::to_string(m_ringsMade.size()).c_str());
 		m_controller.pushCallback(
 			[&]()->void {
 				pullOuterRingTiles(pSlider);
 			}
 		);
 		return true;
+	}
+
+
+	void GridManager::pullOuterRingTiles(Slider& pSlider)
+	{
+		auto& ringsMat = Game::instance().grid().getHexagonRings();
+		
+		bool anyTileMoved = false;
+		const auto ringIndex = m_ringsMade.back().first;
+		const auto ringColor = m_ringsMade.back().second;
+
+		for (int ri = ringIndex; ri < RING_COUNT; ri++) 
+		{
+			for (auto tile : ringsMat[ri]) {
+				if (tile->getColorId() == ColorId::None)
+				{
+					if (ri == RING_COUNT - 1) {
+						tile->assignColor(ringColor);
+						tile->setState(TileState::None);
+					}
+					else if (m_controller.pushAcquireNeighbour(*tile)) {
+						anyTileMoved = true;
+					}
+				}
+			}
+		}
+
+		if (!anyTileMoved) {
+			m_ringsMade.pop_back();
+		}
+		bool continuePull = !m_ringsMade.empty();
+
+		m_controller.pushCallback(
+			[&, continuePull]()->void {
+				if (continuePull) {
+					pullOuterRingTiles(pSlider);
+				}
+				else if (!clearRingsMade(pSlider)) {
+					pSlider.setActive(true);
+				}
+			}
+		);
 	}
 }

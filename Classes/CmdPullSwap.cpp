@@ -31,6 +31,14 @@ namespace hex
 				pCmd.end();
 			}), nullptr
 		));
+
+		m_tile.runAction(
+			Sequence::create(
+				ScaleTo::create(DT / 2.f, BOUNCE_SCALE),
+				ScaleTo::create(DT / 2.f, 1.f),
+				nullptr
+			)
+		);
 	}
 
 

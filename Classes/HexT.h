@@ -21,7 +21,6 @@ namespace hex
 
 		float m_edgeAngle;
 		ColorId m_colorId;
-		ColorId m_previousColor;
 		std::pair<float, float> m_linkPos;
 
 	public:
