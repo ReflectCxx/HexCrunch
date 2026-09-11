@@ -23,8 +23,8 @@ namespace hex
 		void pushCallback(const CallBack&);
 		void pushSliderSwap(const Slider&, const CallBack&);
 
-		bool pushAcquireNeighbour(HexTile&);
 		void pushClearRing(const int pIndex);
 		void pushRotateGrid(const float);
+		void pushAcquireNeighbour(HexTile&, HexTile& pPullFrom);
 	};
 }

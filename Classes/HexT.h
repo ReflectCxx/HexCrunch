@@ -9,9 +9,10 @@ namespace hex
 	template<class T>
 	class Hex
 	{
+		bool m_visited;
 		const int m_ringIndex;
 		const int m_tileIndex;
-				
+
 		T* m_next;
 		T* m_previous;
 
@@ -27,21 +28,21 @@ namespace hex
 
 		Hex(const ColorId, const int pRingIndex, const int pTileIndex);
 
+		constexpr bool isVisited() const;
 		constexpr int getTileIndex() const;
 		constexpr int getRingIndex() const;
 		constexpr float getHexRingEdgeAngle() const;
 
 		constexpr T* getNextRingTile() const;
 		constexpr T* getPrevoiusRingTile() const;
-
 		constexpr ColorId getColorId() const;
-		constexpr ColorId getPreviousColorId() const;
 		
 		void addNeighbour(T*);
+		void setVisited(const bool pVisited);
 
 		std::vector<T*> getInnerNeighbours();
 		std::vector<T*> getOuterNeighbours();
-		constexpr const std::vector<T*>& getNeighbours();
+		constexpr const std::vector<T*>& getNeighbours() const;
 
 		void setNextRingTile(T*);
 	};

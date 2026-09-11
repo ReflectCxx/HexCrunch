@@ -1,11 +1,14 @@
 
+#include "Game.h"
 #include "Slider.h"
 #include "HexGrid.h"
+#include "HexTAlgo.h"
 #include "HexTile.hpp"
-#include "Game.h"
 #include "GridManager.h"
 
+
 USING_NS_CC;
+
 
 namespace hex
 {
@@ -47,12 +50,77 @@ namespace hex
 			m_controller.pushRotateGrid(theta);
 		}
 	}
+	
+
+	void GridManager::donePullingTiles(Slider& pSlider)
+	{
+		auto& ringsMat = Game::instance().grid().getHexagonRings();
+		for (int ri = m_ringIndex; ri < RING_COUNT; ri++) {
+			for (auto t : ringsMat[ri]) {
+				if (t->getColorId() == ColorId::None) {
+					t->setState(TileState::Stray);
+				}
+			}
+		}
+
+		const auto cb = [&]()->void {
+			if (!clearRingsMade(pSlider))
+			{
+				auto& ringsMat = Game::instance().grid().getHexagonRings();
+				for (auto tile : ringsMat[RING_COUNT - 1]) {
+					if (tile->getState() == TileState::None) {
+						m_controller.pushSpawnTile(*tile);
+					}
+				}
+
+				m_controller.pushCallback([&]() {
+					pSlider.setActive(true);
+				});
+			}
+		};
+		m_controller.pushCallback(cb);
+	}
+
+
+	void GridManager::pullOuterRingTiles(Slider& pSlider)
+	{
+		bool anyTileMoved = false;
+		auto& ringsMat = Game::instance().grid().getHexagonRings();
+
+		for (int ri = m_ringIndex; ri < (RING_COUNT - 1); ri++)
+		{
+			std::vector<HexTile*> emptyTiles;
+			for (auto tile : ringsMat[ri]) {
+				if (tile->getColorId() == ColorId::None) {
+					emptyTiles.push_back(tile);
+				}
+			}
+
+			auto claimed = HexAlgo<HexTile>::claimNeighboursColor(emptyTiles);
+			for (auto [emptyT, neighbourT] : claimed) {
+				m_controller.pushAcquireNeighbour(*emptyT, *neighbourT);
+				anyTileMoved = true;
+			}
+		}
+
+		if (anyTileMoved) {
+			m_controller.pushCallback([&]() {
+				pullOuterRingTiles(pSlider);
+			});
+		}
+		else {
+			donePullingTiles(pSlider);
+		}
+	}
 
 
 	bool GridManager::clearRingsMade(Slider& pSlider)
 	{
 		auto isMakingRing = [](const std::vector<HexTile*>& pRing)->bool {
 			const auto color = pRing[0]->getColorId();
+			if (color == ColorId::None) {
+				return false;
+			}
 			for (const auto tile : pRing) {
 				if (tile->getColorId() != color) {
 					return false;
@@ -61,75 +129,30 @@ namespace hex
 			return true;
 		};
 
+		m_ringIndex = -1;
+		m_ringColor = ColorId::None;
 		auto& ringsMat = Game::instance().grid().getHexagonRings();
+
 		for (int ri = 0; ri < RING_COUNT; ri++) {
 			if (isMakingRing(ringsMat[ri])) {
-				m_ringsMade.push_back({ ri, ringsMat[ri][0]->getColorId() });
+				m_ringIndex = ri;
+				m_ringColor = ringsMat[ri][0]->getColorId();
 				m_controller.pushClearRing(ri);
+				break;
 			}
 		}
 
-		if (m_ringsMade.empty()) {
+		if (m_ringColor == ColorId::None) {
 			CCLOG("No rings to clear.");
 			return false;
 		}
+		CCLOG("Rings made at index: %d", std::to_string(m_ringIndex).c_str());
 
-		CCLOG("Rings made : { %s }", std::to_string(m_ringsMade.size()).c_str());
 		m_controller.pushCallback(
 			[&]()->void {
 				pullOuterRingTiles(pSlider);
 			}
 		);
 		return true;
-	}
-
-
-	void GridManager::pullOuterRingTiles(Slider& pSlider)
-	{
-		auto& ringsMat = Game::instance().grid().getHexagonRings();
-		
-		bool anyTileMoved = false;
-		const auto ringIndex = m_ringsMade.back().first;
-		const auto ringColor = m_ringsMade.back().second;
-
-		for (int ri = ringIndex; ri < RING_COUNT; ri++) 
-		{
-			for (auto tile : ringsMat[ri]) {
-				if (tile->getColorId() == ColorId::None)
-				{
-					if (ri == RING_COUNT - 1) {
-						tile->assignColor(ringColor);
-						tile->setState(TileState::None);
-					}
-					else if (m_controller.pushAcquireNeighbour(*tile)) {
-						anyTileMoved = true;
-					}
-				}
-			}
-		}
-
-		if (!anyTileMoved) {
-			m_ringsMade.pop_back();
-		}
-		bool continuePull = !m_ringsMade.empty();
-
-		m_controller.pushCallback(
-			[&, continuePull]()->void {
-				if (continuePull) {
-					pullOuterRingTiles(pSlider);
-				}
-				else if (!clearRingsMade(pSlider)) {
-					for (auto tile : ringsMat[RING_COUNT - 1]) {
-						if (tile->getState() == TileState::None) {
-							m_controller.pushSpawnTile(*tile);
-						}
-					}
-
-					m_controller.pushCallback([&]() { 
-						pSlider.setActive(true); 
-					});
-				}
-			}
-		);
 	}
 }

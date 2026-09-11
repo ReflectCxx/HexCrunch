@@ -20,12 +20,14 @@ namespace hex
         }
         addChild(Asset::createGameBg());
 
-        auto& grid = Game::instance().grid();
-        grid.setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
-        addChild(&grid);
+        const auto grid = HexGrid::create();//Game::instance().grid();
+        grid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
+        addChild(grid);
         
+        Game::instance().setGrid(grid);
+
         m_touchConsumer = std::make_unique<TouchConsumer>();
-        m_touchConsumer->init(grid.getHexagonRings()[RING_COUNT - 2][0]);
+        m_touchConsumer->init(grid->getHexagonRings()[RING_COUNT - 2][0]);
 
         m_touchTracker = std::make_unique<TouchTracker>(
             this,

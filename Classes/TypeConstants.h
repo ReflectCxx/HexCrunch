@@ -31,16 +31,6 @@ namespace hex
 		Expired
 	};
 
-	//enum class CmdKind {
-	//	None,
-	//	CallBack,
-	//	SpawnTile,
-	//	ClearTile,
-	//	PullSwap,
-	//	SliderSwap,
-	//	RotateGrid,
-	//	PullDownTile
-	//};
 
 	enum class ColorId {
 		None,
@@ -63,10 +53,10 @@ namespace hex
 	enum class TileState {
 		None,
 		Idle,
+		Stray,
 		Actor,
 		Follower,
 		Blocked,
 		RingFace,
-		Highlighted
 	};
 }

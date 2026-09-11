@@ -1,7 +1,6 @@
 
-#include <random>
-#include <utility>
 
+#include "Game.h"
 #include "HexGrid.h"
 #include "HexTile.h"
 #include "DrawingUtils.h"
@@ -13,38 +12,6 @@ namespace
 	constexpr auto BG_NODE_Z = 0;
 	constexpr auto LINK_NODE_Z = 1;
 	constexpr auto HEXGRID_NODE_Z = 2;
-}
-
-
-namespace
-{
-	static std::vector<hex::ColorId>& get_colors() 
-	{
-		static auto colors = []()->auto {
-
-			std::vector<int> count = { 6, 12, 18, 24, 30 };		//total tiles 90 tiles.
-			std::vector<hex::ColorId> arr = {
-				hex::ColorId::Red,
-				hex::ColorId::Green,
-				hex::ColorId::Yellow,
-				hex::ColorId::Blue,
-				hex::ColorId::Purple
-			};
-
-			std::random_device rd;
-			std::mt19937 rng(rd());
-			std::shuffle(count.begin(), count.end(), rng);
-
-			std::vector<hex::ColorId> colorBag;
-			for (size_t i = 0; i < arr.size(); ++i) {
-				colorBag.insert(colorBag.end(), count[i], arr[i]);
-			}
-			std::shuffle(colorBag.begin(), colorBag.end(), rng);
-			return colorBag;
-		}();
-
-		return colors;
-	}
 }
 
 
@@ -90,11 +57,9 @@ namespace hex
 
 	HexTile* HexGrid::spawnNewTile(const cocos2d::Vec2& pPos, const int pRingIndex, const int pTileIndex)
 	{
-		auto& colors = get_colors();
 		auto colorId = ColorId::None;
 		if (pRingIndex < RING_COUNT) {
-			colorId = colors.back();
-			colors.pop_back();
+			colorId = Game::instance().popColor();
 		}
 
 		constexpr auto HEX_TILES_COUNT = (HEX_6 / 2) * (RING_COUNT + 1) * (RING_COUNT + 2);

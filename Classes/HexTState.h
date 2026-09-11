@@ -24,8 +24,8 @@ namespace hex
 		bool turnOnBlocked();
 		bool turnOffBlocked();
 
-		bool turnOnHighlighted();
-		bool turnOffHighlighted();
+		bool turnOnStray();
+		bool turnOffStray();
 
 	public:
 

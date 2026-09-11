@@ -2,7 +2,7 @@
 
 #include "Game.h"
 #include "Command.h"
-#include "HexTile.h"
+#include "HexTile.hpp"
 #include "GridFxController.h"
 
 namespace hex

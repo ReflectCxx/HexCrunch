@@ -54,7 +54,7 @@ namespace hex
 {
 	cocos2d::Sprite* Asset::createTileBg(const Size& pSz)
 	{
-		return createTile(TILE_BG, pSz * 1.1f);
+		return createTile(TILE_BG, pSz);
 	}
 
 

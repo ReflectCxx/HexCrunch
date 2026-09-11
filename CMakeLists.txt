@@ -98,6 +98,7 @@ list(APPEND GAME_HEADER
      Classes/GridManager.h
      Classes/HexT.h
      Classes/HexT.hpp
+     Classes/HexTAlgo.h
      Classes/HexTile.h
      Classes/HexTile.hpp
      Classes/HexTState.h

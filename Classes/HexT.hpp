@@ -9,7 +9,8 @@ namespace hex
 {
 	template<class T>
 	Hex<T>::Hex(const ColorId pColorId, const int pRingIndex, const int pTileIndex)
-		: m_ringIndex(pRingIndex)
+		: m_visited(false)
+		, m_ringIndex(pRingIndex)
 		, m_tileIndex(pTileIndex)
 		, m_next(nullptr)
 		, m_previous(nullptr)
@@ -22,37 +23,43 @@ namespace hex
 
 
 	template<class T>
-	inline constexpr int Hex<T>::getRingIndex() const {
+	constexpr int Hex<T>::getRingIndex() const {
 		return m_ringIndex;
 	};
 
 
 	template<class T>
-	inline constexpr int Hex<T>::getTileIndex() const {
+	constexpr bool Hex<T>::isVisited() const {
+		return m_visited;
+	}
+
+
+	template<class T>
+	constexpr int Hex<T>::getTileIndex() const {
 		return m_tileIndex;
 	};
 
 
 	template<class T>
-	inline constexpr T* Hex<T>::getNextRingTile() const {
+	constexpr T* Hex<T>::getNextRingTile() const {
 		return m_next;
 	};
 
 
 	template<class T>
-	inline constexpr T* Hex<T>::getPrevoiusRingTile() const {
+	constexpr T* Hex<T>::getPrevoiusRingTile() const {
 		return m_previous;
 	};
 
 
 	template<class T>
-	inline constexpr ColorId Hex<T>::getColorId() const {
+	constexpr ColorId Hex<T>::getColorId() const {
 		return m_colorId;
 	}
 
 
 	template<class T>
-	constexpr const std::vector<T*>& Hex<T>::getNeighbours() {
+	constexpr const std::vector<T*>& Hex<T>::getNeighbours() const {
 		return m_neighbours;
 	}
 
@@ -62,6 +69,11 @@ namespace hex
 		if (std::find(m_neighbours.begin(), m_neighbours.end(), pTile) == m_neighbours.end()) {
 			m_neighbours.push_back(pTile);
 		}
+	}
+
+	template<class T>
+	inline void Hex<T>::setVisited(const bool pVisited) {
+		m_visited = pVisited;
 	}
 
 

@@ -62,9 +62,10 @@ namespace hex
 
 	void TouchConsumer::onInputRecieved(const Swipe pDir, const bool pIsMockInput)
 	{
-		if (!Game::instance().acceptInput() || !m_slider.isActive()) {
-			const auto cmdK = Game::instance().fxController().getRunningCmdCount();
-			CCLOG("Grid not idle! %lu cmds running.", cmdK);
+		if (!Game::instance().acceptInput() || !m_slider.isActive()) 
+		{
+			CCLOG("Grid not idle! %lu cmds running.", 
+				  Game::instance().fxController().getRunningCmdCount());
 			return;
 		}
 

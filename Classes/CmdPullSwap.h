@@ -9,29 +9,32 @@ namespace hex
 {
 	struct CmdPullSwap
 	{
-		static std::optional<Command> create(HexTile& pTile)
+		static Command create(HexTile& pTile, HexTile& pPullFrom)
 		{
-			auto action = CmdPullSwap{ pTile };
-			if (action.init()) {
-				return Command{
+			auto action = CmdPullSwap{ pTile, pPullFrom };
+			return Command{
 
-					BlocksQ::No,
-					Game::instance().fxController(),
-					[action] (Command& pCmd)-> void {
-						action.run(pCmd);
-					}
-				};
-			}
-			return std::nullopt;
+				BlocksQ::No,
+				Game::instance().fxController(),
+				[action](Command& pCmd)-> void {
+					action.run(pCmd);
+				}
+			};
 		}
-
-		HexTile& m_tile;
-		cocos2d::Vec2 m_pullFromPos = { 0.f, 0.f };
 
 		void run(Command& pCmd) const;
 
 	private:
 
-		bool init();
+		HexTile& m_tile;
+		const cocos2d::Vec2 m_pullFromPos;
+
+		CmdPullSwap(HexTile& pTile, HexTile& pPullFrom)
+			: m_tile(pTile)
+			, m_pullFromPos(pPullFrom.getPosition())
+		{
+			m_tile.swapColor(pPullFrom, false);
+			pPullFrom.setState(TileState::None);
+		}
 	};
 }

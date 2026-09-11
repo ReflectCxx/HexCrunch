@@ -39,7 +39,7 @@ namespace hex
 		case TileState::Follower: return turnOffFollower();
 		case TileState::RingFace: return turnOffRingFace();
 		case TileState::Blocked: return turnOffBlocked();
-		case TileState::Highlighted: return turnOffHighlighted();
+		case TileState::Stray: return turnOffStray();
 		case TileState::None: {
 			initStateZero();
 			return true;
@@ -58,7 +58,7 @@ namespace hex
 		case TileState::Follower: return turnOnFollower();
 		case TileState::RingFace: return turnOnRingFace();
 		case TileState::Blocked: return turnOnBlocked();
-		case TileState::Highlighted: return turnOnHighlighted();
+		case TileState::Stray: return turnOnStray();
 		default: return false;
 		}
 	}
@@ -117,20 +117,16 @@ namespace hex
 	}
 
 
-	bool HexTState::turnOnHighlighted()
+	bool HexTState::turnOnStray()
 	{
-		//const auto ang = getIdleFace().getRotation();
-		//getIdleFace().setRotation(ang + 60.f);
-		getIdleFace().setVisible(true);
+		getBackground().setVisible(true);
 		return true;
 	}
 
 
-	bool HexTState::turnOffHighlighted()
+	bool HexTState::turnOffStray()
 	{
-		//const auto ang = getIdleFace().getRotation();
-		//getIdleFace().setRotation(ang - 60.f);
-		getIdleFace().setVisible(false);
+		getBackground().setVisible(false);
 		return true;
 	}
 }
@@ -148,6 +144,7 @@ namespace hex
 		getLink().setVisible(false);
 		getRingFace().setVisible(false);
 		getBackground().setVisible(false);
+		getBackground().setScale(1.f);
 		return true;
 	}
 
@@ -163,6 +160,7 @@ namespace hex
 		getLink().setVisible(true);
 		getRingFace().setVisible(true);
 		getBackground().setVisible(true);
+		getBackground().setScale(1.1f);
 		return true;
 	}
 }
@@ -186,6 +184,7 @@ namespace hex
 		getLink().setVisible(true);
 		getRingFace().setVisible(true);
 		getBackground().setVisible(true);
+		getBackground().setScale(1.1f);
 
 		return true;
 	}
@@ -206,6 +205,7 @@ namespace hex
 		getLink().setVisible(false);
 		getRingFace().setVisible(false);
 		getBackground().setVisible(false);
+		getBackground().setScale(1.f);
 		return true;
 	}
 }

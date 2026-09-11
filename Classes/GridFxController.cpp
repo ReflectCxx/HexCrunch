@@ -34,6 +34,13 @@ namespace hex
 		push(std::move(cmd));
 	}
 
+	
+	void GridFxController::pushAcquireNeighbour(HexTile& pTile, HexTile& pPullFrom)
+	{
+		auto cmd = CmdPullSwap::create(pTile, pPullFrom);
+		push(std::move(cmd));
+	}
+
 
 	void GridFxController::pushSliderSwap(const Slider& pSlider, const CallBack& pOnEndCb)
 	{
@@ -49,17 +56,6 @@ namespace hex
 		for (const auto tile : ring) {
 			push(CmdClearRingTile::create(*tile));
 		}
-	}
-
-
-	bool GridFxController::pushAcquireNeighbour(HexTile& pTile)
-	{
-		auto cmd = CmdPullSwap::create(pTile);
-		if (cmd) {
-			push(std::move(cmd.value()));
-			return true;
-		}
-		return false;
 	}
 
 
