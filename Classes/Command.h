@@ -14,7 +14,6 @@ namespace hex
 		inline static std::uint32_t m_counter{ 0 };
 
 		const BlocksQ m_blockQ;
-		const CmdKind m_cmdKind;
 		const std::size_t m_cmdId;
 		std::function<void(Command&)> m_command;
 
@@ -30,11 +29,10 @@ namespace hex
 		void end();
 		void execute();
 		void unblockQ();
-		constexpr CmdKind getKind() const;
 
 		Command(Command&&) noexcept;
-		Command(BlocksQ pBlockQ, const CmdKind pCmdK,
-				CommandController& pCC, std::function<void(Command&)> pCmd);
+		Command(BlocksQ pBlockQ, CommandController& pCC,
+				std::function<void(Command&)> pCmd);
 	};
 }
 

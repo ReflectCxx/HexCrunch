@@ -14,7 +14,6 @@ namespace hex
 			return Command{
 
 				BlocksQ::Yes,
-				CmdKind::ClearTile,
 				Game::instance().fxController(),
 				[action = CmdClearRingTile{ pTile }]
 				(Command& pCmd)->void {

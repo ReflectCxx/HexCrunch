@@ -66,9 +66,9 @@ namespace hex
 	void GridFxController::pushCallback(const CallBack& pCallBack)
 	{
 		push(Command{
-			BlocksQ::Join,
-			CmdKind::CallBack,
-			*this, [=](Command& pCmd)->void {
+			BlocksQ::Join, *this,
+			[=](Command& pCmd)->void {
+
 				pCmd.end();
 				pCallBack();
 			}
@@ -79,9 +79,8 @@ namespace hex
 	void GridFxController::pushSpawnTile(HexTile& pTile)
 	{
 		push(Command{
-			BlocksQ::No,
-			CmdKind::CallBack,
-			*this, [&](Command& pCmd)->void {
+			BlocksQ::No, *this,
+			[&](Command& pCmd)->void {
 
 				pTile.setState(TileState::Idle);
 				pTile.setScale(0.01f);

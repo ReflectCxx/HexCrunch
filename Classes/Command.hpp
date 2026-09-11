@@ -5,29 +5,22 @@
 
 namespace hex
 {
-	constexpr CmdKind Command::getKind() const {
-		return m_cmdKind;
-	}
-
-
-	inline Command::Command(BlocksQ pBlockQ, const CmdKind pCmdK ,
-						    CommandController& pCC, std::function<void(Command&)> pCmd)
+	inline Command::Command(BlocksQ pBlockQ, CommandController& pCC,
+							std::function<void(Command&)> pCmd)
 		: m_blockQ(pBlockQ)
-		, m_cmdKind(pCmdK)
+		, m_cmdId(m_counter++)
 		, m_command(std::move(pCmd))
 		, m_cmdState(CmdState::None)
-		, m_controller(pCC)
-		, m_cmdId(m_counter++){
+		, m_controller(pCC) {
 	}
 
 
 	inline Command::Command(Command&& pOther) noexcept
 		: m_blockQ(pOther.m_blockQ)
-		, m_cmdKind(pOther.m_cmdKind)
+		, m_cmdId(pOther.m_cmdId)
 		, m_command(std::move(pOther.m_command))
 		, m_controller(pOther.m_controller)
-		, m_cmdState(pOther.m_cmdState)
-		, m_cmdId(pOther.m_cmdId) {
+		, m_cmdState(pOther.m_cmdState) {
 		pOther.m_cmdState = CmdState::Expired;
 	}
 

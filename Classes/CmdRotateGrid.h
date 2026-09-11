@@ -13,7 +13,6 @@ namespace hex
 			return Command{
 
 				BlocksQ::Yes,
-				CmdKind::RotateGrid,
 				Game::instance().fxController(),
 				[action = CmdRotateGrid{ pAngle }]
 				(Command& pCmd)->void {

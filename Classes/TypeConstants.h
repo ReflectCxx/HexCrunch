@@ -31,16 +31,16 @@ namespace hex
 		Expired
 	};
 
-	enum class CmdKind {
-		None,
-		CallBack,
-		SpawnTile,
-		ClearTile,
-		PullSwap,
-		SliderSwap,
-		RotateGrid,
-		PullDownTile
-	};
+	//enum class CmdKind {
+	//	None,
+	//	CallBack,
+	//	SpawnTile,
+	//	ClearTile,
+	//	PullSwap,
+	//	SliderSwap,
+	//	RotateGrid,
+	//	PullDownTile
+	//};
 
 	enum class ColorId {
 		None,

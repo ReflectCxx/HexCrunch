@@ -16,7 +16,6 @@ namespace hex
 				return Command{
 
 					BlocksQ::No,
-					CmdKind::PullSwap,
 					Game::instance().fxController(),
 					[action] (Command& pCmd)-> void {
 						action.run(pCmd);
