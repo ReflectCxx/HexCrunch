@@ -9,13 +9,22 @@ namespace {
 
 namespace hex
 {
+	CmdPullSwap::CmdPullSwap(HexTile& pTile, HexTile& pPullFrom)
+		: m_tile(pTile)
+		, m_pullFromPos(pPullFrom.getPosition())
+	{
+		m_tile.swapColor(pPullFrom, false);
+		pPullFrom.setState(TileState::None);
+	}
+
+
 	void CmdPullSwap::run(Command& pCmd) const
 	{
 		const auto pos = m_tile.getPosition();
 		m_tile.setPosition(m_pullFromPos);
 
 		auto resetV = m_tile.getLink().isVisible();
-		if (m_tile.getState() == TileState::None) {
+		if (m_tile.getState() == TileState::None || m_tile.getState() == TileState::Stray) {
 			m_tile.setState(TileState::Idle);
 			m_tile.getLink().setVisible(true);
 			resetV = false;

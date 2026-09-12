@@ -20,6 +20,7 @@ namespace hex
 		Game();
 		void seedColors();
 		void setGrid(HexGrid* pGrid);
+		void pushColor(const ColorId);
 
 	public:
 
@@ -33,9 +34,8 @@ namespace hex
 		GridFxController& fxController();
 
 		bool acceptInput();
-
 		const ColorId popColor();
-		void pushColor(const ColorId);
+		void ringCleared(const std::size_t pRingIndex);
 
 		static Game& instance();
 		friend GameScene;

@@ -120,6 +120,9 @@ namespace hex
 	bool HexTState::turnOnStray()
 	{
 		getBackground().setVisible(true);
+		const auto bg = getBackground().getChildren().at(0);
+		bg->setOpacity(255 * 0.3f);
+		
 		return true;
 	}
 
@@ -127,6 +130,8 @@ namespace hex
 	bool HexTState::turnOffStray()
 	{
 		getBackground().setVisible(false);
+		const auto bg = getBackground().getChildren().at(0);
+		bg->setOpacity(255);
 		return true;
 	}
 }

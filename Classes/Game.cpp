@@ -58,6 +58,10 @@ namespace hex
 		m_colorStack.pop_back();
 		return color;
 	}
+
+	void Game::ringCleared(const std::size_t pRingIndex) {
+
+	}
 }
 
 

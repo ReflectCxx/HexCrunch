@@ -54,15 +54,6 @@ namespace hex
 
 	void GridManager::donePullingTiles(Slider& pSlider)
 	{
-		auto& ringsMat = Game::instance().grid().getHexagonRings();
-		for (int ri = m_ringIndex; ri < RING_COUNT; ri++) {
-			for (auto t : ringsMat[ri]) {
-				if (t->getColorId() == ColorId::None) {
-					t->setState(TileState::Stray);
-				}
-			}
-		}
-
 		const auto cb = [&]()->void {
 			if (!clearRingsMade(pSlider))
 			{
@@ -103,7 +94,15 @@ namespace hex
 			}
 		}
 
-		if (anyTileMoved) {
+		if (anyTileMoved) 
+		{
+			for (int ri = m_ringIndex; ri < RING_COUNT; ri++) {
+				for (auto t : ringsMat[ri]) {
+					if (t->getColorId() == ColorId::None) {
+						t->setState(TileState::Stray);
+					}
+				}
+			}
 			m_controller.pushCallback([&]() {
 				pullOuterRingTiles(pSlider);
 			});

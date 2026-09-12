@@ -56,6 +56,7 @@ namespace hex
 		for (const auto tile : ring) {
 			push(CmdClearRingTile::create(*tile));
 		}
+		Game::instance().ringCleared(pIndex);
 	}
 
 
