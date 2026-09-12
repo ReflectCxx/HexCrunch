@@ -16,7 +16,9 @@ namespace hex
 	{
 		auto nextTile = &ringTile;
 		do {
-			nextTile->setState(state);
+			if (nextTile->getColorId() != ColorId::None) {
+				nextTile->setState(state);
+			}
 			nextTile = static_cast<HexTile*>(nextTile->getNextRingTile());
 		} while (nextTile != &ringTile);
 	}
@@ -58,9 +60,11 @@ namespace hex
 			if (!clearRingsMade(pSlider))
 			{
 				auto& ringsMat = Game::instance().grid().getHexagonRings();
-				for (auto tile : ringsMat[RING_COUNT - 1]) {
-					if (tile->getState() == TileState::None) {
-						m_controller.pushSpawnTile(*tile);
+				for (int ri = 0; ri < RING_COUNT; ri++) {
+					for (const auto t : ringsMat[ri]) {
+						if (t->getColorId() == ColorId::None) {
+							m_controller.pushSpawnTile(*t);
+						}
 					}
 				}
 

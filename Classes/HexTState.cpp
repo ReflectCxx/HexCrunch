@@ -103,16 +103,26 @@ namespace hex
 {
 	bool HexTState::turnOffRingFace()
 	{
-		getLink().setVisible(false);
-		getRingFace().setVisible(false);
+		if (getNextRingTile()->getColorId() != ColorId::None) {
+			getLink().setVisible(false);
+			getRingFace().setVisible(false);
+		}
+		else {
+			getIdleFace().setVisible(false);
+		}
 		return true;
 	}
 
 
 	bool HexTState::turnOnRingFace()
 	{
-		getLink().setVisible(true);
-		getRingFace().setVisible(true);
+		if (getNextRingTile()->getColorId() != ColorId::None) {
+			getLink().setVisible(true);
+			getRingFace().setVisible(true);
+		}
+		else {
+			getIdleFace().setVisible(true);
+		}
 		return true;
 	}
 

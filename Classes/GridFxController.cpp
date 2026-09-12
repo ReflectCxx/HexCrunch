@@ -79,6 +79,9 @@ namespace hex
 			BlocksQ::No, *this,
 			[&](Command& pCmd)->void {
 
+				const auto color = Game::instance().popColor();
+				pTile.assignColor(color);
+				pTile.refreshView();
 				pTile.setState(TileState::Idle);
 				pTile.setScale(0.01f);
 				pTile.runAction(

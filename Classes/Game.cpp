@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "HexGrid.h"
+#include "HexTile.hpp"
 #include "GridManager.h"
 #include "Game.h"
 
@@ -59,20 +60,51 @@ namespace hex
 		return color;
 	}
 
-	void Game::ringCleared(const std::size_t pRingIndex) {
+	void Game::ringCleared(const std::size_t pRingIndex)
+	{
+		const auto color = m_grid->getHexagonRings()[pRingIndex][0]->getColorId();
+		const auto popCount = (HEX_6 * (pRingIndex + 1));
 
+		for (int i = 0; i < popCount; i++) {
+			pushColor(color);
+		}
 	}
 }
 
 
 namespace hex
 {
+	bool Game::gridSanityCheck()
+	{
+		std::unordered_map<ColorId, int> onGrid;
+		const auto& ringsMat = m_grid->getHexagonRings();
+		for (const auto& ring : ringsMat) {
+			for (const auto t : ring) {
+				const auto color = t->getColorId();
+				if (color != ColorId::None) {
+					onGrid[color]++;
+				}
+			}
+		}
+
+		for (int i = 0; i < m_colors.size(); i++) {
+			const auto [color, count] = m_colors[i];
+			const auto onGridCount = onGrid[color];
+			const auto offGridCount = m_offGrid[i].second;
+			if (count != (onGridCount + offGridCount)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	
 	void Game::seedColors()
 	{
 		static std::mt19937 s_rng{ std::random_device{}() };
 
 		std::vector<int> count = { 6, 12, 18, 24, 30 };		//total tiles 90 tiles.
-		std::vector<hex::ColorId> arr = {
+		const std::vector<hex::ColorId> colors = {
 			hex::ColorId::Red,
 			hex::ColorId::Green,
 			hex::ColorId::Yellow,
@@ -81,15 +113,14 @@ namespace hex
 		};
 
 		std::shuffle(count.begin(), count.end(), s_rng);
-
 		for (std::size_t i = 0; i < count.size(); i++) {
-			m_colors.push_back({ arr[i], count[i] });
+			m_colors.push_back({ colors[i], count[i] });
+			m_offGrid.push_back({ colors[i], 0 });
 		}
 
-		for (size_t i = 0; i < arr.size(); ++i) {
-			m_colorStack.insert(m_colorStack.end(), count[i], arr[i]);
+		for (size_t i = 0; i < colors.size(); ++i) {
+			m_colorStack.insert(m_colorStack.end(), count[i], colors[i]);
 		}
-
 		std::shuffle(m_colorStack.begin(), m_colorStack.end(), s_rng);
 	}
 }

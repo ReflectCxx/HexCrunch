@@ -37,6 +37,8 @@ namespace hex
 		const ColorId popColor();
 		void ringCleared(const std::size_t pRingIndex);
 
+		bool gridSanityCheck();
+
 		static Game& instance();
 		friend GameScene;
 	};

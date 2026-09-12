@@ -9,8 +9,7 @@ namespace hex
 {
 	template<class T>
 	Hex<T>::Hex(const ColorId pColorId, const int pRingIndex, const int pTileIndex)
-		: m_visited(false)
-		, m_ringIndex(pRingIndex)
+		: m_ringIndex(pRingIndex)
 		, m_tileIndex(pTileIndex)
 		, m_next(nullptr)
 		, m_previous(nullptr)
@@ -26,12 +25,6 @@ namespace hex
 	constexpr int Hex<T>::getRingIndex() const {
 		return m_ringIndex;
 	};
-
-
-	template<class T>
-	constexpr bool Hex<T>::isVisited() const {
-		return m_visited;
-	}
 
 
 	template<class T>
@@ -69,11 +62,6 @@ namespace hex
 		if (std::find(m_neighbours.begin(), m_neighbours.end(), pTile) == m_neighbours.end()) {
 			m_neighbours.push_back(pTile);
 		}
-	}
-
-	template<class T>
-	inline void Hex<T>::setVisited(const bool pVisited) {
-		m_visited = pVisited;
 	}
 
 

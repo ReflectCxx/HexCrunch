@@ -60,8 +60,10 @@ namespace hex
 		auto& grid = Game::instance().grid();
 		if (pFlag == Turn::On) {
 			grid.manager().setRingTilesState(actor(), TileState::RingFace);
-			actor().setState(TileState::Actor);
-			follower().setState(TileState::Follower);
+			if (actor().getColorId() != ColorId::None) {
+				actor().setState(TileState::Actor);
+				follower().setState(TileState::Follower);
+			}
 		}
 		else {
 			follower().setState(TileState::Idle);
