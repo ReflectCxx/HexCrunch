@@ -24,7 +24,7 @@ namespace hex
 	}
 
 
-	void GridManager::swapSelection(Slider& pSlider, const std::function<void()>& pOnEndCb) 
+	void GridManager::swapSelection(Slider& pSlider, const std::function<void()>& pOnEndCb)
 	{
 		const auto cb = [=, &pSlider]()->void {
 			if (clearRingsMade(pSlider)) {
@@ -47,12 +47,12 @@ namespace hex
 		const auto d = (otherPosW - gridPosW);
 		float theta = std::round(std::atan2(-d.y, d.x) * 180.0f / static_cast<float>(M_PI));
 
-		if (theta <= 30.f || theta >= 150.f){
+		if (theta <= 30.f || theta >= 150.f) {
 			const auto theta = ((playerPos.x > gridPosW.x) ? 60.f : -60.f);
 			m_controller.pushRotateGrid(theta);
 		}
 	}
-	
+
 
 	void GridManager::donePullingTiles(Slider& pSlider)
 	{
@@ -60,60 +60,21 @@ namespace hex
 			if (!clearRingsMade(pSlider))
 			{
 				auto& ringsMat = Game::instance().grid().getHexagonRings();
+				int count = 0;
 				for (int ri = 0; ri < RING_COUNT; ri++) {
 					for (const auto t : ringsMat[ri]) {
 						if (t->getColorId() == ColorId::None) {
 							m_controller.pushSpawnTile(*t);
+							count++;
 						}
 					}
 				}
-
 				m_controller.pushCallback([&]() {
 					pSlider.setActive(true);
 				});
 			}
 		};
 		m_controller.pushCallback(cb);
-	}
-
-
-	void GridManager::pullOuterRingTiles(Slider& pSlider)
-	{
-		bool anyTileMoved = false;
-		auto& ringsMat = Game::instance().grid().getHexagonRings();
-
-		for (int ri = m_ringIndex; ri < (RING_COUNT - 1); ri++)
-		{
-			std::vector<HexTile*> emptyTiles;
-			for (auto tile : ringsMat[ri]) {
-				if (tile->getColorId() == ColorId::None) {
-					emptyTiles.push_back(tile);
-				}
-			}
-
-			auto claimed = HexAlgo<HexTile>::claimNeighboursColor(emptyTiles);
-			for (auto [emptyT, neighbourT] : claimed) {
-				m_controller.pushAcquireNeighbour(*emptyT, *neighbourT);
-				anyTileMoved = true;
-			}
-		}
-
-		if (anyTileMoved) 
-		{
-			for (int ri = m_ringIndex; ri < RING_COUNT; ri++) {
-				for (auto t : ringsMat[ri]) {
-					if (t->getColorId() == ColorId::None) {
-						t->setState(TileState::Stray);
-					}
-				}
-			}
-			m_controller.pushCallback([&]() {
-				pullOuterRingTiles(pSlider);
-			});
-		}
-		else {
-			donePullingTiles(pSlider);
-		}
 	}
 
 
@@ -146,10 +107,9 @@ namespace hex
 		}
 
 		if (m_ringColor == ColorId::None) {
-			CCLOG("No rings to clear.");
 			return false;
 		}
-		CCLOG("Rings made at index: %d", std::to_string(m_ringIndex).c_str());
+		CCLOG("Ring index: { %lu }", std::to_string(m_ringIndex).c_str());
 
 		m_controller.pushCallback(
 			[&]()->void {
@@ -157,5 +117,46 @@ namespace hex
 			}
 		);
 		return true;
+	}
+
+
+	void GridManager::pullOuterRingTiles(Slider& pSlider)
+	{
+		bool anyTileMoved = false;
+		auto& ringsMat = Game::instance().grid().getHexagonRings();
+
+		for (int ri = m_ringIndex; ri < (RING_COUNT - 1); ri++)
+		{
+			std::vector<HexTile*> emptyTiles;
+			for (auto tile : ringsMat[ri]) {
+				if (tile->getColorId() == ColorId::None) {
+					emptyTiles.push_back(tile);
+				}
+			}
+
+			auto claimed = HexAlgo<HexTile>::claimNeighboursColor(emptyTiles);
+			for (auto [emptyT, neighbourT] : claimed) {
+				m_controller.pushAcquireNeighbour(*emptyT, *neighbourT);
+				anyTileMoved = true;
+			}
+		}
+
+		if (anyTileMoved)
+		{
+			for (int ri = m_ringIndex; ri < RING_COUNT; ri++) {
+				for (auto t : ringsMat[ri]) {
+					if (t->getColorId() == ColorId::None) {
+						t->setState(TileState::Stray);
+					}
+				}
+			}
+
+			m_controller.pushCallback([&]() {
+				pullOuterRingTiles(pSlider);
+			});
+		}
+		else {
+			donePullingTiles(pSlider);
+		}
 	}
 }

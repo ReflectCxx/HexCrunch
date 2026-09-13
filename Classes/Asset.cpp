@@ -80,6 +80,15 @@ namespace hex
 	}
 
 
+	cocos2d::Sprite* Asset::createArrow()
+	{
+		auto arrow = Sprite::create(ARROW);
+		const auto scale = (HEX_RAD * 0.6f) / arrow->getContentSize().width;
+		arrow->setScale(scale);
+		return arrow;
+	}
+
+
 	Sprite* Asset::createTile(const std::string& pName, const Size& pSz)
 	{
 		auto tile = Sprite::create(pName);

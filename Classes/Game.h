@@ -16,11 +16,13 @@ namespace hex
 		std::vector<std::pair<ColorId, int>> m_offGrid;
 
 		HexGrid* m_grid = nullptr;
+		GameScene* m_scene = nullptr;
 
 		Game();
 		void seedColors();
 		void setGrid(HexGrid* pGrid);
 		void pushColor(const ColorId);
+		void setGameScene(GameScene*);
 
 	public:
 
@@ -30,6 +32,7 @@ namespace hex
 		Game& operator=(const Game&) = delete;
 
 		HexGrid& grid();
+		GameScene& scene();
 		GridManager& gridManager();
 		GridFxController& fxController();
 

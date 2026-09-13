@@ -8,10 +8,12 @@ namespace hex
 {
 	class HexTile : public Hex<HexTile>, public cocos2d::Node
 	{
-		cocos2d::Node* m_blockFace;
-		cocos2d::Node* m_clipped;
-		cocos2d::Node* m_idleFace;
+		cocos2d::Node* m_arrow;
+		cocos2d::Node* m_hexIdle;
+		cocos2d::Node* m_hexBlocked;
+		cocos2d::Node* m_hexClipped;
 		cocos2d::DrawNode* m_hexLink;
+
 		cocos2d::ClippingNode* m_ringFace;
 		cocos2d::ClippingNode* m_background;
 
@@ -33,6 +35,8 @@ namespace hex
 
 		static HexTile* create(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
+		const float getArrowAngle();
+		constexpr cocos2d::Node& getArrow();
 		constexpr cocos2d::Node& getRingFace();
 		constexpr cocos2d::Node& getIdleFace();
 		constexpr cocos2d::Node& getClippedFace();

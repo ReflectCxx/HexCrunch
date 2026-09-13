@@ -25,8 +25,16 @@ namespace hex
 		return (*m_grid);
 	}
 
+	GameScene& Game::scene() {
+		return (*m_scene);
+	}
+
 	void Game::setGrid(HexGrid* pGrid) {
 		m_grid = pGrid;
+	}
+
+	void Game::setGameScene(GameScene* pScene) {
+		m_scene = pScene;
 	}
 
 	GridManager& Game::gridManager() {

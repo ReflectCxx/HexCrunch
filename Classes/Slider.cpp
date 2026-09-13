@@ -1,8 +1,9 @@
 
 #include <algorithm>
 
-#include "Game.h"
 #include "Slider.h"
+
+#include "Game.h"
 #include "HexGrid.h"
 #include "HexTile.hpp"
 #include "TouchConsumer.h"
@@ -15,6 +16,7 @@ namespace hex
 	{
 		m_followerIndex = 1;
 		m_actorTile = pActorTile;
+
 		updateOuterRingPathQ();
 		setActive(true);
 		alignWithGrid();
@@ -63,11 +65,13 @@ namespace hex
 			if (actor().getColorId() != ColorId::None) {
 				actor().setState(TileState::Actor);
 				follower().setState(TileState::Follower);
+				updateArrows(true);
 			}
 		}
 		else {
 			follower().setState(TileState::Idle);
 			grid.manager().setRingTilesState(actor(), TileState::Idle);
+			updateArrows(false);
 		}
 	}
 
@@ -208,8 +212,45 @@ namespace hex
 	}
 
 
+	void Slider::updateArrows(bool pShow)
+	{
+		const auto fixNext = [](HexTile& pT, bool pS) static {
+			const auto nt = pT.getNextRingTile();
+			nt->getArrow().setVisible(pS);
+			nt->getArrow().setRotation(nt->getArrowAngle());
+
+			const auto ri = nt->getRingIndex();
+			const auto ti = nt->getTileIndex();
+			if (ti % (ri + 1) == 0) {
+				nt->getArrow().setRotation(nt->getArrowAngle() + 60.f);
+			}
+		};
+
+		if (m_followerIndex < (m_outerNeighbours.size() - 1)) {
+			fixNext(follower(), pShow);
+		}
+		else {
+			fixNext(actor(), pShow);
+		}
+
+		const auto fixPrevious = [](HexTile& pT, bool pS) static {
+			const auto pt = pT.getPrevoiusRingTile();
+			pt->getArrow().setVisible(pS);
+			pt->getArrow().setRotation(pt->getArrowAngle() + 180.f);
+		};
+
+		if (m_followerIndex > 0) {
+			fixPrevious(follower(), pShow);
+		}
+		else {
+			fixPrevious(actor(), pShow);
+		}
+	}
+
+
 	bool Slider::moveActorLeft()
 	{
+		updateArrows(false);
 		if (m_followerIndex > 0) {
 			follower().setState(TileState::Idle);
 			m_followerIndex--;
@@ -240,12 +281,14 @@ namespace hex
 			}
 			m_followerIndex = (m_outerNeighbours.size() - 1);
 		}
+		updateArrows(true);
 		return true;
 	}
 
 
 	bool Slider::moveActorRight()
 	{
+		updateArrows(false);
 		if (m_followerIndex < (m_outerNeighbours.size() - 1))
 		{
 			follower().setState(TileState::Idle);
@@ -277,6 +320,7 @@ namespace hex
 			}
 			m_followerIndex = 0;
 		}
+		updateArrows(true);
 		return true;
 	}
 }

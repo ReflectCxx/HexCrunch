@@ -57,7 +57,7 @@ namespace hex
 			const auto children = pParent->getOuterNeighbours();
 			for (T* child : children)
 			{
-				if (pUsedChildren.contains(child)) {
+				if (pUsedChildren.find(child) != pUsedChildren.end()) {
 					continue;
 				}
 
@@ -78,7 +78,7 @@ namespace hex
 			{
 				for (T* child : parent->getOuterNeighbours())
 				{
-					if (pUsedChildren.contains(child)) {
+					if (pUsedChildren.find(child) != pUsedChildren.end()) {
 						continue;
 					}
 

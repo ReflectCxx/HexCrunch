@@ -11,11 +11,10 @@ namespace hex
 	{
 		friend Command;
 
-		bool m_qBlocked = false;
 		std::size_t m_runningCount = 0;
-		std::uint64_t m_blockedByCmdId = -1;
-		std::deque<Command> m_commands;
-		std::deque<std::reference_wrapper<Command>> m_commandQ;
+		std::deque<Command> m_commands = {};
+		std::deque<std::reference_wrapper<Command>> m_commandQ = {};
+		std::optional<std::uint64_t> m_blockedByCmdId = std::nullopt;
 
 		void blockQ(const std::uint64_t pByCmdId, const bool);
 		constexpr std::size_t& runningCount();

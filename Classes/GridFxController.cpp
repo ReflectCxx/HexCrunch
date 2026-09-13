@@ -14,6 +14,7 @@ namespace hex
 	void GridFxController::update()
 	{
 		CommandController::update();
+
 		while (true) {
 			const auto command = nextCmd();
 			if (command) {
@@ -82,8 +83,9 @@ namespace hex
 				const auto color = Game::instance().popColor();
 				pTile.assignColor(color);
 				pTile.refreshView();
-				pTile.setState(TileState::Idle);
+
 				pTile.setScale(0.01f);
+				pTile.setState(TileState::Idle);
 				pTile.runAction(
 					cocos2d::Sequence::create(
 						cocos2d::ScaleTo::create(0.25f, 1.f),

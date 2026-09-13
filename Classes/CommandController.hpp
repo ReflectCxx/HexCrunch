@@ -15,6 +15,17 @@ namespace hex
 	}
 
 
+	inline void CommandController::push(Command pCmd)
+	{
+		if (pCmd.m_cmdState != CmdState::None) {
+			return;
+		}
+		m_commands.push_back(std::move(pCmd));
+		m_commandQ.push_back(m_commands.back());
+		m_commands.back().m_cmdState = CmdState::Queued;
+	}
+
+
 	inline void CommandController::update()
 	{
 		int count = 0;
@@ -28,25 +39,27 @@ namespace hex
 	}
 
 
-	inline void CommandController::push(Command pCmd)
+	inline void CommandController::blockQ(const std::uint64_t pByCmdId, const bool pBlock)
 	{
-		if (pCmd.m_cmdState != CmdState::None) {
-			return;
+		if (pBlock) {
+			if (!m_blockedByCmdId.has_value()) {
+				m_blockedByCmdId = pByCmdId;
+			}
 		}
-		m_commands.push_back(std::move(pCmd));
-		m_commandQ.push_back(m_commands.back());
-		m_commands.back().m_cmdState = CmdState::Queued;
+		else if (m_blockedByCmdId.has_value() &&  *m_blockedByCmdId == pByCmdId) {
+			m_blockedByCmdId.reset();
+		}
 	}
 
 
 	inline std::optional<std::reference_wrapper<Command>> CommandController::nextCmd()
 	{
-		if (m_qBlocked || m_commandQ.empty()) {
+		if (m_blockedByCmdId.has_value() || m_commandQ.empty()) {
 			return std::nullopt;
 		}
 
 		if (m_commandQ.front().get().m_blockQ == BlocksQ::Join && runningCount() != 0) {
-			CCLOG("Waiting to finish executions, running count: { %d }", runningCount());
+			CCLOG("Waiting to finish executions, running count: { %lu }", runningCount());
 			return std::nullopt;
 		}
 
@@ -54,20 +67,5 @@ namespace hex
 		cmd.m_cmdState = CmdState::Ready;
 		m_commandQ.pop_front();
 		return cmd;
-	}
-
-
-	inline void CommandController::blockQ(const std::uint64_t pByCmdId, const bool pBlock)
-	{
-		if (pBlock) {
-			if (!m_qBlocked) {
-				m_qBlocked = true;
-				m_blockedByCmdId = pByCmdId;
-			}
-		}
-		else if (m_blockedByCmdId == pByCmdId) {
-			m_qBlocked = false;
-			m_blockedByCmdId = -1;
-		}
 	}
 }

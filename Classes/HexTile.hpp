@@ -8,16 +8,24 @@ namespace hex
 		m_colorId = pColor;
 	}
 
+	inline const float HexTile::getArrowAngle() {
+		return (getHexRingEdgeAngle() - 60.f);
+	}
+
+	constexpr cocos2d::Node& HexTile::getArrow() {
+		return *m_arrow;
+	}
+
 	constexpr cocos2d::Node& HexTile::getRingFace() {
 		return *m_ringFace;
 	}
 
 	constexpr cocos2d::Node& HexTile::getIdleFace() {
-		return *m_idleFace;
+		return *m_hexIdle;
 	}
 
 	constexpr cocos2d::Node& HexTile::getClippedFace() {
-		return *m_clipped;
+		return *m_hexClipped;
 	}
 
 	constexpr cocos2d::Node& HexTile::getBackground() {
@@ -25,7 +33,7 @@ namespace hex
 	}
 
 	constexpr cocos2d::Node& HexTile::getBlockedFace() {
-		return *m_blockFace;
+		return *m_hexBlocked;
 	}
 
 	constexpr cocos2d::DrawNode& HexTile::getLink() {

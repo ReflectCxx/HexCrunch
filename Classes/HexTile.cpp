@@ -39,9 +39,10 @@ namespace hex
 {
 	HexTile::HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex)
 		: Hex(pId, pRingIndex, pTileIndex)
-		, m_blockFace(nullptr)
-		, m_clipped(nullptr)
-		, m_idleFace(nullptr)
+		, m_arrow(nullptr)
+		, m_hexIdle(nullptr)
+		, m_hexBlocked(nullptr)
+		, m_hexClipped(nullptr)
 		, m_hexLink(nullptr)
 		, m_ringFace(nullptr)
 		, m_background(nullptr)
@@ -84,14 +85,14 @@ namespace hex
 		}
 		const auto& sz = getIdleFace().getContentSize();
 		
-		m_idleFace->removeAllChildren();
-		m_idleFace->addChild(Asset::createNormalTile(color, sz));
+		m_hexIdle->removeAllChildren();
+		m_hexIdle->addChild(Asset::createNormalTile(color, sz));
 
-		m_clipped->removeAllChildren();
-		m_clipped->addChild(Asset::createNormalTile(color, sz));
+		m_hexClipped->removeAllChildren();
+		m_hexClipped->addChild(Asset::createNormalTile(color, sz));
 
-		m_blockFace->removeAllChildren();
-		m_blockFace->addChild(Asset::createBlockedTile(color, sz));
+		m_hexBlocked->removeAllChildren();
+		m_hexBlocked->addChild(Asset::createBlockedTile(color, sz));
 
 		auto& pt = *getPrevoiusRingTile();
 		const auto linkSz = Size{ LINK_WIDTH, LINK_HEIGHT };
@@ -109,18 +110,23 @@ namespace hex
 		constexpr auto radius = (HEX_RAD - HEX_BORDER);
 		const auto sz = Size{ SQRT_3 * radius, 2.f * radius };
 		
-		m_idleFace = Node::create();
-		m_idleFace->setContentSize(sz);
-		addChild(m_idleFace, Z_FOREGROUND);
+		m_hexIdle = Node::create();
+		m_hexIdle->setContentSize(sz);
+		addChild(m_hexIdle, Z_FOREGROUND);
 		
-		m_clipped = Node::create();
-		m_ringFace = create_clipped(m_clipped, DrawNode::create());
+		m_hexClipped = Node::create();
+		m_ringFace = create_clipped(m_hexClipped, DrawNode::create());
 		m_ringFace->setContentSize(sz);
 		addChild(m_ringFace, Z_RING_ON);
 		
-		m_blockFace = Node::create();
-		m_blockFace->setContentSize(sz);
-		addChild(m_blockFace, Z_BLOCKED);
+		m_hexBlocked = Node::create();
+		m_hexBlocked->setContentSize(sz);
+		addChild(m_hexBlocked, Z_BLOCKED);
+
+		m_arrow = Asset::createArrow();
+		m_arrow->setRotation(getArrowAngle());
+		addChild(m_arrow, Z_BLOCKED + 1);
+		m_arrow->setVisible(false);
 
 		show_index(*this);
 		return true;
@@ -151,9 +157,9 @@ namespace hex
 		initClippedBg(pGridNode);
 
 		const auto theta = getHexRingEdgeAngle();
-		m_clipped->setRotation(theta);
-		m_blockFace->setRotation(theta);
-		m_idleFace->setRotation(theta);
+		m_hexClipped->setRotation(theta);
+		m_hexBlocked->setRotation(theta);
+		m_hexIdle->setRotation(theta);
 	}
 
 
