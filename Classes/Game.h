@@ -1,5 +1,7 @@
 #pragma once
 
+#include <deque>
+
 #include "Constants.h"
 
 namespace hex
@@ -11,7 +13,7 @@ namespace hex
 
 	class Game
 	{		
-		std::vector<ColorId> m_colorStack;
+		std::deque<ColorId> m_colorStack;
 		std::vector<std::pair<ColorId, int>> m_colors;
 		std::vector<std::pair<ColorId, int>> m_offGrid;
 
@@ -38,7 +40,6 @@ namespace hex
 
 		bool acceptInput();
 		const ColorId popColor();
-		void ringCleared(const std::size_t pRingIndex);
 
 		bool gridSanityCheck();
 

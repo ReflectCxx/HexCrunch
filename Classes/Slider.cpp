@@ -214,9 +214,10 @@ namespace hex
 
 	void Slider::updateArrows(bool pShow)
 	{
-		const auto fixNext = [](HexTile& pT, bool pS) static {
-			const auto nt = pT.getNextRingTile();
-			nt->getArrow().setVisible(pS);
+		const auto fixRight = [pShow](HexTile& tile) 
+		{
+			const auto nt = tile.getNextRingTile();
+			nt->getArrow().setVisible(pShow);
 			nt->getArrow().setRotation(nt->getArrowAngle());
 
 			const auto ri = nt->getRingIndex();
@@ -227,23 +228,24 @@ namespace hex
 		};
 
 		if (m_followerIndex < (m_outerNeighbours.size() - 1)) {
-			fixNext(follower(), pShow);
+			fixRight(follower());
 		}
 		else {
-			fixNext(actor(), pShow);
+			fixRight(actor());
 		}
 
-		const auto fixPrevious = [](HexTile& pT, bool pS) static {
-			const auto pt = pT.getPrevoiusRingTile();
-			pt->getArrow().setVisible(pS);
+		const auto fixLeft = [pShow](HexTile& tile) 
+		{
+			const auto pt = tile.getPrevoiusRingTile();
+			pt->getArrow().setVisible(pShow);
 			pt->getArrow().setRotation(pt->getArrowAngle() + 180.f);
 		};
 
 		if (m_followerIndex > 0) {
-			fixPrevious(follower(), pShow);
+			fixLeft(follower());
 		}
 		else {
-			fixPrevious(actor(), pShow);
+			fixLeft(actor());
 		}
 	}
 

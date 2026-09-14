@@ -16,6 +16,7 @@ namespace hex
 		, m_edgeAngle(0.f)
 		, m_linkPos{ 0.f, 0.f }
 		, m_colorId(pColorId)
+		, m_spawnColor(ColorId::None)
 	{
 		m_neighbours.reserve(HEX_6);
 	}
@@ -48,6 +49,16 @@ namespace hex
 	template<class T>
 	constexpr ColorId Hex<T>::getColorId() const {
 		return m_colorId;
+	}
+
+	template<class T>
+	constexpr ColorId Hex<T>::getSpawnColor() const {
+		return m_spawnColor;
+	}
+
+	template<class T>
+	constexpr void Hex<T>::setSpawnColor(ColorId pColor) {
+		m_spawnColor = pColor;
 	}
 
 

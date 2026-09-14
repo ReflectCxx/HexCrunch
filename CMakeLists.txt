@@ -81,7 +81,6 @@ list(APPEND GAME_HEADER
      Classes/Asset.h
      Classes/AssetConsts.h
      Classes/CmdClearRingTile.h
-     Classes/CmdRotateGrid.h
      Classes/CmdSliderSwap.h
      Classes/CmdPullSwap.h
      Classes/Command.h

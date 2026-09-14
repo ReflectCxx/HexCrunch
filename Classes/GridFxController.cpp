@@ -5,7 +5,6 @@
 #include "GridFxController.h"
 
 #include "CmdPullSwap.h"
-#include "CmdRotateGrid.h"
 #include "CmdSliderSwap.h"
 #include "CmdClearRingTile.h"
 
@@ -28,14 +27,7 @@ namespace hex
 
 
 namespace hex
-{
-	void GridFxController::pushRotateGrid(const float pAngle)
-	{
-		auto cmd = CmdRotateGrid::create(pAngle);
-		push(std::move(cmd));
-	}
-
-	
+{	
 	void GridFxController::pushAcquireNeighbour(HexTile& pTile, HexTile& pPullFrom)
 	{
 		auto cmd = CmdPullSwap::create(pTile, pPullFrom);
@@ -57,7 +49,6 @@ namespace hex
 		for (const auto tile : ring) {
 			push(CmdClearRingTile::create(*tile));
 		}
-		Game::instance().ringCleared(pIndex);
 	}
 
 
@@ -66,9 +57,29 @@ namespace hex
 		push(Command{
 			BlocksQ::Join, *this,
 			[=](Command& pCmd)->void {
-
 				pCmd.end();
 				pCallBack();
+			}
+		});
+	}
+
+
+	void GridFxController::pushRotateGrid(const float pAngle)
+	{
+		push(Command{
+			BlocksQ::Join,
+			Game::instance().fxController(),
+			[=](Command& pCmd)->void {
+
+				Game::instance().grid().runAction(
+					cocos2d::Sequence::create(
+						cocos2d::RotateBy::create(0.5f, pAngle),
+						cocos2d::CallFunc::create(
+						[&]()->void {
+							pCmd.end();
+						}), nullptr
+					)
+				);
 			}
 		});
 	}
@@ -80,20 +91,19 @@ namespace hex
 			BlocksQ::No, *this,
 			[&](Command& pCmd)->void {
 
-				const auto color = Game::instance().popColor();
-				pTile.assignColor(color);
+				pTile.assignColor(pTile.getSpawnColor());
+				pTile.setSpawnColor(ColorId::None);
 				pTile.refreshView();
-
 				pTile.setScale(0.01f);
 				pTile.setState(TileState::Idle);
+
 				pTile.runAction(
 					cocos2d::Sequence::create(
 						cocos2d::ScaleTo::create(0.25f, 1.f),
 						cocos2d::CallFunc::create(
-							[&]() { 
+							[&]()->void { 
 								pCmd.end(); 
-							}),
-						nullptr
+							}), nullptr
 					)
 				);
 			}
