@@ -24,7 +24,6 @@ namespace hex
 
 		HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
-		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getBlockedFace();
 
 	public:
@@ -39,6 +38,7 @@ namespace hex
 		constexpr cocos2d::Node& getArrow();
 		constexpr cocos2d::Node& getRingFace();
 		constexpr cocos2d::Node& getIdleFace();
+		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getClippedFace();
 		constexpr cocos2d::DrawNode& getLink();
 		constexpr void assignColor(const ColorId pColor);

@@ -7,6 +7,9 @@
 
 USING_NS_CC;
 
+namespace {
+	constexpr auto BG_NODE_TAG = 99;
+}
 
 namespace hex
 {
@@ -129,19 +132,24 @@ namespace hex
 
 	bool HexTState::turnOnStray()
 	{
-		getBackground().setVisible(true);
 		const auto bg = getBackground().getChildren().at(0);
+		bg->retain();
+		bg->removeFromParent();
 		bg->setOpacity(255 * 0.3f);
-		
+		addChild(bg, BG_NODE_TAG, BG_NODE_TAG);
+		bg->release();		
 		return true;
 	}
 
 
 	bool HexTState::turnOffStray()
 	{
-		getBackground().setVisible(false);
-		const auto bg = getBackground().getChildren().at(0);
+		const auto bg = getChildByTag(BG_NODE_TAG);
+		bg->retain();
+		bg->removeFromParent();
 		bg->setOpacity(255);
+		getBackground().addChild(bg, 0);
+		bg->release();
 		return true;
 	}
 }

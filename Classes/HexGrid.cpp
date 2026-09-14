@@ -29,6 +29,11 @@ namespace hex
 		}
 
 		initHexGrid();
+
+		m_hexRings[RING_COUNT - 2][0]->swapColor(
+			*m_hexRings[RING_COUNT - 1][0], false
+		);
+
 		for (auto& rings : m_hexRings) {
 			for (const auto t : rings) {
 				t->setState(TileState::Idle);

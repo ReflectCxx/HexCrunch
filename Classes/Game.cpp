@@ -18,39 +18,39 @@ namespace
 	static std::vector<std::pair<hex::ColorId, std::size_t>> initQuota(std::mt19937& pRng)
 	{
 		std::array<std::size_t, N> quota = { 1, 2, 3, 4, 5 };
-		std::shuffle(quota.begin(), quota.end(), pRng);
+		//std::shuffle(quota.begin(), quota.end(), pRng);
 
-		std::size_t quota1i = 0, quota2i = 0;
-		for (std::size_t i = 0; i < quota.size(); ++i) {
-			if (quota[i] == 1) quota1i = i;
-			if (quota[i] == 2) quota2i = i;
-		}
+		//std::size_t quota1i = 0, quota2i = 0;
+		//for (std::size_t i = 0; i < quota.size(); ++i) {
+		//	if (quota[i] == 1) quota1i = i;
+		//	if (quota[i] == 2) quota2i = i;
+		//}
 
 		std::array<hex::ColorId, N> colors = {
-			hex::ColorId::Red,
-			hex::ColorId::Green,
-			hex::ColorId::Yellow,
+			hex::ColorId::Purple,
 			hex::ColorId::Blue,
-			hex::ColorId::Purple
+			hex::ColorId::Yellow,
+			hex::ColorId::Green,
+			hex::ColorId::Red
 		};
 
-		if (colors[quota1i] == EXCLUDE_COLOR) {
-			colors[quota1i] = colors[quota2i];
-		}
-		else if (colors[quota2i] == EXCLUDE_COLOR) {
-			colors[quota2i] = colors[quota1i];
-		}
-		else {
-			const auto c = colors[quota1i];
-			colors[quota1i] = colors[quota2i];
+		//if (colors[quota1i] == EXCLUDE_COLOR) {
+		//	colors[quota1i] = colors[quota2i];
+		//}
+		//else if (colors[quota2i] == EXCLUDE_COLOR) {
+		//	colors[quota2i] = colors[quota1i];
+		//}
+		//else {
+		//	const auto c = colors[quota1i];
+		//	colors[quota1i] = colors[quota2i];
 
-			for (std::size_t i = 0; i < colors.size(); ++i) {
-				if (colors[i] == EXCLUDE_COLOR) {
-					colors[i] = c;
-					break;
-				}
-			}
-		}
+		//	for (std::size_t i = 0; i < colors.size(); ++i) {
+		//		if (colors[i] == EXCLUDE_COLOR) {
+		//			colors[i] = c;
+		//			break;
+		//		}
+		//	}
+		//}
 
 		std::vector<std::pair<hex::ColorId, std::size_t>> cQuota;
 		cQuota.reserve(N);

@@ -97,14 +97,17 @@ namespace hex
 				pTile.refreshView();
 				pTile.setScale(0.01f);
 				pTile.setState(TileState::Idle);
-
-				const auto ms = cocos2d::RandomHelper::random_int(250, 1000);
+				pTile.getLink().setVisible(true);
+				pTile.getBackground().setVisible(true);
+				const auto ms = cocos2d::RandomHelper::random_int(200, 999);
 				pTile.runAction(
 					cocos2d::Sequence::create(
 						cocos2d::ScaleTo::create(ms / 1000.f, 1.f),
 						cocos2d::CallFunc::create(
 							[&]()->void { 
-								pCmd.end(); 
+								pTile.getLink().setVisible(false);
+								pTile.getBackground().setVisible(false);
+								pCmd.end();
 							}), nullptr
 					)
 				);
