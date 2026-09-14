@@ -24,7 +24,7 @@ namespace hex
 		void pushSliderSwap(const Slider&, const CallBack&);
 
 		void pushClearRing(const int pIndex);
-		void pushRotateGrid(const float);
+		void pushRotateGrid(const float, const CallBack&);
 		void pushAcquireNeighbour(HexTile&, HexTile& pPullFrom);
 	};
 }

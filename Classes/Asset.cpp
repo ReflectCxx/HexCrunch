@@ -83,7 +83,7 @@ namespace hex
 	cocos2d::Sprite* Asset::createArrow()
 	{
 		auto arrow = Sprite::create(ARROW);
-		const auto scale = (HEX_RAD * 0.6f) / arrow->getContentSize().width;
+		const auto scale = (HEX_RAD * 0.7f) / arrow->getContentSize().width;
 		arrow->setScale(scale);
 		return arrow;
 	}

@@ -8,7 +8,6 @@
 #include "HexTile.hpp"
 #include "TouchConsumer.h"
 
-USING_NS_CC;
 
 namespace hex
 {
@@ -32,9 +31,15 @@ namespace hex
 
 namespace hex
 {
-	void Slider::alignWithGrid() const {
-		Game::instance().gridManager().correctOrientation(*this);
+	void Slider::alignWithGrid() const
+	{
+		Game::instance().gridManager().correctOrientation(*this,
+			[this]() {
+				updateArrows(true);
+			}
+		);
 	}
+
 
 	void Slider::resetToPosition(HexTile* pPreviousActor, const int pPrevFollowerI)
 	{
@@ -175,7 +180,7 @@ namespace hex
 		}
 		else {
 			auto& grid = Game::instance().grid();
-			const auto gridPosW = grid.getHexNode().convertToWorldSpace(Vec2::ZERO);
+			const auto gridPosW = grid.getHexNode().convertToWorldSpace({ 0.f, 0.f });
 			const auto tilePosW = grid.getHexNode().convertToWorldSpace(actor().getPosition());
 			const auto i = (tilePosW.x > gridPosW.x ? 1 : 0);
 
@@ -193,7 +198,7 @@ namespace hex
 	{
 		auto& grid = Game::instance().grid();
 		const auto downTiles = actor().getOuterNeighbours();
-		const auto gridPosW = grid.getHexNode().convertToWorldSpace(Vec2::ZERO);
+		const auto gridPosW = grid.getHexNode().convertToWorldSpace({ 0.f, 0.f });
 		if (downTiles.size() == 3) {
 			if (m_followerIndex == 1) {
 				m_actorTile = downTiles[1];
@@ -212,19 +217,26 @@ namespace hex
 	}
 
 
-	void Slider::updateArrows(bool pShow)
+	void Slider::updateArrows(bool pShow) const
 	{
-		const auto fixRight = [pShow](HexTile& tile) 
-		{
-			const auto nt = tile.getNextRingTile();
-			nt->getArrow().setVisible(pShow);
-			nt->getArrow().setRotation(nt->getArrowAngle());
-
-			const auto ri = nt->getRingIndex();
-			const auto ti = nt->getTileIndex();
-			if (ti % (ri + 1) == 0) {
-				nt->getArrow().setRotation(nt->getArrowAngle() + 60.f);
+		const auto rotate = [](cocos2d::Node& node, float offset) {
+			float pr = 0.0f;
+			for (auto* p = node.getParent(); p != nullptr; p = p->getParent()) {
+				pr += p->getRotation();
 			}
+			node.setRotation(offset - pr);
+		};
+
+		const auto fixLeft = [rotate, pShow](HexTile& tile) {
+			const auto pt = tile.getPrevoiusRingTile();
+			pt->getArrow().setVisible(pShow);
+			rotate(pt->getArrow(), 180.f);
+		};
+
+		const auto fixRight = [rotate, pShow](HexTile& tile) {
+			const auto nt = tile.getNextRingTile();
+			rotate(nt->getArrow(), 0.f);
+			nt->getArrow().setVisible(pShow);
 		};
 
 		if (m_followerIndex < (m_outerNeighbours.size() - 1)) {
@@ -233,14 +245,6 @@ namespace hex
 		else {
 			fixRight(actor());
 		}
-
-		const auto fixLeft = [pShow](HexTile& tile) 
-		{
-			const auto pt = tile.getPrevoiusRingTile();
-			pt->getArrow().setVisible(pShow);
-			pt->getArrow().setRotation(pt->getArrowAngle() + 180.f);
-		};
-
 		if (m_followerIndex > 0) {
 			fixLeft(follower());
 		}

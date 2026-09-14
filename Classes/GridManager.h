@@ -25,9 +25,9 @@ namespace hex
 		constexpr GridFxController& controller();
 
 		void update();
-		void correctOrientation(const Slider&);
 		void setRingTilesState(HexTile& pStartTile, TileState) const;
 		void swapSelection(Slider&, const std::function<void()>& pOnEndCb);
+		void correctOrientation(const Slider&, const std::function<void()>& pOnEndCb);
 	};
 }
 

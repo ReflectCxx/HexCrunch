@@ -38,7 +38,7 @@ namespace hex
 	}
 
 
-	void GridManager::correctOrientation(const Slider& pSlider)
+	void GridManager::correctOrientation(const Slider& pSlider, const std::function<void()>& pOnEndCb)
 	{
 		auto& hexGrid = Game::instance().grid().getHexNode();
 		const auto playerPos = hexGrid.convertToWorldSpace(pSlider.actor().getPosition());
@@ -49,7 +49,7 @@ namespace hex
 
 		if (theta <= 30.f || theta >= 150.f) {
 			const auto theta = ((playerPos.x > gridPosW.x) ? 60.f : -60.f);
-			m_controller.pushRotateGrid(theta);
+			m_controller.pushRotateGrid(theta, pOnEndCb);
 		}
 	}
 

@@ -167,7 +167,7 @@ namespace hex
 				}
 			}
 
-			std::shuffle(sectorColors.begin(), sectorColors.end(), s_rng);
+			//std::shuffle(sectorColors.begin(), sectorColors.end(), s_rng);
 
 			int src = 0;
 			for (int ring = 0; ring < RING_COUNT; ++ring)

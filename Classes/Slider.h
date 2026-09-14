@@ -26,7 +26,7 @@ namespace hex
 		std::deque<HexTile*> m_outerNeighbours;
 		
 		void trackTap();
-		void updateArrows(bool pShow);
+		void updateArrows(bool pShow) const;
 
 	public:
 
