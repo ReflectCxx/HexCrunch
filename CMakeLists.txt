@@ -69,6 +69,7 @@ list(APPEND GAME_SOURCE
      Classes/HexGrid.cpp
      Classes/GridFxController.cpp
      Classes/GridManager.cpp
+     Classes/HexSolutions.cpp
      Classes/HexTile.cpp
      Classes/HexTState.cpp
      Classes/Slider.cpp
@@ -95,6 +96,7 @@ list(APPEND GAME_HEADER
      Classes/HexGrid.h
      Classes/GridFxController.h
      Classes/GridManager.h
+     Classes/HexSolutions.h
      Classes/HexT.h
      Classes/HexT.hpp
      Classes/HexTAlgo.h

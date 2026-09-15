@@ -57,7 +57,7 @@ namespace hex
 		push(Command{
 			BlocksQ::Join, *this,
 			[=](Command& pCmd)->void {
-				pCmd.end();
+				pCmd.ends();
 				pCallBack();
 			}
 		});
@@ -76,7 +76,7 @@ namespace hex
 						cocos2d::RotateBy::create(0.5f, pAngle),
 						cocos2d::CallFunc::create(
 						[&]()->void {
-							pCmd.end();
+							pCmd.ends();
 							pCallBack();
 						}), nullptr
 					)
@@ -99,7 +99,7 @@ namespace hex
 				pTile.setState(TileState::Idle);
 				pTile.getLink().setVisible(true);
 				pTile.getBackground().setVisible(true);
-				const auto ms = cocos2d::RandomHelper::random_int(200, 999);
+				const auto ms = cocos2d::RandomHelper::random_int(250, 750);
 				pTile.runAction(
 					cocos2d::Sequence::create(
 						cocos2d::ScaleTo::create(ms / 1000.f, 1.f),
@@ -107,8 +107,9 @@ namespace hex
 							[&]()->void { 
 								pTile.getLink().setVisible(false);
 								pTile.getBackground().setVisible(false);
-								pCmd.end();
-							}), nullptr
+								pCmd.ends();
+							}),
+						nullptr
 					)
 				);
 			}

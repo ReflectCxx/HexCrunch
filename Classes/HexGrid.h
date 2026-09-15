@@ -19,8 +19,8 @@ namespace hex
 
 		void initHexGrid();
 
-		HexTile* spawnNewTile(const cocos2d::Vec2& pPos,
-							  const int pRingIndex, const int pTileIndex);
+		HexTile* spawnNewTile(const int pRingIndex, const int pTileIndex,
+							  std::deque<ColorId>& pColorQ, const cocos2d::Vec2& pPos);
 
 		void initRingHexTiles(int pRingIndex);
 

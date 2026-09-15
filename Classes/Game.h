@@ -1,8 +1,7 @@
 #pragma once
 
-#include <deque>
-
 #include "Constants.h"
+#include "HexSolutions.h"
 
 namespace hex
 {
@@ -12,18 +11,16 @@ namespace hex
 	class GridFxController;
 
 	class Game
-	{		
-		std::deque<ColorId> m_colorStack;
+	{
 		std::vector<std::pair<ColorId, int>> m_colors;
 		std::vector<std::pair<ColorId, int>> m_offGrid;
 
 		HexGrid* m_grid = nullptr;
 		GameScene* m_scene = nullptr;
+		HexSolutions m_hexSolver = {};
 
-		Game();
-		void seedColors();
+		Game() = default;
 		void setGrid(HexGrid* pGrid);
-		void pushColor(const ColorId);
 		void setGameScene(GameScene*);
 
 	public:
@@ -39,9 +36,8 @@ namespace hex
 		GridFxController& fxController();
 
 		bool acceptInput();
-		const ColorId popColor();
-
 		bool gridSanityCheck();
+		void loadLevel(std::deque<ColorId>&);
 
 		static Game& instance();
 		friend GameScene;

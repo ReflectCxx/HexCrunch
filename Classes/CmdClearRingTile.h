@@ -36,7 +36,6 @@ namespace hex
 			cocos2d::Sequence::create(
 				scaleUp,
 				cocos2d::CallFunc::create([&]()->void {
-
 					pCmd.unblockQ();
 				}),
 				scaleDown,
@@ -46,7 +45,7 @@ namespace hex
 					m_tile.assignColor(ColorId::None);
 					m_tile.setState(TileState::None);
 					
-					pCmd.end();
+					pCmd.ends();
 				}), nullptr
 			)
 		);

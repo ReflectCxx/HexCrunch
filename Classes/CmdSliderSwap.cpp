@@ -46,7 +46,7 @@ namespace hex
 
 		m_follower.getClippedFace().setVisible(true);
 		m_follower.getIdleFace().setVisible(false);
-		pCmd.end();
+		pCmd.ends();
 	}
 
 

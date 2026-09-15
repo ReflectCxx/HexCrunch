@@ -25,7 +25,7 @@ namespace hex
 	}
 
 	
-	inline void Command::end()
+	inline void Command::ends()
 	{
 		if (m_cmdState != CmdState::Running) {
 			return;

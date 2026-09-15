@@ -13,7 +13,7 @@ namespace hex::ut
         cocos2d::Vec2 vertices[NUM_VERTICES];
 
         for (int i = 0; i < NUM_VERTICES; ++i) {
-            const float angle = (60.f * i + 30.f) * M_PI / 180.f;
+            const float angle = (float)((60 * i + 30) * M_PI / 180.f);
             vertices[i] = { radius * std::cos(angle), radius * std::sin(angle) };
         }
 
@@ -27,7 +27,7 @@ namespace hex::ut
         constexpr int NUM_CORNERS = HEX_6;
         constexpr int ARC_SEGMENTS = 5;
 
-        constexpr float DEG_TO_RAD = M_PI / 180.f;
+        constexpr float DEG_TO_RAD = (float) M_PI / 180.f;
         constexpr float HALF_INTERIOR_ANGLE = 60.f * DEG_TO_RAD;
 
         cocos2d::Vec2 corners[NUM_CORNERS];
@@ -69,7 +69,7 @@ namespace hex::ut
             float endAngle = std::atan2(tangentB.y - arcCenter.y, tangentB.x - arcCenter.x);
 
             while (endAngle < startAngle) {
-                endAngle += 2.f * M_PI;
+                endAngle += 2.f * (float)M_PI;
             }
 
             for (int j = 0; j <= ARC_SEGMENTS; ++j) {

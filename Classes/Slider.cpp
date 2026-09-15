@@ -220,7 +220,7 @@ namespace hex
 	void Slider::updateArrows(bool pShow) const
 	{
 		const auto rotate = [](cocos2d::Node& node, float offset) {
-			float pr = 0.0f;
+			auto pr = 0.0f;
 			for (auto* p = node.getParent(); p != nullptr; p = p->getParent()) {
 				pr += p->getRotation();
 			}

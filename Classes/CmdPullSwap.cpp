@@ -37,7 +37,7 @@ namespace hex
 			MoveTo::create(DT, pos),
 			CallFunc::create([&, resetV]() {
 				m_tile.getLink().setVisible(resetV);
-				pCmd.end();
+				pCmd.ends();
 			}), nullptr
 		));
 

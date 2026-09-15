@@ -121,7 +121,7 @@ namespace hex
 		if (m_ringColor == ColorId::None) {
 			return false;
 		}
-		CCLOG("Ring index: { %s }", std::to_string(m_ringIndex).c_str());
+		CCLOG("Ring made at index: { %lu }", m_ringIndex);
 
 		m_controller.pushCallback(
 			[&]()->void {

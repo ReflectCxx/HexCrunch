@@ -26,7 +26,7 @@ namespace hex
 
 	public:
 		
-		void end();
+		void ends();
 		void execute();
 		void unblockQ();
 
