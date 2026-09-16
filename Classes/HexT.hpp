@@ -8,12 +8,11 @@
 namespace hex
 {
 	template<class T>
-	Hex<T>::Hex(const ColorId pColorId, const int pRingIndex, const int pTileIndex)
+	Hex<T>::Hex(const int pRingIndex, const int pTileIndex)
 		: m_ringIndex(pRingIndex)
 		, m_tileIndex(pTileIndex)
 		, m_next(nullptr)
 		, m_previous(nullptr)
-		, m_colorId(pColorId)
 	{
 		m_neighbours.reserve(HEX_6);
 	}
@@ -41,12 +40,6 @@ namespace hex
 	constexpr T* Hex<T>::getPrevoiusRingTile() const {
 		return m_previous;
 	};
-
-
-	template<class T>
-	constexpr ColorId Hex<T>::getColorId() const {
-		return m_colorId;
-	}
 
 
 	template<class T>

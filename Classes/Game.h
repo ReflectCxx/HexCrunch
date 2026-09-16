@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Constants.h"
-#include "HexSolutions.h"
 
 namespace hex
 {
@@ -17,7 +16,6 @@ namespace hex
 
 		HexGrid* m_grid = nullptr;
 		GameScene* m_scene = nullptr;
-		HexSolutions m_hexSols = {};
 
 		Game() = default;
 		void setGrid(HexGrid* pGrid);
@@ -36,8 +34,8 @@ namespace hex
 		GridFxController& fxController();
 
 		bool acceptInput();
+		void loadLevel(const HexRingMatrix&);
 		bool gridSanityCheck();
-		void loadLevel(std::deque<ColorId>&);
 
 		static Game& instance();
 		friend GameScene;

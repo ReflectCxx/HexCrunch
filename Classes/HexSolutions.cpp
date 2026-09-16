@@ -3,6 +3,7 @@
 #include <random>
 
 #include "HexSolutions.h"
+#include "HexTile.h"
 
 namespace
 {
@@ -10,6 +11,7 @@ namespace
 	constexpr auto SECTOR_CN = COLOR_N * (COLOR_N + 1) / 2;
 	constexpr auto EXCLUDE_C = hex::ColorId::Blue;
 	constexpr std::array<hex::ColorId, COLOR_N> COLORS = {
+
 		hex::ColorId::Red,
 		hex::ColorId::Blue,
 		hex::ColorId::Green,
@@ -23,17 +25,39 @@ namespace
 
 namespace hex
 {
+	void HexSolutions::scanSectors(const HexRingMatrix& pGridMat)
+	{
+		std::array<std::map<ColorId, int>, HEX_6> sectorColors;
+
+		for (int si = 0; si < HEX_6; ++si)
+		{
+			for (int ri = 0; ri < RING_COUNT; ++ri)
+			{
+				const int tilesN = ri + 1;
+				const int t0 = si * tilesN;
+
+				for (int ti = 0; ti < tilesN; ++ti)
+				{
+					const auto t = pGridMat[ri][t0 + ti];
+					const auto col = t->getColorId();
+					sectorColors[si][col]++;
+				}
+			}
+		}
+	}
+
+
 	void HexSolutions::seedColors(std::deque<ColorId>& pColorQ)
 	{
 		std::array<std::vector<ColorId>, RING_COUNT> rings;
-		for (int r = 0; r < RING_COUNT; ++r) {
-			rings[r].resize(HEX_6 * (r + 1));
+		for (int ri = 0; ri < RING_COUNT; ri++) {
+			rings[ri].resize(HEX_6 * (ri + 1));
 		}
 
 		auto seq = std::vector<int>{ 1, 2, 3, 4, 5 };
 		std::shuffle(seq.begin(), seq.end(), g_rng);
 
-		for (int sector = 0; sector < HEX_6; ++sector)
+		for (int si = 0; si < HEX_6; si++)
 		{
 			std::vector<ColorId> sectorColors;
 			sectorColors.reserve(SECTOR_CN);
@@ -43,19 +67,19 @@ namespace hex
 				}
 			}
 
-			int src = 0;
-			for (int ring = 0; ring < RING_COUNT; ++ring)
+			int ci = 0;
+			for (int ri = 0; ri < RING_COUNT; ++ri)
 			{
-				const int sectorWidth = ring + 1;
-				const int startTile = sector * sectorWidth;
-				for (int i = 0; i < sectorWidth; ++i) {
-					rings[ring][startTile + i] = sectorColors[src++];
+				const int tilesN = ri + 1;
+				const int t0 = si * tilesN;
+				for (int i = 0; i < tilesN; ++i) {
+					rings[ri][t0 + i] = sectorColors[ci++];
 				}
 			}
 		}
 
-		for (int ring = 0; ring < RING_COUNT; ++ring) {
-			for (ColorId color : rings[ring]) {
+		for (int ri = 0; ri < RING_COUNT; ri++) {
+			for (ColorId color : rings[ri]) {
 				pColorQ.push_back(color);
 			}
 		}

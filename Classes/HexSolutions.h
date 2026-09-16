@@ -14,5 +14,6 @@ namespace hex
 	public:
 
 		void seedColors(std::deque<ColorId>&);
+		void scanSectors(const HexRingMatrix&);
 	};
 }

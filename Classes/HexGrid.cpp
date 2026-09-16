@@ -30,6 +30,8 @@ namespace hex
 
 		initHexGrid();
 
+		Game::instance().loadLevel(m_hexRings);
+
 		auto& actor = *m_hexRings[RING_COUNT - 2][0];
 		auto& follower = *m_hexRings[RING_COUNT - 1][0];
 		actor.swapColor(follower, false);
@@ -60,20 +62,13 @@ namespace hex
 	}
 
 
-	HexTile* HexGrid::spawnNewTile(const int pRingIndex, const int pTileIndex,
-								   std::deque<ColorId>& pColorQ, const cocos2d::Vec2& pPos)
+	HexTile* HexGrid::spawnNewTile(const int pRingIndex, const int pTileIndex, const cocos2d::Vec2& pPos)
 	{
-		auto colorId = ColorId::None;
-		if (pRingIndex < RING_COUNT) {
-			colorId = pColorQ.front();
-			pColorQ.pop_front();
-		}
-
 		constexpr auto HEX_TILES_COUNT = (HEX_6 / 2) * (RING_COUNT + 1) * (RING_COUNT + 2);
 		const auto count = ((HEX_6 / 2) * pRingIndex * (pRingIndex + 1) + pTileIndex + 1);
 		const auto zOrder = (HEX_TILES_COUNT - count);
 
-		auto tile = HexTile::create(colorId, pRingIndex, pTileIndex);
+		auto tile = HexTile::create(pRingIndex, pTileIndex);
 		tile->setPosition(pPos);
 		tile->setLocalZOrder(zOrder);
 		m_hexNode->addChild(tile);
@@ -119,9 +114,6 @@ namespace hex
 		m_hexNode = Node::create();
 		addChild(m_hexNode, HEXGRID_NODE_Z);
 
-		std::deque<ColorId> colorQ;
-		Game::instance().loadLevel(colorQ);
-
 		std::vector<std::vector<int>> outwardNeighboursMatrix;
 		for (int ringIndex = 0; ringIndex <= RING_COUNT; ringIndex++)
 		{
@@ -137,7 +129,7 @@ namespace hex
 				const float centerPosX = HEX_WIDTH * (ringIndex + 1) * cos(theta);
 				const float centerPosY = HEX_WIDTH * (ringIndex + 1) * sin(theta);
 
-				auto nextTile = spawnNewTile(ringIndex, tileIndex, colorQ, { centerPosX, centerPosY });
+				auto nextTile = spawnNewTile(ringIndex, tileIndex, { centerPosX, centerPosY });
 				ringTiles.push_back(nextTile);
 				tileOutwardNeighbourCount.push_back(3);
 				tileIndex++;
@@ -151,7 +143,7 @@ namespace hex
 					const auto beta = float(theta + (M_PI * 2.f/ 3.f));
 					const float adjPosX = centerPosX + i * HEX_WIDTH * cos(beta);
 					const float adjPosY = centerPosY + i * HEX_WIDTH * sin(beta);
-					auto nextTile = spawnNewTile(ringIndex, tileIndex, colorQ, { adjPosX, adjPosY });
+					auto nextTile = spawnNewTile(ringIndex, tileIndex, { adjPosX, adjPosY });
 
 					ringTiles.push_back(nextTile);
 					tileOutwardNeighbourCount.push_back(2);

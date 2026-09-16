@@ -2,6 +2,7 @@
 
 #include "HexGrid.h"
 #include "HexTile.hpp"
+#include "HexSolutions.h"
 #include "GridManager.h"
 #include "Game.h"
 
@@ -24,10 +25,6 @@ namespace hex
 		m_scene = pScene;
 	}
 
-	void Game::loadLevel(std::deque<ColorId>& pColorQ) {
-		m_hexSols.seedColors(pColorQ);
-	}
-
 	GridManager& Game::gridManager() {
 		return m_grid->manager();
 	}
@@ -36,13 +33,11 @@ namespace hex
 		return m_grid->manager().controller();
 	}
 
-	bool Game::acceptInput()
-	{
+	bool Game::acceptInput() {
 		return (m_grid->manager().controller().getRunningCmdCount() == 0);
 	}
 
-	Game& Game::instance()
-	{
+	Game& Game::instance() {
 		static Game _instance;
 		return _instance;
 	}
@@ -51,6 +46,21 @@ namespace hex
 
 namespace hex
 {
+	void Game::loadLevel(const HexRingMatrix& pRings)
+	{
+		std::deque<ColorId> pColorQ;
+		HexSolutions().seedColors(pColorQ);
+
+		for (int ri = 0; ri < RING_COUNT; ri++) {
+			for (const auto t : pRings[ri]) {
+				const auto color = pColorQ.front();
+				pColorQ.pop_front();
+				t->assignColor(color);
+			}
+		}
+	}
+
+
 	bool Game::gridSanityCheck()
 	{
 		std::unordered_map<ColorId, int> onGrid;

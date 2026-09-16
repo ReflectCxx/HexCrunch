@@ -12,6 +12,7 @@ namespace
 	static constexpr auto Z_FOREGROUND = 0;
 	static constexpr auto Z_RING_ON = 1;
 	static constexpr auto Z_BLOCKED = 2;
+	static constexpr auto DBG_LABEL_TAG = 999;
 
 	static ClippingNode* create_clipped(Node* pNode, Node* pStencil)
 	{
@@ -22,24 +23,14 @@ namespace
 		clippingNode->addChild(pNode);
 		return clippingNode;
 	}
-
-	static void show_index(hex::HexTile& pT)
-	{
-		const auto ri = pT.getRingIndex();
-		const auto ti = pT.getTileIndex();
-		std::string str;// = std::to_string(ri) + ", ";
-		str += std::to_string(ti % (ri + 1));
-		auto label = Label::createWithTTF(str, hex::FONT, 50.f);
-		pT.addChild(label, 3);
-	}
 }
 
 
 namespace hex
 {
-	HexTile::HexTile(const ColorId pId, const int pRingIndex, const int pTileIndex)
-		: Hex(pId, pRingIndex, pTileIndex)
-		, m_meta{ 0.f, pId, {0.f, 0.f} }
+	HexTile::HexTile(const int pRingIndex, const int pTileIndex)
+		: Hex(pRingIndex, pTileIndex)
+		, m_meta{ ColorId::None, ColorId::None, 0.f, {0.f, 0.f} }
 		, m_arrow(nullptr)
 		, m_hexIdle(nullptr)
 		, m_hexBlocked(nullptr)
@@ -50,10 +41,10 @@ namespace hex
 	{ }
 
 
-	HexTile* HexTile::create(const ColorId pId, const int pRingIndex, const int pTileIndex)
+	HexTile* HexTile::create(const int pRingIndex, const int pTileIndex)
 	{
-		auto pRet = new(std::nothrow) HexTState(pId, pRingIndex, pTileIndex);
-		if (pRet && pRet->init(pId, pRingIndex, pTileIndex)) {
+		auto pRet = new(std::nothrow) HexTState(pRingIndex, pTileIndex);
+		if (pRet && pRet->init(pRingIndex, pTileIndex)) {
 			pRet->autorelease();
 		}
 		else {
@@ -61,6 +52,19 @@ namespace hex
 			pRet = nullptr;
 		}
 		return pRet;
+	}
+
+
+	void HexTile::showString(const std::string& pStr)
+	{
+		auto label = getChildByTag(DBG_LABEL_TAG);
+		if (label == nullptr) {
+			label = Label::createWithTTF(pStr, hex::FONT, 50.f);
+			addChild(label, Z_BLOCKED + 1);
+		}
+		else {
+			static_cast<Label*>(label)->setString(pStr);
+		}
 	}
 }
 
@@ -70,7 +74,7 @@ namespace hex
 {
 	void HexTile::swapColor(HexTile& pOther, bool pRefreshView)
 	{
-		std::swap(m_colorId, pOther.m_colorId);
+		std::swap(m_meta.color, pOther.m_meta.color);
 		if (pRefreshView) {
 			pOther.refreshView();
 			refreshView();
@@ -102,7 +106,7 @@ namespace hex
 	}
 
 
-	bool HexTile::init(const ColorId pId, const int pRingIndex, const int pTileIndex)
+	bool HexTile::init(const int pRingIndex, const int pTileIndex)
 	{
 		if (!Node::init()) {
 			return false;
@@ -128,8 +132,6 @@ namespace hex
 		m_arrow->setRotation(getArrowAngle());
 		addChild(m_arrow, Z_BLOCKED + 1);
 		m_arrow->setVisible(false);
-
-		show_index(*this);
 		return true;
 	}
 
@@ -137,7 +139,6 @@ namespace hex
 	void HexTile::initRingPlacement(Node* pGridNode, Node* pLinkNode)
 	{
 		const auto& nextTile = *getNextRingTile();
-		const auto color = nextTile.getColorId();
 		const auto pos = convertToNodeSpace(nextTile.convertToWorldSpace({ 0.f, 0.f }));
 		m_meta.edgeAngle = float(-atan(pos.y / pos.x) * (180.f / M_PI));
 
@@ -146,7 +147,7 @@ namespace hex
 
 		m_hexLink = DrawNode::create();
 		const auto linkSz = Size{ LINK_WIDTH, LINK_HEIGHT };
-		Asset::drawHexLink(m_hexLink, color, linkPos, linkSz, m_meta.edgeAngle);
+		Asset::drawHexLink(m_hexLink, ColorId::None, linkPos, linkSz, m_meta.edgeAngle);
 		
 		m_hexLink->setPosition(getPosition());
 		pLinkNode->addChild(m_hexLink, getLocalZOrder());

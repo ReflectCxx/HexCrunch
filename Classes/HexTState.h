@@ -29,9 +29,9 @@ namespace hex
 
 	public:
 
-		HexTState(const ColorId pId, 
-				  const int pRingIndex, 
-				  const int pTileIndex) :HexTile(pId, pRingIndex, pTileIndex) { }
+		HexTState(const int pRingIndex, const int pTileIndex) 
+			: HexTile(pRingIndex, pTileIndex)
+		{ }
 
 		bool stateOnDeactivate();
 		bool stateOnActivate(TileState);

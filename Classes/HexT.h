@@ -17,22 +17,15 @@ namespace hex
 
 		std::vector<T*> m_neighbours;
 
-	protected:
-
-		ColorId m_colorId;
-
 	public:
 
-		Hex(const ColorId, const int pRingIndex, const int pTileIndex);
+		Hex(const int pRingIndex, const int pTileIndex);
 
 		constexpr int getTileIndex() const;
 		constexpr int getRingIndex() const;
 		
 		constexpr T* getNextRingTile() const;
 		constexpr T* getPrevoiusRingTile() const;
-
-		constexpr ColorId getColorId() const;
-
 
 		void addNeighbour(T*);
 		
