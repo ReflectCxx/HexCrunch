@@ -30,22 +30,15 @@ namespace hex
 			rings[r].resize(HEX_6 * (r + 1));
 		}
 
-		const auto count = []() {
-			std::vector<int> r01{ 1, 2};
-			std::vector<int> r234{ 3, 4, 5 };
-			std::shuffle(r01.begin(), r01.end(), g_rng);
-			std::shuffle(r234.begin(), r234.end(), g_rng);
-			r01.insert(r01.end(), r234.begin(), r234.end());
-			return r01;
-		}();
-
+		auto seq = std::vector<int>{ 1, 2, 3, 4, 5 };
+		std::shuffle(seq.begin(), seq.end(), g_rng);
 
 		for (int sector = 0; sector < HEX_6; ++sector)
 		{
 			std::vector<ColorId> sectorColors;
 			sectorColors.reserve(SECTOR_CN);
 			for (int ri = 0; ri < RING_COUNT; ri++) {
-				for (int n = 0; n < count[ri]; n++) {
+				for (int n = 0; n < seq[ri]; n++) {
 					sectorColors.push_back(COLORS[ri]);
 				}
 			}

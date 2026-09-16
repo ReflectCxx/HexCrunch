@@ -25,7 +25,7 @@ namespace hex
 	}
 
 	void Game::loadLevel(std::deque<ColorId>& pColorQ) {
-		m_hexSolver.seedColors(pColorQ);
+		m_hexSols.seedColors(pColorQ);
 	}
 
 	GridManager& Game::gridManager() {

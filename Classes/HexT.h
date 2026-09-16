@@ -19,10 +19,7 @@ namespace hex
 
 	protected:
 
-		float m_edgeAngle;
 		ColorId m_colorId;
-		ColorId m_spawnColor;
-		std::pair<float, float> m_linkPos;
 
 	public:
 
@@ -30,14 +27,12 @@ namespace hex
 
 		constexpr int getTileIndex() const;
 		constexpr int getRingIndex() const;
-		constexpr float getHexRingEdgeAngle() const;
-
+		
 		constexpr T* getNextRingTile() const;
 		constexpr T* getPrevoiusRingTile() const;
 
 		constexpr ColorId getColorId() const;
-		constexpr ColorId getSpawnColor() const;
-		constexpr void setSpawnColor(ColorId);
+
 
 		void addNeighbour(T*);
 		

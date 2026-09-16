@@ -13,10 +13,7 @@ namespace hex
 		, m_tileIndex(pTileIndex)
 		, m_next(nullptr)
 		, m_previous(nullptr)
-		, m_edgeAngle(0.f)
-		, m_linkPos{ 0.f, 0.f }
 		, m_colorId(pColorId)
-		, m_spawnColor(ColorId::None)
 	{
 		m_neighbours.reserve(HEX_6);
 	}
@@ -51,16 +48,6 @@ namespace hex
 		return m_colorId;
 	}
 
-	template<class T>
-	constexpr ColorId Hex<T>::getSpawnColor() const {
-		return m_spawnColor;
-	}
-
-	template<class T>
-	constexpr void Hex<T>::setSpawnColor(ColorId pColor) {
-		m_spawnColor = pColor;
-	}
-
 
 	template<class T>
 	constexpr const std::vector<T*>& Hex<T>::getNeighbours() const {
@@ -73,15 +60,6 @@ namespace hex
 		if (std::find(m_neighbours.begin(), m_neighbours.end(), pTile) == m_neighbours.end()) {
 			m_neighbours.push_back(pTile);
 		}
-	}
-
-
-	template<class T>
-	inline constexpr float Hex<T>::getHexRingEdgeAngle() const
-	{
-		const auto num = (m_tileIndex / (m_ringIndex + 1));
-		const auto theta = (-60.f * (1.f + float(num)));
-		return theta;
 	}
 
 

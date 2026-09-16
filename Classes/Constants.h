@@ -7,7 +7,7 @@ namespace hex
 {
 	constexpr auto SCALE = 1.f;
 	constexpr auto ANIM_SCALE = 1.f;
-	constexpr auto WIN_SCALE = 0.7f;
+	constexpr auto WIN_SCALE = 0.3f;
 
 	constexpr auto EDGE_GAP = SCALE * 35.f;
 	constexpr auto SCR_WIDTH = SCALE * 1800.f; //*/1080.f;
@@ -15,7 +15,7 @@ namespace hex
 
 	constexpr auto HEX_6 = 6;
 	constexpr auto RING_COUNT = 5;
-	constexpr auto SQRT_3 = 1.7320508075688772f;
+	constexpr auto SQRT_3 = 1.7320508f;
 
 	constexpr auto GRID_WIDTH = (SCR_WIDTH - 2.f * EDGE_GAP);
 	constexpr auto GRID_HEIGHT = (GRID_WIDTH * 2.f) / SQRT_3;

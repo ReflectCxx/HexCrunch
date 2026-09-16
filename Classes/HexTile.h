@@ -8,6 +8,14 @@ namespace hex
 {
 	class HexTile : public Hex<HexTile>, public cocos2d::Node
 	{
+		struct HexMeta
+		{
+			float edgeAngle;
+			ColorId spawnColor;
+			std::pair<float, float> linkPos;
+		};
+
+		HexMeta m_meta;
 		cocos2d::Node* m_arrow;
 		cocos2d::Node* m_hexIdle;
 		cocos2d::Node* m_hexBlocked;
@@ -34,13 +42,17 @@ namespace hex
 
 		static HexTile* create(const ColorId pId, const int pRingIndex, const int pTileIndex);
 
-		const float getArrowAngle();
+		const float getArrowAngle() const;
 		constexpr cocos2d::Node& getArrow();
 		constexpr cocos2d::Node& getRingFace();
 		constexpr cocos2d::Node& getIdleFace();
 		constexpr cocos2d::Node& getBackground();
 		constexpr cocos2d::Node& getClippedFace();
 		constexpr cocos2d::DrawNode& getLink();
+
+		constexpr void setSpawnColor(ColorId);
+		constexpr ColorId getSpawnColor() const;
+		constexpr float getHexRingEdgeAngle() const;
 		constexpr void assignColor(const ColorId pColor);
 
 		virtual void setState(const TileState) = 0;

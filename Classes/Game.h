@@ -17,7 +17,7 @@ namespace hex
 
 		HexGrid* m_grid = nullptr;
 		GameScene* m_scene = nullptr;
-		HexSolutions m_hexSolver = {};
+		HexSolutions m_hexSols = {};
 
 		Game() = default;
 		void setGrid(HexGrid* pGrid);
