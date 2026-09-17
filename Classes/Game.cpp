@@ -47,16 +47,6 @@ namespace hex
 
 namespace hex
 {
-	bool Game::gridSanityCheck()
-	{
-		auto& hexRings = m_grid->getHexagonRings();
-		const auto str = HexSolutions{ hexRings }.scanSectors();
-		m_scene->showText(str);
-		CCLOG("%s", str.c_str());
-		return true;
-	}
-
-
 	void Game::loadLevel(const HexRingMatrix& pRings)
 	{
 		std::deque<ColorId> colorQ;
@@ -68,6 +58,50 @@ namespace hex
 				colorQ.pop_front();
 				t->assignColor(color);
 			}
+		}
+	}
+
+
+	bool Game::gridSanityCheck()
+	{
+		auto& hexRings = m_grid->getHexagonRings();
+		auto sector = HexSolutions{ hexRings }.getSectorColors();
+
+		std::ostringstream ss;
+		for (int si = 0; si < HEX_6; ++si) {
+			ss << "\nS" << (si + 1)
+				<< " : R(" << sector[si][ColorId::Red] << ")"
+				<< " G(" << sector[si][ColorId::Green] << ")"
+				<< " B(" << sector[si][ColorId::Blue] << ")"
+				<< " Y(" << sector[si][ColorId::Yellow] << ")"
+				<< " P(" << sector[si][ColorId::Purple] << ")";
+		}
+
+		m_scene->showText(ss.str());
+		CCLOG("%s", ss.str().c_str());
+		return true;
+	}
+
+
+	void Game::seedSpawningColors()
+	{
+		auto& hexRings = Game::instance().grid().getHexagonRings();
+		auto sectorAssign = HexSolutions{ hexRings }.seedSectorSpawns();
+		for (int si = 0; si < HEX_6; si++)
+		{
+			for (int ri = 0; ri < RING_COUNT; ri++)
+			{
+				const int tn = ri + 1;
+				const int t0 = si * tn;
+				for (int ti = 0; ti < tn; ++ti) {
+					auto& t = *hexRings[ri][t0 + ti];
+					if (t.getColorId() == ColorId::None && t.getSpawnColor() == ColorId::None && !sectorAssign[si].empty()) {
+						t.setSpawnColor(sectorAssign[si].back());
+						sectorAssign[si].pop_back();
+					}
+				}
+			}
+			assert(sectorAssign[si].empty());
 		}
 	}
 }

@@ -33,6 +33,7 @@ namespace hex
 		bool acceptInput();
 		void loadLevel(const HexRingMatrix&);
 		bool gridSanityCheck();
+		void seedSpawningColors();
 
 		static Game& instance();
 		friend GameScene;

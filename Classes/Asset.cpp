@@ -107,7 +107,7 @@ namespace hex
 		const auto scaleY = SCR_HEIGHT / bg->getContentSize().height;
 		bg->setScale(scaleX, scaleY);
 		bg->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f });
-		bg->setOpacity(255 * 0.95f);
+		bg->setOpacity(static_cast<uint8_t>(255.f * 0.95f));
 		return bg;
 	}
 

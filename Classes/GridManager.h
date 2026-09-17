@@ -17,7 +17,7 @@ namespace hex
 		GridFxController m_controller;
 
 		bool clearRingsMade(Slider&);
-		void donePullingTiles(Slider&);
+		void spawnTiles(Slider&);
 		void pullOuterRingTiles(Slider&);
 		
 	public:

@@ -1,14 +1,8 @@
 #pragma once
 
+#include <map>
+#include <array>
 #include <vector>
-
-namespace hex
-{
-	class HexTile;
-	using NeighboursMat = std::vector<std::vector<int>>;
-	using HexRingMatrix = std::vector<std::vector<HexTile*>>;
-}
-
 
 namespace hex
 {
@@ -59,4 +53,16 @@ namespace hex
 		Blocked,
 		RingFace,
 	};
+}
+
+
+namespace hex
+{
+	constexpr auto HEX_6 = 6;
+
+	using SectorColors = std::array<std::map<ColorId, int>, HEX_6>;
+	using NeighboursMat = std::vector<std::vector<int>>;
+
+	class HexTile;
+	using HexRingMatrix = std::vector<std::vector<HexTile*>>;
 }

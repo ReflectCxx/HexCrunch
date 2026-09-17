@@ -10,6 +10,22 @@
 USING_NS_CC;
 
 
+namespace
+{
+	inline const std::string col_str(const hex::ColorId pColor)
+	{
+		switch (pColor) {
+		case hex::ColorId::Red: return "RED";
+		case hex::ColorId::Blue: return "BLUE";
+		case hex::ColorId::Green: return "GREEN";
+		case hex::ColorId::Yellow: return "YELLOW";
+		case hex::ColorId::Purple: return "PURPLE";
+		default: return "NONE";
+		}
+	}
+}
+
+
 namespace hex
 {
 	void GridManager::setRingTilesState(HexTile& ringTile, TileState state) const
@@ -56,38 +72,25 @@ namespace hex
 	}
 
 
-	void GridManager::donePullingTiles(Slider& pSlider)
+	void GridManager::spawnTiles(Slider& pSlider)
 	{
-		const auto cb = [&]()->void
-		{
-			auto& ringsMat = Game::instance().grid().getHexagonRings();
-			if (m_ringColor != ColorId::None) {
-				for (int ri = 0; ri < RING_COUNT; ri++) {
-					for (const auto t : ringsMat[ri]) {
-						if (t->getColorId() == ColorId::None && 
-							t->getSpawnColor() == ColorId::None) {
-							t->setSpawnColor(m_ringColor);
-						}
-					}
+		//Game::instance().seedSpawningColors();
+		int count = 0;
+		auto& hexRings = Game::instance().grid().getHexagonRings();
+		for (int ri = 0; ri < RING_COUNT; ri++) {
+			for (const auto t : hexRings[ri]) {
+				if (t->getState() == TileState::Stray) {
+					m_controller.pushSpawnTile(*t);
+					count++;
 				}
 			}
-
-			if (!clearRingsMade(pSlider))
-			{
-				Game::instance().gridSanityCheck();
-				for (int ri = 0; ri < RING_COUNT; ri++) {
-					for (const auto t : ringsMat[ri]) {
-						if (t->getState() == TileState::Stray) {
-							m_controller.pushSpawnTile(*t);
-						}
-					}
-				}
-				m_controller.pushCallback([&]() {
-					pSlider.setActive(true);
-				});
+		}
+		CCLOG("Unresolved spawn count:{ %d }, assigned color: %s", count, col_str(m_ringColor).c_str());
+		m_controller.pushCallback(
+			[&]()->void {
+				pSlider.setActive(true);
 			}
-		};
-		m_controller.pushCallback(cb);
+		);
 	}
 
 
@@ -108,18 +111,18 @@ namespace hex
 
 		m_ringIndex = -1;
 		m_ringColor = ColorId::None;
-		auto& rings = Game::instance().grid().getHexagonRings();
+		auto& hexRings = Game::instance().grid().getHexagonRings();
 
 		for (int ri = 0; ri < RING_COUNT; ri++) {
-			if (isMakingRing(rings[ri])) {
+			if (isMakingRing(hexRings[ri])) {
 				m_ringIndex = ri;
-				m_ringColor = rings[ri][0]->getColorId();
+				m_ringColor = hexRings[ri][0]->getColorId();
 				m_controller.pushClearRing(ri);
 				break;
 			}
 		}
 
-		if (m_ringColor == ColorId::None) {
+		if (m_ringIndex == -1) {
 			return false;
 		}
 		CCLOG("Ring made at index: { %lu }", m_ringIndex);
@@ -136,12 +139,11 @@ namespace hex
 	void GridManager::pullOuterRingTiles(Slider& pSlider)
 	{
 		bool anyTileMoved = false;
-		auto& ringsMat = Game::instance().grid().getHexagonRings();
-
+		auto& hexRings = Game::instance().grid().getHexagonRings();
 		for (int ri = m_ringIndex; ri < (RING_COUNT - 1); ri++)
 		{
 			std::vector<HexTile*> emptyTiles;
-			for (auto tile : ringsMat[ri]) {
+			for (auto tile : hexRings[ri]) {
 				if (tile->getColorId() == ColorId::None) {
 					emptyTiles.push_back(tile);
 				}
@@ -154,28 +156,32 @@ namespace hex
 			}
 		}
 
-		if (anyTileMoved)
-		{
-			for (int ri = m_ringIndex; ri < RING_COUNT; ri++) {
-				for (auto t : ringsMat[ri]) {
-					if (t->getColorId() == ColorId::None) {
-						t->setState(TileState::Stray);
-					}
-				}
-			}
-
-			m_controller.pushCallback([&]() {
-				pullOuterRingTiles(pSlider);
-			});
-		}
-		else
-		{
-			for (const auto t : ringsMat[0]) {
+		for (int ri = 0; ri < RING_COUNT; ri++) {
+			for (const auto t : hexRings[ri]) {
 				if (t->getColorId() == ColorId::None) {
 					t->setState(TileState::Stray);
 				}
 			}
-			donePullingTiles(pSlider);
 		}
+
+		m_controller.pushCallback([&, anyTileMoved]()->void 
+		{
+			if (anyTileMoved) {
+				pullOuterRingTiles(pSlider);
+			}
+			else {
+				assert(m_ringColor != ColorId::None);
+				for (int ri = 0; ri < RING_COUNT; ri++) {
+					for (const auto t : hexRings[ri]) {
+						if (t->getColorId() == ColorId::None && t->getSpawnColor() == ColorId::None) {
+							t->setSpawnColor(m_ringColor);
+						}
+					}
+				}
+				if (!clearRingsMade(pSlider)) {
+					spawnTiles(pSlider);
+				}
+			}
+		});
 	}
 }

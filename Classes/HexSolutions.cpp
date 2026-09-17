@@ -28,33 +28,43 @@ namespace
 
 namespace hex
 {
-	const std::string HexSolutions::scanSectors()
+	const SectorColors HexSolutions::getSectorColors()
 	{
-		std::array<std::map<ColorId, int>, HEX_6> sector;
-
+		SectorColors sector = {};
 		for (int si = 0; si < HEX_6; si++){
 			for (int ri = 0; ri < RING_COUNT; ri++)
 			{
 				const int tn = ri + 1;
 				const int t0 = si * tn;
 				for (int ti = 0; ti < tn; ++ti) {
-					const auto t = m_hexRings[ri][t0 + ti];
-					const auto col = t->getColorId();
+					const auto& t = *m_hexRings[ri][t0 + ti];
+					const auto col = t.getColorId();
 					sector[si][col]++;
 				}
 			}
 		}
+		return sector;
+	}
 
-		std::ostringstream ss;
-		for (int si = 0; si < HEX_6; ++si) {
-			ss << "\nS" << (si + 1)
-				<< " : R(" << sector[si][ColorId::Red] << ")"
-				<< " G(" << sector[si][ColorId::Green] << ")"
-				<< " B(" << sector[si][ColorId::Blue] << ")"
-				<< " Y(" << sector[si][ColorId::Yellow] << ")"
-				<< " P(" << sector[si][ColorId::Purple] << ")";
+
+	const std::array<int, HEX_6> HexSolutions::getSectorSpawnCount()
+	{
+		std::array<int, HEX_6> spawnCount = {};
+		for (int si = 0; si < HEX_6; si++) {
+			for (int ri = 0; ri < RING_COUNT; ri++)
+			{
+				const int tn = ri + 1;
+				const int t0 = si * tn;
+				for (int ti = 0; ti < tn; ++ti) {
+					const auto& t = *m_hexRings[ri][t0 + ti];
+					if (t.getColorId() == ColorId::None &&
+						t.getSpawnColor() == ColorId::None) {
+						spawnCount[si]++;
+					}
+				}
+			}
 		}
-		return ss.str();
+		return spawnCount;
 	}
 
 
@@ -93,5 +103,88 @@ namespace hex
 				pColorQ.push_back(color);
 			}
 		}
+	}
+
+
+	const std::array<std::vector<ColorId>, HEX_6> HexSolutions::seedSectorSpawns()
+	{
+		auto sectorColors = getSectorColors();
+		auto sectorSpawnCn = getSectorSpawnCount();
+		std::array<std::vector<ColorId>, HEX_6> sectorAssign{};
+
+		while (true)
+		{
+			ColorId bestColor = ColorId::None;
+			int bestPresence = -1;
+			int bestTarget = 0;
+
+			//
+			// Find the most-present color on the grid that can be
+			// COMPLETELY balanced across all sectors in this cycle.
+			//
+			for (const auto color : COLORS)
+			{
+				if (color == ColorId::None) {
+					continue;
+				}
+
+				int target = 0;
+				int totalPresence = 0;
+
+				// Balance means bringing every sector up to the
+				// current maximum sector count for this color.
+				for (int s = 0; s < HEX_6; s++) {
+					const int count = sectorColors[s][color];
+					target = std::max(target, count);
+					totalPresence += count;
+				}
+
+				bool canBalance = true;
+				int totalDeficit = 0;
+
+				for (int s = 0; s < HEX_6; s++)
+				{
+					const int deficit = (target - sectorColors[s][color]);
+					// This sector does not have enough empty slots
+					// to bring this color up to target.
+					if (deficit > sectorSpawnCn[s]) {
+						canBalance = false;
+						break;
+					}
+					totalDeficit += deficit;
+				}
+
+				// Ignore colors that are already balanced.
+				if (!canBalance || totalDeficit == 0) {
+					continue;
+				}
+
+				// Priority:
+				// heal the color currently most abundant on the grid.
+				if (totalPresence > bestPresence) {
+					bestColor = color;
+					bestPresence = totalPresence;
+					bestTarget = target;
+				}
+			}
+
+			// No additional color can be completely healed
+			// using the remaining empty positions.
+			if (bestColor == ColorId::None) {
+				break;
+			}
+
+			// Fully balance the selected color.
+			for (int s = 0; s < HEX_6; ++s)
+			{
+				const int deficit = (bestTarget - sectorColors[s][bestColor]);
+				for (int i = 0; i < deficit; ++i) {
+					sectorAssign[s].push_back(bestColor);
+				}
+				sectorColors[s][bestColor] += deficit;
+				sectorSpawnCn[s] -= deficit;
+			}
+		}
+		return sectorAssign;
 	}
 }
