@@ -26,11 +26,13 @@ namespace hex
 
 	void GridManager::swapSelection(Slider& pSlider, const std::function<void()>& pOnEndCb)
 	{
-		const auto cb = [=, &pSlider]()->void {
+		const auto cb = [=, &pSlider]()->void 
+		{
 			if (clearRingsMade(pSlider)) {
 				pSlider.setActive(false);
 			}
 			else {
+				Game::instance().gridSanityCheck();
 				pOnEndCb();
 			}
 		};
@@ -72,12 +74,11 @@ namespace hex
 
 			if (!clearRingsMade(pSlider))
 			{
-				int count = 0;
+				Game::instance().gridSanityCheck();
 				for (int ri = 0; ri < RING_COUNT; ri++) {
 					for (const auto t : ringsMat[ri]) {
 						if (t->getState() == TileState::Stray) {
 							m_controller.pushSpawnTile(*t);
-							count++;
 						}
 					}
 				}
@@ -107,12 +108,12 @@ namespace hex
 
 		m_ringIndex = -1;
 		m_ringColor = ColorId::None;
-		auto& ringsMat = Game::instance().grid().getHexagonRings();
+		auto& rings = Game::instance().grid().getHexagonRings();
 
 		for (int ri = 0; ri < RING_COUNT; ri++) {
-			if (isMakingRing(ringsMat[ri])) {
+			if (isMakingRing(rings[ri])) {
 				m_ringIndex = ri;
-				m_ringColor = ringsMat[ri][0]->getColorId();
+				m_ringColor = rings[ri][0]->getColorId();
 				m_controller.pushClearRing(ri);
 				break;
 			}
@@ -167,14 +168,13 @@ namespace hex
 				pullOuterRingTiles(pSlider);
 			});
 		}
-		else {
-
+		else
+		{
 			for (const auto t : ringsMat[0]) {
 				if (t->getColorId() == ColorId::None) {
 					t->setState(TileState::Stray);
 				}
 			}
-
 			donePullingTiles(pSlider);
 		}
 	}

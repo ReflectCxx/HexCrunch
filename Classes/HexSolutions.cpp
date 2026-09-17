@@ -19,31 +19,42 @@ namespace
 		hex::ColorId::Yellow
 	};
 
-	std::mt19937 g_rng{ std::random_device{}() };
+	static std::mt19937& rng() {
+		static std::mt19937 _{ std::random_device{}() };
+		return _;
+	}
 }
 
 
 namespace hex
 {
-	void HexSolutions::scanSectors(const HexRingMatrix& pGridMat)
+	const std::string HexSolutions::scanSectors()
 	{
-		std::array<std::map<ColorId, int>, HEX_6> sectorColors;
+		std::array<std::map<ColorId, int>, HEX_6> sector;
 
-		for (int si = 0; si < HEX_6; ++si)
-		{
-			for (int ri = 0; ri < RING_COUNT; ++ri)
+		for (int si = 0; si < HEX_6; si++){
+			for (int ri = 0; ri < RING_COUNT; ri++)
 			{
-				const int tilesN = ri + 1;
-				const int t0 = si * tilesN;
-
-				for (int ti = 0; ti < tilesN; ++ti)
-				{
-					const auto t = pGridMat[ri][t0 + ti];
+				const int tn = ri + 1;
+				const int t0 = si * tn;
+				for (int ti = 0; ti < tn; ++ti) {
+					const auto t = m_hexRings[ri][t0 + ti];
 					const auto col = t->getColorId();
-					sectorColors[si][col]++;
+					sector[si][col]++;
 				}
 			}
 		}
+
+		std::ostringstream ss;
+		for (int si = 0; si < HEX_6; ++si) {
+			ss << "\nS" << (si + 1)
+				<< " : R(" << sector[si][ColorId::Red] << ")"
+				<< " G(" << sector[si][ColorId::Green] << ")"
+				<< " B(" << sector[si][ColorId::Blue] << ")"
+				<< " Y(" << sector[si][ColorId::Yellow] << ")"
+				<< " P(" << sector[si][ColorId::Purple] << ")";
+		}
+		return ss.str();
 	}
 
 
@@ -55,25 +66,24 @@ namespace hex
 		}
 
 		auto seq = std::vector<int>{ 1, 2, 3, 4, 5 };
-		std::shuffle(seq.begin(), seq.end(), g_rng);
+		std::shuffle(seq.begin(), seq.end(), rng());
 
 		for (int si = 0; si < HEX_6; si++)
 		{
-			std::vector<ColorId> sectorColors;
-			sectorColors.reserve(SECTOR_CN);
+			std::vector<ColorId> sector;
+			sector.reserve(SECTOR_CN);
 			for (int ri = 0; ri < RING_COUNT; ri++) {
 				for (int n = 0; n < seq[ri]; n++) {
-					sectorColors.push_back(COLORS[ri]);
+					sector.push_back(COLORS[ri]);
 				}
 			}
 
 			int ci = 0;
-			for (int ri = 0; ri < RING_COUNT; ++ri)
-			{
-				const int tilesN = ri + 1;
-				const int t0 = si * tilesN;
-				for (int i = 0; i < tilesN; ++i) {
-					rings[ri][t0 + i] = sectorColors[ci++];
+			for (int ri = 0; ri < RING_COUNT; ri++) {
+				const int tn = ri + 1;
+				const int t0 = si * tn;
+				for (int i = 0; i < tn; ++i) {
+					rings[ri][t0 + i] = sector[ci++];
 				}
 			}
 		}

@@ -135,7 +135,7 @@ namespace hex
 		const auto bg = getBackground().getChildren().at(0);
 		bg->retain();
 		bg->removeFromParent();
-		bg->setOpacity(255 * 0.3f);
+		bg->setOpacity(static_cast<uint8_t>(255.f * 0.3f));
 		addChild(bg, BG_NODE_TAG, BG_NODE_TAG);
 		bg->release();		
 		return true;

@@ -55,7 +55,7 @@ namespace hex
 	}
 
 
-	void HexTile::showString(const std::string& pStr)
+	void HexTile::showText(const std::string& pStr)
 	{
 		auto label = getChildByTag(DBG_LABEL_TAG);
 		if (label == nullptr) {
@@ -132,6 +132,10 @@ namespace hex
 		m_arrow->setRotation(getArrowAngle());
 		addChild(m_arrow, Z_BLOCKED + 1);
 		m_arrow->setVisible(false);
+
+		if (pRingIndex == 0) {
+			showText(std::to_string(pTileIndex + 1));
+		}
 		return true;
 	}
 

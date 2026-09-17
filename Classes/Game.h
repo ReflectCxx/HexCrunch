@@ -11,9 +11,6 @@ namespace hex
 
 	class Game
 	{
-		std::vector<std::pair<ColorId, int>> m_colors;
-		std::vector<std::pair<ColorId, int>> m_offGrid;
-
 		HexGrid* m_grid = nullptr;
 		GameScene* m_scene = nullptr;
 

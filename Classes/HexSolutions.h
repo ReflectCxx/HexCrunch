@@ -6,14 +6,11 @@
 
 namespace hex
 {
-	class Game;
-	class HexSolutions
+	struct HexSolutions
 	{
-		friend Game;
+		const HexRingMatrix& m_hexRings;
 
-	public:
-
-		void seedColors(std::deque<ColorId>&);
-		void scanSectors(const HexRingMatrix&);
+		const std::string scanSectors();
+		static void seedColors(std::deque<ColorId>&);
 	};
 }

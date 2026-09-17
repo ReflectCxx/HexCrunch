@@ -20,23 +20,20 @@ namespace hex
 
 	void CmdPullSwap::run(Command& pCmd) const
 	{
-		const auto pos = m_tile.getPosition();
-		m_tile.setPosition(m_pullFromPos);
-
-		auto resetV = m_tile.getLink().isVisible();
-		if (m_tile.getState() == TileState::None || m_tile.getState() == TileState::Stray) {
+		const auto cs = m_tile.getState();
+		if (cs == TileState::None || cs == TileState::Stray) {
 			m_tile.setState(TileState::Idle);
-			m_tile.getLink().setVisible(true);
-			resetV = false;
 		}
 		else {
 			m_tile.refreshView();
 		}
 		
+		const auto pos = m_tile.getPosition();
+		m_tile.setPosition(m_pullFromPos);
+
 		m_tile.runAction(Sequence::create(
 			MoveTo::create(DT, pos),
-			CallFunc::create([&, resetV]() {
-				m_tile.getLink().setVisible(resetV);
+			CallFunc::create([&]() {
 				pCmd.ends();
 			}), nullptr
 		));

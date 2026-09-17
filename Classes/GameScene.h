@@ -11,12 +11,16 @@ namespace hex
         std::unique_ptr<TouchTracker> m_touchTracker = nullptr;
         std::unique_ptr<TouchConsumer> m_touchConsumer = nullptr;
 
+        cocos2d::Label* m_text = nullptr;
+
         bool init() override;
 
     public:
 
         GameScene();
         ~GameScene();
+
+        void showText(const std::string&);
 
         CREATE_FUNC(GameScene);
     };

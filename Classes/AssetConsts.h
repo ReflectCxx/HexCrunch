@@ -22,5 +22,6 @@ namespace hex
 
 	constexpr auto BTN_EXIT_NORMAL = "exit_normal.png";
 	constexpr auto BTN_EXIT_SELECTED = "exit_selected";
-	constexpr auto FONT = "fonts/Marker Felt.ttf";
+	//constexpr auto FONT = "fonts/Marker Felt.ttf";
+	constexpr auto FONT = "fonts/Skranji-Regular.ttf";
 }

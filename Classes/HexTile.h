@@ -62,6 +62,6 @@ namespace hex
 		virtual void setState(const TileState) = 0;
 		virtual const TileState getState() = 0;
 
-		void showString(const std::string& pStr);
+		void showText(const std::string& pStr);
 	};
 }
