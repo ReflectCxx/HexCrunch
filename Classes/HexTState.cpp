@@ -17,7 +17,7 @@ namespace hex
 		switchToState(pState);
 	}
 
-	const TileState HexTState::getState() {
+	const TileState HexTState::getState() const {
 		return getCurrentState();
 	}
 

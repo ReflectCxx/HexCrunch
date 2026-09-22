@@ -54,13 +54,12 @@ namespace hex
 		constexpr ColorId getColorId() const;
 		constexpr ColorId getSpawnColor() const;
 
-		constexpr void setColorId(ColorId);
 		constexpr void setSpawnColor(ColorId);
 		constexpr float getHexRingEdgeAngle() const;
 		constexpr void assignColor(const ColorId pColor);
 
 		virtual void setState(const TileState) = 0;
-		virtual const TileState getState() = 0;
+		virtual const TileState getState() const = 0;
 
 		void showText(const std::string& pStr);
 	};

@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Slider.h"
 #include "HexGrid.h"
+#include "TouchConsumer.h"
 #include "GridFxController.h"
 
 #include "CmdPullSwap.h"
@@ -49,6 +50,17 @@ namespace hex
 		for (const auto tile : ring) {
 			push(CmdClearRingTile::create(*tile));
 		}
+	}
+
+
+	void GridFxController::pushPauseFxQ()
+	{
+		push(Command{
+			BlocksQ::Yes, *this,
+			[=](Command& pCmd)->void {
+				Game::instance().touch().setPauseCmd(pCmd);
+			}
+		});
 	}
 
 

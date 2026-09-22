@@ -36,6 +36,6 @@ namespace hex
 		bool stateOnDeactivate();
 		bool stateOnActivate(TileState);
 		void setState(const TileState) override;
-		const TileState getState() override;
+		const TileState getState() const override;
 	};
 }

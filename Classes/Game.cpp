@@ -15,6 +15,11 @@ namespace hex
 		return _;
 	}
 
+	std::mt19937& Game::rng() {
+		static std::mt19937 _{ std::random_device{}() };
+		return _;
+	}
+
 	HexGrid& Game::grid() {
 		return (*m_grid);
 	}
@@ -31,8 +36,16 @@ namespace hex
 		m_scene = pScene;
 	}
 
+	void Game::setTouchConsumer(TouchConsumer* pTouch) {
+		m_touch = pTouch;
+	}
+
 	GridManager& Game::gridManager() {
 		return m_grid->manager();
+	}
+
+	TouchConsumer& Game::touch() {
+		return *m_touch;
 	}
 
 	GridFxController& Game::fxController() {
@@ -47,18 +60,18 @@ namespace hex
 
 namespace hex
 {
-	void Game::loadLevel(const HexRingMatrix& pRings)
+	void Game::loadLevel(const HexRingMatrix& pRings) const
 	{
-		std::deque<ColorId> colorQ;
-		HexSolutions::seedColors(colorQ);
+		//std::shuffle(m_sectorColorsN.begin(), m_sectorColorsN.end(), rng());
+		HexSolutions{ pRings }.seedColors(m_sectorColorsN);
+	}
 
-		for (int ri = 0; ri < RING_COUNT; ri++) {
-			for (const auto t : pRings[ri]) {
-				const auto color = colorQ.front();
-				colorQ.pop_front();
-				t->assignColor(color);
-			}
-		}
+
+	void Game::seedSpawningColors() const
+	{
+		HexSolutions{
+			Game::instance().grid().getHexagonRings()
+		}.balanceStrayColors();
 	}
 
 
@@ -78,30 +91,7 @@ namespace hex
 		}
 
 		m_scene->showText(ss.str());
-		CCLOG("%s", ss.str().c_str());
+		CCLOG("Sanity Check:- %s", ss.str().c_str());
 		return true;
-	}
-
-
-	void Game::seedSpawningColors()
-	{
-		auto& hexRings = Game::instance().grid().getHexagonRings();
-		auto sectorAssign = HexSolutions{ hexRings }.seedSectorSpawns();
-		for (int si = 0; si < HEX_6; si++)
-		{
-			for (int ri = 0; ri < RING_COUNT; ri++)
-			{
-				const int tn = ri + 1;
-				const int t0 = si * tn;
-				for (int ti = 0; ti < tn; ++ti) {
-					auto& t = *hexRings[ri][t0 + ti];
-					if (t.getColorId() == ColorId::None && t.getSpawnColor() == ColorId::None && !sectorAssign[si].empty()) {
-						t.setSpawnColor(sectorAssign[si].back());
-						sectorAssign[si].pop_back();
-					}
-				}
-			}
-			assert(sectorAssign[si].empty());
-		}
 	}
 }

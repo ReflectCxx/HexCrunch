@@ -19,6 +19,7 @@ namespace hex
 		using CallBack = std::function<void()>;
 
 		void update();
+		void pushPauseFxQ();
 		void pushSpawnTile(HexTile&);
 		void pushCallback(const CallBack&);
 		void pushSliderSwap(const Slider&, const CallBack&);

@@ -3,6 +3,7 @@
 #include "HexTile.hpp"
 #include "Game.h"
 #include "TouchConsumer.h"
+#include "Command.hpp"
 
 USING_NS_CC;
 
@@ -15,6 +16,21 @@ namespace hex
 {
 	void TouchConsumer::init(HexTile* pActor) {
 		m_slider.init(pActor);
+	}
+
+	void TouchConsumer::setPauseCmd(Command& pCmd)
+	{
+		m_unPauseCmd = pCmd;
+	}
+
+
+	void TouchConsumer::resumeFxQ()
+	{
+		if (!m_unPauseCmd) {
+			return;
+		}
+		m_unPauseCmd->get().ends();
+		m_unPauseCmd = std::nullopt;
 	}
 
 
@@ -62,6 +78,10 @@ namespace hex
 
 	void TouchConsumer::onInputRecieved(const Swipe pDir, const bool pIsMockInput)
 	{
+		if (pDir == Swipe::SingleTap) {
+			resumeFxQ();
+		}
+
 		if (!Game::instance().acceptInput() || !m_slider.isActive()) 
 		{
 			CCLOG("Grid not idle! %lu cmds running.", 

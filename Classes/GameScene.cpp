@@ -36,6 +36,7 @@ namespace hex
 
         m_touchConsumer = std::make_unique<TouchConsumer>();
         m_touchConsumer->init(grid->getHexagonRings()[RING_COUNT - 2][0]);
+        Game::instance().setTouchConsumer(m_touchConsumer.get());
 
         m_touchTracker = std::make_unique<TouchTracker>(
             this,
