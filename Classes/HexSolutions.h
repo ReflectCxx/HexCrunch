@@ -12,12 +12,17 @@ namespace hex
 	{
 		const HexRingMatrix& m_hexRings;
 		
-		const SectorColors getSectorColors();
+		void balanceStrayColors() const;
+
+		const SectorColors getSectorColors() const;
 		
-		const std::array<int, HEX_6> getSectorSpawnCount();
+		const SectorColors getSectorStrayColors() const;
 
-		const std::array<std::vector<ColorId>, HEX_6> seedSectorSpawns();
+		void seedSpawnColors(const SectorColors& perSectorStrayColorN) const;
 
-		static void seedColors(std::deque<ColorId>&);
+		void seedColors(const std::vector<int>& pSectorColorN) const;
+
+		static void log(const SectorColors sector);
+
 	};
 }

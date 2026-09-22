@@ -44,7 +44,7 @@ namespace hex
 	{
 		const auto cb = [=, &pSlider]()->void 
 		{
-			if (clearRingsMade(pSlider)) {
+			if (popRings(pSlider)) {
 				pSlider.setActive(false);
 			}
 			else {
@@ -74,18 +74,20 @@ namespace hex
 
 	void GridManager::spawnTiles(Slider& pSlider)
 	{
-		//Game::instance().seedSpawningColors();
-		int count = 0;
+		Game::instance().gridSanityCheck();
+		Game::instance().seedSpawningColors();
+
+		m_controller.pushPauseFxQ();
+
 		auto& hexRings = Game::instance().grid().getHexagonRings();
 		for (int ri = 0; ri < RING_COUNT; ri++) {
 			for (const auto t : hexRings[ri]) {
 				if (t->getState() == TileState::Stray) {
 					m_controller.pushSpawnTile(*t);
-					count++;
 				}
 			}
 		}
-		CCLOG("Unresolved spawn count:{ %d }, assigned color: %s", count, col_str(m_ringColor).c_str());
+
 		m_controller.pushCallback(
 			[&]()->void {
 				pSlider.setActive(true);
@@ -94,7 +96,7 @@ namespace hex
 	}
 
 
-	bool GridManager::clearRingsMade(Slider& pSlider)
+	bool GridManager::popRings(Slider& pSlider)
 	{
 		auto isMakingRing = [](const std::vector<HexTile*>& pRing)->bool {
 			const auto color = pRing[0]->getColorId();
@@ -129,14 +131,14 @@ namespace hex
 
 		m_controller.pushCallback(
 			[&]()->void {
-				pullOuterRingTiles(pSlider);
+				doHexCrunch(pSlider);
 			}
 		);
 		return true;
 	}
 
 
-	void GridManager::pullOuterRingTiles(Slider& pSlider)
+	void GridManager::doHexCrunch(Slider& pSlider)
 	{
 		bool anyTileMoved = false;
 		auto& hexRings = Game::instance().grid().getHexagonRings();
@@ -167,7 +169,7 @@ namespace hex
 		m_controller.pushCallback([&, anyTileMoved]()->void 
 		{
 			if (anyTileMoved) {
-				pullOuterRingTiles(pSlider);
+				doHexCrunch(pSlider);
 			}
 			else {
 				assert(m_ringColor != ColorId::None);
@@ -178,7 +180,7 @@ namespace hex
 						}
 					}
 				}
-				if (!clearRingsMade(pSlider)) {
+				if (!popRings(pSlider)) {
 					spawnTiles(pSlider);
 				}
 			}
