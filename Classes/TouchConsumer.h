@@ -14,7 +14,7 @@ namespace hex
 	{
 		Slider m_slider;
 
-		std::optional<std::reference_wrapper<Command>> m_unPauseCmd = std::nullopt;
+		std::optional<std::reference_wrapper<Command>> m_resumeFxCmd = std::nullopt;
 
 		void resumeFxQ();
 		bool moveSliderUp();

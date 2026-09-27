@@ -1,3 +1,5 @@
+
+
 #include "Constants.h"
 #include "TouchTracker.h"
 
@@ -23,7 +25,7 @@ namespace hex
     }
 
 
-    TouchTracker::~TouchTracker()
+    void TouchTracker::deInit()
     {
         if (m_listener && m_target) {
             m_target->getEventDispatcher()->removeEventListener(m_listener);

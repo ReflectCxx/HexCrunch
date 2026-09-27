@@ -25,7 +25,8 @@ namespace hex
 
     public:
 
-        ~TouchTracker();
         TouchTracker(cocos2d::Node* pTarget, const std::function<void(Swipe)>& pCallback);
+
+        void deInit();
     };
 }

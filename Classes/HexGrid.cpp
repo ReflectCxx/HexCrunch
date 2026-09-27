@@ -1,9 +1,6 @@
 
-
-#include "Game.h"
 #include "HexGrid.h"
 #include "HexTile.h"
-#include "DrawingUtils.h"
 
 USING_NS_CC;
 
@@ -29,19 +26,6 @@ namespace hex
 		}
 
 		initHexGrid();
-
-		Game::instance().loadLevel(m_hexRings);
-
-		auto& actor = *m_hexRings[RING_COUNT - 2][0];
-		auto& follower = *m_hexRings[RING_COUNT - 1][0];
-		actor.swapColor(follower, false);
-
-		for (auto& rings : m_hexRings) {
-			for (const auto t : rings) {
-				t->setState(TileState::Idle);
-			}
-		}
-
 		setRotation(30.f);
 		scheduleUpdate();
 		return true;
@@ -79,18 +63,19 @@ namespace hex
 	}
 
 
-	void HexGrid::linkNeighbouringRingTiles(const NeighboursMat& pFaceCounts)
+	void HexGrid::linkNeighbouringRingTiles()
 	{
-		for (size_t ringIndex = 0; ringIndex < RING_COUNT; ringIndex++)
+		for (size_t ri = 0; ri < RING_COUNT; ri++)
 		{
-			const std::vector<HexTile*>& innerRing = m_hexRings[ringIndex];
-			const std::vector<HexTile*>& outerRing = m_hexRings[ringIndex + 1];
+			const std::vector<HexTile*>& innerRing = m_hexRings[ri];
+			const std::vector<HexTile*>& outerRing = m_hexRings[ri + 1];
 			int indexCounter = outerRing.size() - 1;
 
-			for (size_t index = 0; index < innerRing.size(); index++)
+			for (size_t ti = 0; ti < innerRing.size(); ti++)
 			{
-				HexTile* innerTile = innerRing[index];
-				for (int faceCount = 0; faceCount < pFaceCounts[ringIndex][index]; faceCount++) {
+				HexTile* innerTile = innerRing[ti];
+				const auto neighbours = (ti % (ri + 1) == 0 ? 3 : 2);
+				for (int i = 0; i < neighbours; i++) {
 					const int outerRingIndex = indexCounter % outerRing.size();
 					innerTile->addNeighbour(outerRing[outerRingIndex]);
 					outerRing[outerRingIndex]->addNeighbour(innerTile);
@@ -100,7 +85,6 @@ namespace hex
 			}
 		}
 	}
-
 
 
 	void HexGrid::initHexGrid()
@@ -114,14 +98,12 @@ namespace hex
 		m_hexNode = Node::create();
 		addChild(m_hexNode, HEXGRID_NODE_Z);
 
-		std::vector<std::vector<int>> outwardNeighboursMatrix;
 		for (int ringIndex = 0; ringIndex <= RING_COUNT; ringIndex++)
 		{
 			int tileIndex = 0;
 			HexTile* previousTile = nullptr;
 
 			std::vector<HexTile*> ringTiles;
-			std::vector<int> tileOutwardNeighbourCount;
 
 			for (int angleI = 0; angleI < HEX_6; angleI++)
 			{
@@ -131,7 +113,6 @@ namespace hex
 
 				auto nextTile = spawnNewTile(ringIndex, tileIndex, { centerPosX, centerPosY });
 				ringTiles.push_back(nextTile);
-				tileOutwardNeighbourCount.push_back(3);
 				tileIndex++;
 
 				if (previousTile) {
@@ -146,7 +127,6 @@ namespace hex
 					auto nextTile = spawnNewTile(ringIndex, tileIndex, { adjPosX, adjPosY });
 
 					ringTiles.push_back(nextTile);
-					tileOutwardNeighbourCount.push_back(2);
 					tileIndex++;
 
 					if (previousTile) {
@@ -157,10 +137,9 @@ namespace hex
 			}
 
 			m_hexRings.push_back(ringTiles);
-			outwardNeighboursMatrix.push_back(tileOutwardNeighbourCount);
 			previousTile->setNextRingTile(ringTiles.front());
 			initRingHexTiles(ringIndex);
 		}
-		linkNeighbouringRingTiles(outwardNeighboursMatrix);
+		linkNeighbouringRingTiles();
 	}
 }

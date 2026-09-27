@@ -3,27 +3,35 @@
 #include <random>
 
 #include "Constants.h"
+#include "TouchTracker.h"
+#include "TouchConsumer.h"
+
+class AppDelegate;
 
 namespace hex
 {
 	class HexGrid;
 	class GameScene;
 	class GridManager;
-	class TouchConsumer;
+	class TouchTracker;
 	class GridFxController;
 
 	class Game
 	{
 		HexGrid* m_grid = nullptr;
+
 		GameScene* m_scene = nullptr;
-		TouchConsumer* m_touch = nullptr;
+
+		TouchConsumer m_touchConsumer = {};
+
 		std::vector<int> m_sectorColorsN = { 7, 1, 5, 1, 1 };
 
-		Game() = default;
-		void setGrid(HexGrid* pGrid);
-		void setGameScene(GameScene*);
-		void setTouchConsumer(TouchConsumer*);
+		std::unique_ptr<TouchTracker> m_touchTracker = nullptr;
 
+		Game() = default;
+
+		bool init();
+		
 	public:
 
 		Game(Game&&) = delete;
@@ -31,20 +39,19 @@ namespace hex
 		Game& operator=(Game&&) = delete;
 		Game& operator=(const Game&) = delete;
 
-		HexGrid& grid();
-		GameScene& scene();
-		GridManager& gridManager();
+		HexGrid& grid() const;
+		GameScene& scene() const;
+		GridManager& gridManager() const;
 		TouchConsumer& touch();
-		GridFxController& fxController();
+		GridFxController& fxController() const;
 
 		bool acceptInput();
 		bool gridSanityCheck();
-
 		void seedSpawningColors() const;
-		void loadLevel(const HexRingMatrix&) const;
 
 		static Game& instance();
 		static std::mt19937& rng();
-		friend GameScene;
+
+		friend AppDelegate;
 	};
 }

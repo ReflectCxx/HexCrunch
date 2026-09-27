@@ -24,7 +24,7 @@ namespace hex
 
 		void initRingHexTiles(int pRingIndex);
 
-		void linkNeighbouringRingTiles(const NeighboursMat& pFaceCounts);
+		void linkNeighbouringRingTiles();
 
 	public:
 		

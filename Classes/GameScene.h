@@ -1,19 +1,17 @@
 #pragma once
 
+#include <functional>
+
 #include "cocos2d.h"
-#include "TouchTracker.h"
-#include "TouchConsumer.h"
 
 namespace hex
 {
+    class HexGrid;
     class GameScene : public cocos2d::Scene
     {
-        std::unique_ptr<TouchTracker> m_touchTracker = nullptr;
-        std::unique_ptr<TouchConsumer> m_touchConsumer = nullptr;
-
         cocos2d::Label* m_text = nullptr;
 
-        bool init() override;
+        std::function<void()> m_dctorCb = nullptr;
 
     public:
 
@@ -21,6 +19,12 @@ namespace hex
         ~GameScene();
 
         void showText(const std::string&);
+
+        void setupHexGrid(HexGrid*);
+
+        bool init() override;
+
+        void setDctorCallback(const std::function<void()>);
 
         CREATE_FUNC(GameScene);
     };

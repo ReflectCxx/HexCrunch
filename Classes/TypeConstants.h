@@ -61,7 +61,6 @@ namespace hex
 	constexpr auto HEX_6 = 6;
 
 	using SectorColors = std::array<std::map<ColorId, int>, HEX_6>;
-	using NeighboursMat = std::vector<std::vector<int>>;
 
 	class HexTile;
 	using HexRingMatrix = std::vector<std::vector<HexTile*>>;

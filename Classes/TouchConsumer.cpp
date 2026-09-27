@@ -20,17 +20,17 @@ namespace hex
 
 	void TouchConsumer::setPauseCmd(Command& pCmd)
 	{
-		m_unPauseCmd = pCmd;
+		m_resumeFxCmd = pCmd;
 	}
 
 
 	void TouchConsumer::resumeFxQ()
 	{
-		if (!m_unPauseCmd) {
+		if (!m_resumeFxCmd) {
 			return;
 		}
-		m_unPauseCmd->get().ends();
-		m_unPauseCmd = std::nullopt;
+		m_resumeFxCmd->get().ends();
+		m_resumeFxCmd = std::nullopt;
 	}
 
 
