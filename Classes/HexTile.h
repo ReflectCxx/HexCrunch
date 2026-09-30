@@ -2,65 +2,65 @@
 
 #include "cocos2d.h"
 
-#include "Hex.h"
-#include "StateMachine.h"
+#include "HexT.hpp"
 
 namespace hex
 {
-	struct PathLink {
-		float angle = 0.f;
-		cocos2d::Vec2 origin = {0.f, 0.f};
-		cocos2d::DrawNode* node = nullptr;
-	};
-
-
-	class HexTile : public Hex, public StateMachine<TileState, HexTile>, public cocos2d::Node
+	class HexTile : public Hex<HexTile>, public cocos2d::Node
 	{
-		friend struct HexTileUtils;
-		friend struct HexTileState;
+		struct HexMeta
+		{
+			ColorId color;
+			ColorId spawnColor;
+
+			float edgeAngle;
+			std::pair<float, float> linkPos;
+		};
+
+		HexMeta m_meta;
+		cocos2d::Node* m_arrow;
+		cocos2d::Node* m_hexIdle;
+		cocos2d::Node* m_hexBlocked;
+		cocos2d::Node* m_hexClipped;
+		cocos2d::DrawNode* m_hexLink;
+		cocos2d::ClippingNode* m_ringFace;
+		cocos2d::ClippingNode* m_background;
+
+		void initClippedBg(cocos2d::Node* pGridNode);
+		bool init(const int pRingIndex, const int pTileIndex);
 
 	protected:
 
-		PathLink m_pathLink;
-
-		cocos2d::Node* m_clipped;
-		cocos2d::Node* m_foreground;
-		cocos2d::Node* m_background;
-		cocos2d::DrawNode* m_bgHighlight;
-
-		void addIndexLabel();
-		void refreshTileColor();
-
 		HexTile(const int pRingIndex, const int pTileIndex);
 
-		bool init(const ColorId pId, const int pRingIndex, const int pTileIndex);
+		constexpr cocos2d::Node& getBlockedFace();
 
 	public:
 
-		SETP(cocos2d::DrawNode, Background, m_background)
+		void refreshView();
+		void swapColor(HexTile&, bool pRefreshView);
+		void initRingPlacement(cocos2d::Node* pGridNode, cocos2d::Node* pLinkNode);
 
-		GETPREF(cocos2d::Node, Clipped, m_clipped)
-		GETPREF(cocos2d::Node, Foreground, m_foreground)
-		GETPREF(cocos2d::Node, Background, m_background)
-		GETPREF(cocos2d::DrawNode, Highlight, m_bgHighlight)
-		GETPREF(cocos2d::DrawNode, Link, (m_pathLink.node))
+		static HexTile* create(const int pRingIndex, const int pTileIndex);
 
-		void setState(TileState pState);
+		const float getArrowAngle() const;
+		constexpr cocos2d::Node& getArrow();
+		constexpr cocos2d::Node& getRingFace();
+		constexpr cocos2d::Node& getIdleFace();
+		constexpr cocos2d::Node& getBackground();
+		constexpr cocos2d::Node& getClippedFace();
+		constexpr cocos2d::DrawNode& getLink();
 
-		bool stateOnDeactivate();
+		constexpr ColorId getColorId() const;
+		constexpr ColorId getSpawnColor() const;
 
-		bool stateOnActivate(TileState pState);
+		constexpr void setSpawnColor(ColorId);
+		constexpr float getHexRingEdgeAngle() const;
+		constexpr void assignColor(const ColorId pColor);
 
-		void setRingPathLink(const PathLink& pLink);
+		virtual void setState(const TileState) = 0;
+		virtual const TileState getState() const = 0;
 
-		static HexTile* create(const ColorId pId, const int pRingIndex, const int pTileIndex);
+		void showText(const std::string& pStr);
 	};
-}
-
-
-namespace hex
-{
-	inline void HexTile::setState(TileState pState) {
-		switchToState(pState);
-	}
 }

@@ -1,35 +1,40 @@
 #pragma once
 
+#include <functional>
 #include "Constants.h"
-#include "CommandManager.h"
 
 namespace hex
 {
-	class CommandManager;
+	class CommandController;
 
-	class Command
+	class Command final
 	{
-		const CmdKind m_cmdKind;
-		const ExecutionKind m_exeKind;
+		friend CommandController;
+
+		inline static std::uint32_t m_counter{ 0 };
+
+		const BlocksQ m_blockQ;
+		const std::size_t m_cmdId;
+		std::function<void(Command&)> m_command;
+
+		CmdState m_cmdState;
+		CommandController& m_controller;
+
+		Command(const Command&) = delete;
+		Command& operator=(Command&&) = delete;
+		Command& operator=(const Command&) = delete;
 
 	public:
+		
+		void ends();
+		void execute();
+		void unblockQ();
 
-		~Command();
-		Command(CmdKind pCmdType, ExecutionKind pExeType);
-
-		GET(CmdKind, CommandKind, m_cmdKind)
-		GET(ExecutionKind, ExecutionKind, m_exeKind)
-
-		//virtual void execute() = 0;
-		//virtual void finishedExecution();
+		Command(Command&&) noexcept;
+		Command(BlocksQ pBlockQ, CommandController& pCC,
+				std::function<void(Command&)> pCmd);
 	};
 }
 
-
-namespace hex
-{
-	inline Command::Command(CmdKind pCmdKind, ExecutionKind pExeKind)
-		: m_cmdKind(pCmdKind)
-		, m_exeKind(pExeKind)
-	{ }
-}
+#include "Command.hpp"
+#include "CommandController.hpp"

@@ -1,61 +1,67 @@
 #pragma once
 
+#include <map>
+#include <array>
 #include <vector>
 
 namespace hex
 {
-	class HexTile;
-	using NeighboursMat = std::vector<std::vector<int>>;
-	using HexgonRingMatrix = std::vector<std::vector<HexTile*>>;
+	enum class Turn {
+		On,
+		Off
+	};
+
+	enum class BlocksQ {
+		No,   // Doesn't block the queue.
+		Yes,  // Blocks the queue until this command finishes.
+		Join, // Waits for all running commands to finish before dispatch.
+	};
+
+	enum class CmdState {
+		None,
+		Ready,
+		Queued,
+		Running,
+		Expired
+	};
+
+
+	enum class ColorId {
+		None,
+		Red,
+		Blue,
+		Green,
+		Purple,
+		Yellow
+	};
+
+	enum class Swipe {
+		None,
+		Up,
+		Left,
+		Down,
+		Right,
+		SingleTap
+	};
+
+	enum class TileState {
+		None,
+		Idle,
+		Stray,
+		Actor,
+		Follower,
+		Blocked,
+		RingFace,
+	};
 }
 
 
 namespace hex
 {
-	enum class ColorId
-	{
-		kNone,
-		kRed,
-		kBlue,
-		kGreen,
-		kPurple,
-		kYellow
-	};
+	constexpr auto HEX_6 = 6;
 
+	using SectorColors = std::array<std::map<ColorId, int>, HEX_6>;
 
-	enum class Swipe {
-		kNone,
-		kUp,
-		kLeft,
-		kDown,
-		kRight,
-		kSingleTap
-	};
-
-	enum class TileState
-	{
-		kNone,
-		kIdle,
-		kActing,
-		kClipped,
-		kHighlighted
-	};
-
-
-	enum class ExecutionKind
-	{
-		kNone,
-		kSynchronous,
-		kASynchronous
-	};
-
-
-	enum class CmdKind
-	{
-		kNone = -1,
-		kSpawnTile,
-		kSwapTiles,
-		kPullDownTile,
-		kCount
-	};
+	class HexTile;
+	using HexRingMatrix = std::vector<std::vector<HexTile*>>;
 }

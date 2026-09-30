@@ -1,52 +1,61 @@
 #pragma once
 
-#include "TouchTracker.h"
-#include "TouchConsumer.h"
-#include "HexGridController.h"
+#include "cocos2d.h"
+#include "Constants.h"
+#include "GridManager.h"
 
 namespace hex
 {
 	class HexGrid : public cocos2d::Node
 	{
-		HexgonRingMatrix m_hexRings;
+		GridManager m_manager;
+		HexRingMatrix m_hexRings;
 
-		HexGridController m_controller;
-
-		std::unique_ptr<TouchTracker> m_swipeTracker = nullptr;
-
-		std::unique_ptr<TouchConsumer> m_swipeConsumer = nullptr;
-
-		HexGrid();
+		cocos2d::Node* m_hexNode = nullptr;
+		cocos2d::Node* m_hexBGNode = nullptr;
+		cocos2d::Node* m_hexLinkNode = nullptr;
 
 		bool init() override;
 
 		void initHexGrid();
 
-		HexTile* spawnNewTile(const cocos2d::Vec2& pos, 
-							  const int pRingIndex, const int pTileIndex);
+		HexTile* spawnNewTile(const int pRingIndex, const int pTileIndex,
+							  const cocos2d::Vec2& pPos);
 
-		void initClippedBGTile(cocos2d::Node* pBgNode, HexTile* pTile,
-							   const cocos2d::Vec2& pOrigin, int pRingIndex, float pAngle);
+		void initRingHexTiles(int pRingIndex);
 
-		void initHexTileBackground(cocos2d::Node* pBgNode, 
-								   cocos2d::Node* pLinkNode, int pRingIndex);
-
-		void linkNeighbouringRingTiles(const NeighboursMat& pFaceCounts);
+		void linkNeighbouringRingTiles();
 
 	public:
-
-		GET(HexgonRingMatrix, HexagonRings, m_hexRings);
+		
+		constexpr GridManager& manager();
+		constexpr const HexRingMatrix& getHexagonRings() const;
+		
+		constexpr cocos2d::Node& getHexNode();
+		constexpr cocos2d::Node& getHexBGNode();
 
 		CREATE_FUNC(HexGrid)
 
-		constexpr HexGridController& controller();
+		void update(float) override;
 	};
 }
 
 
 namespace hex
 {
-	constexpr HexGridController& HexGrid::controller() {
-		return m_controller;
+	constexpr const HexRingMatrix& HexGrid::getHexagonRings() const {
+		return m_hexRings;
+	}
+
+	constexpr cocos2d::Node& HexGrid::getHexNode() {
+		return *m_hexNode;
+	}
+
+	constexpr cocos2d::Node& HexGrid::getHexBGNode() {
+		return *m_hexBGNode;
+	}
+
+	constexpr GridManager& HexGrid::manager() {
+		return m_manager;
 	}
 }

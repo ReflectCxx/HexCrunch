@@ -61,36 +61,53 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/TouchTracker.cpp
+     Classes/Asset.cpp
+     Classes/CmdSliderSwap.cpp
+     Classes/CmdPullSwap.cpp
+     Classes/Game.cpp
      Classes/GameScene.cpp
      Classes/HexGrid.cpp
-     Classes/TouchConsumer.cpp
-     Classes/Hex.cpp
-     Classes/HexTileUtils.cpp
+     Classes/GridFxController.cpp
+     Classes/GridManager.cpp
+     Classes/HexSolutions.cpp
      Classes/HexTile.cpp
-     Classes/HexTileState.cpp
-     Classes/HexGridController.cpp
-     Classes/CommandManager.cpp
+     Classes/HexTState.cpp
+     Classes/Slider.cpp
+     Classes/TouchConsumer.cpp
+     Classes/TouchTracker.cpp
      )
+
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/TouchTracker.h
+     Classes/Asset.h
+     Classes/AssetConsts.h
+     Classes/CmdClearRingTile.h
+     Classes/CmdSliderSwap.h
+     Classes/CmdPullSwap.h
+     Classes/Command.h
+     Classes/Command.hpp
+     Classes/CommandController.h
+     Classes/CommandController.hpp
+     Classes/Constants.h
+     Classes/Defines.h
+     Classes/DrawingUtils.h
+     Classes/Game.h
      Classes/GameScene.h
      Classes/HexGrid.h
-     Classes/TouchConsumer.h
-     Classes/DrawingUtils.h
-     Classes/Constants.h
-     Classes/TypeConstants.h
-     Classes/AssetStrings.h
-     Classes/Defines.h
-     Classes/Hex.h
-     Classes/HexTileUtils.h
+     Classes/GridFxController.h
+     Classes/GridManager.h
+     Classes/HexSolutions.h
+     Classes/HexT.h
+     Classes/HexT.hpp
+     Classes/HexTAlgo.h
      Classes/HexTile.h
-     Classes/HexTileState.h
-     Classes/HexGridController.h
-     Classes/CommandManager.h
-     Classes/Command.h
+     Classes/HexTile.hpp
+     Classes/HexTState.h
+     Classes/Slider.h
      Classes/StateMachine.h
+     Classes/TouchConsumer.h
+     Classes/TouchTracker.h
+     Classes/TypeConstants.h
      )
 
 if(ANDROID)

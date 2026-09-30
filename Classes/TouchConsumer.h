@@ -1,50 +1,30 @@
 #pragma once
 
+#include <set>
 #include <deque>
+#include <optional>
+
+#include "Slider.h"
 
 namespace hex
 {
-	class HexGrid;
+	class Command;
+
 	class TouchConsumer
 	{
-		int m_otherTileIndex;
+		Slider m_slider;
 
-		int m_sameDirSwapCount;
-		int m_sameDirSlideCount;
+		std::optional<std::reference_wrapper<Command>> m_resumeFxCmd = std::nullopt;
 
-		Swipe m_currentSlideDir;
-		Swipe m_lastSwappedInDir;
-		std::pair<int, int> m_lastSwappedIndices;
-
-		HexGrid& m_grid;
-
-		HexTile* m_actorTile;
-		std::deque<HexTile*> m_outerNeighbours;
-
-		HexTile& actorTile();
-		HexTile& otherTile();
-
-		void moveActorUp();
-		void moveActorDown();
-		bool moveSelectionUp();
-		bool moveSelectionLeft();
-		bool moveSelectionDown();
-		bool moveSelectionRight();
-
-		void updateOuterRingPathQ();
-		void highlightCurrentRing(bool pStateOn);
-
-		void swapSelection();
-		bool moveSliderTiles(const Swipe pDir);
-
-		void trackTapToPredictNextSwap();
-		void trackSwipeToPredictNextSwap(const Swipe pDir);
+		void resumeFxQ();
+		bool moveSliderUp();
+		bool moveSliderDown();
+		bool moveSlider(const Swipe);
 		
 	public:
 
-		TouchConsumer(HexGrid& pHexGrid);
-
-		void init();
-		void onInputRecieved(const Swipe pDir);
+		void init(HexTile*);
+		void setPauseCmd(Command&);
+		void onInputRecieved(const Swipe, const bool = false);
 	};
 }

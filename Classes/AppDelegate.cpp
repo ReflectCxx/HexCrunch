@@ -1,7 +1,7 @@
 
-#include "AppDelegate.h"
+#include "Game.h"
 #include "GameScene.h"
-#include "Constants.h"
+#include "AppDelegate.h"
 
 // #define USE_AUDIO_ENGINE 1
 
@@ -85,7 +85,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = hex::GameScene::create();
+
+    if (!hex::Game::instance().init()) {
+        return false;
+    }
+
+    auto scene = &hex::Game::instance().scene();
 
     // run
     director->runWithScene(scene);

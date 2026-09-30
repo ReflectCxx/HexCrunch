@@ -1,26 +1,43 @@
 
-#include "Constants.h"
-#include "HexGrid.h"
 #include "GameScene.h"
+#include "Game.h"
+
+#include "Asset.h"
+#include "HexGrid.h"
+
 
 USING_NS_CC;
 
-namespace hex 
+namespace hex
 {
-    void GameScene::initMenuButtons()
+    GameScene::GameScene() = default;
+
+    GameScene::~GameScene()
     {
-        auto closeItem = MenuItemImage::create(BTN_EXIT_NORMAL, BTN_EXIT_SELECTED,
-            [this](cocos2d::Ref*) {
-                Director::getInstance()->end();
-            });
+        if (m_dctorCb) {
+            m_dctorCb();
+        }
+    }
 
-        const auto x = (SCR_WIDTH - closeItem->getContentSize().width / 2.f);
-        const auto y = (closeItem->getContentSize().height / 2.f);
-        closeItem->setPosition({ x, y });
+    
+    void GameScene::setDctorCallback(const std::function<void()> pCb)
+    {
+        m_dctorCb = pCb;
+    }
 
-        auto menu = Menu::create(closeItem, nullptr);
-        menu->setPosition(Vec2::ZERO);
-        addChild(menu);
+
+    void GameScene::setupHexGrid(HexGrid* pGrid)
+    {
+        pGrid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
+        addChild(pGrid);
+    }
+
+
+    void GameScene::showText(const std::string& pStr)
+    {
+        m_text->setString(pStr);
+        const auto& sz = m_text->getContentSize();
+        m_text->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f - (2 * sz.height) });
     }
 
 
@@ -29,21 +46,15 @@ namespace hex
         if (!Scene::init()) {
             return false;
         }
+        addChild(Asset::createGameBg());
 
-        auto bg = Sprite::create(GAME_BG);
-        const auto scaleX = SCR_WIDTH / bg->getContentSize().width;
-        const auto scaleY = SCR_HEIGHT / bg->getContentSize().height;
-        bg->setScale(scaleX, scaleY);
-        bg->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f });
-        addChild(bg);
+        m_text = Label::createWithTTF("", FONT, 50.f);
+        addChild(m_text);
 
-        bg->setOpacity(255 * 0.95f);
+        addChild(Asset::createExitBtn([this](Ref*) {
+            Director::getInstance()->end();
+        }));
 
-        auto grid = HexGrid::create();
-        grid->setPosition({ SCR_WIDTH / 2.f, SCR_HEIGHT / 2.f + GRID_HEIGHT / 6.f });
-        addChild(grid);
-
-        initMenuButtons();
         return true;
     }
 }
