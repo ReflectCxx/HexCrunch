@@ -10,6 +10,12 @@ Designed for effortless one-thumb play, HexCrunch brings a playful twist to colo
 
 ## Gameplay Demo
 
+## Gameplay Demo
+
+<div align="center">
+
 https://github.com/user-attachments/assets/d96499fc-fafa-4a49-a4f3-7efe0dd15910
+
+</div>
 
 *HexCrunch is currently an early proof of concept, showcasing its core gameplay mechanics. More to come!*
